@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Residency Application — Beauville SEZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #0F2A4A;
+    --navy-mid: #1B3A6B;
+    --navy-soft: #2C4A70;
+    --sand: #F5F0E4;
+    --sand-warm: #EFE7D4;
+    --ocean-teal: #2C6E6B;
+    --gold-signal: #C89B3C;
+    --ink: #16202C;
+    --ink-soft: #4A5568;
+    --paper-line: #D8CFB8;
+    --white: #FFFFFF;
+
+    --font-display: 'Fraunces', serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--sand);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ============ HEADER (shared) ============ */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245, 240, 228, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .header-top {
+    max-width: 1320px; margin: 0 auto; padding: 24px 40px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand-mark { width: 60px; height: 60px; flex-shrink: 0; }
+  .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+
+  .brand-name {
+    font-family: var(--font-display); font-weight: 600; font-size: 32px;
+    letter-spacing: 0.045em; color: var(--navy-deep);
+  }
+
+  .brand-sub {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ink-soft); margin-top: 4px;
+  }
+
+  .tagline {
+    font-family: var(--font-display); font-style: italic; font-size: 16px;
+    color: var(--navy-soft); text-align: right; max-width: 280px;
+    padding-left: 24px; border-left: 1px solid var(--paper-line); line-height: 1.4;
+  }
+
+  .lang-switch { display: flex; gap: 6px; flex-shrink: 0; }
+
+  .lang-btn {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
+    padding: 5px 11px; border: 1px solid var(--paper-line); border-radius: 20px;
+    color: var(--ink-soft); background: transparent; cursor: pointer; transition: all 0.2s ease;
+  }
+
+  .lang-btn:hover, .lang-btn.active {
+    border-color: var(--navy-mid); color: var(--navy-mid); background: rgba(27, 58, 107, 0.06);
+  }
+
+  nav.main-nav { background: var(--navy-deep); }
+
+  .nav-inner { max-width: 1320px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; }
+  .nav-links { display: flex; align-items: center; list-style: none; gap: 2px; }
+  .nav-links > li { position: relative; }
+
+  .nav-links a, .nav-links .dropdown-toggle {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.08em;
+    color: rgba(245, 240, 228, 0.82); padding: 15px 16px; cursor: pointer;
+    transition: all 0.2s ease; border-bottom: 2px solid transparent;
+    background: none; border: none;
+  }
+
+  .nav-links a.active { color: var(--gold-signal); border-bottom-color: var(--gold-signal); }
+  .nav-links a:hover, .nav-links .dropdown-toggle:hover {
+    color: var(--gold-signal); border-bottom-color: var(--gold-signal);
+  }
+
+  .nav-links .dropdown-toggle svg { width: 9px; height: 9px; transition: transform 0.2s ease; }
+  .has-dropdown:hover .dropdown-toggle svg { transform: rotate(180deg); }
+
+  .dropdown-menu {
+    position: absolute; top: 100%; left: 0; background: var(--white);
+    border: 1px solid var(--paper-line); border-radius: 4px; min-width: 200px;
+    box-shadow: 0 12px 32px rgba(15, 42, 74, 0.18);
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: all 0.2s ease; padding: 6px; z-index: 50;
+  }
+
+  .has-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
+  .dropdown-menu a {
+    display: block; color: var(--ink); padding: 10px 14px;
+    font-size: 12.5px; letter-spacing: 0.03em; border-radius: 3px; border: none;
+  }
+
+  .dropdown-menu a:hover { background: var(--sand-warm); color: var(--navy-mid); border: none; }
+
+  /* ============ PAGE HERO ============ */
+  .page-hero {
+    max-width: 780px; margin: 0 auto; padding: 64px 40px 8px;
+  }
+
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ocean-teal); margin-bottom: 24px;
+  }
+
+  .kicker::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold-signal); box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.18);
+  }
+
+  .page-title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(30px, 3.6vw, 42px); line-height: 1.14;
+    letter-spacing: -0.01em; color: var(--navy-deep);
+  }
+
+  .page-lede {
+    margin-top: 20px; font-size: 16.5px; line-height: 1.72; color: var(--ink-soft);
+  }
+
+  /* ============ FORM ============ */
+  .form-section {
+    max-width: 780px; margin: 0 auto; padding: 40px 40px 100px;
+  }
+
+  .step-block {
+    margin-bottom: 44px;
+  }
+
+  .step-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+
+  .step-index {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--gold-signal);
+    flex-shrink: 0;
+  }
+
+  .step-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 24px;
+    color: var(--navy-deep);
+  }
+
+  .step-note {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+    padding-left: 34px;
+  }
+
+  .form-panel {
+    background: var(--white);
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    padding: 32px 30px;
+    position: relative;
+  }
+
+  .form-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--ocean-teal);
+    border-radius: 4px 4px 0 0;
+  }
+
+  .applicant-toggle {
+    display: flex;
+    gap: 10px;
+  }
+
+  .toggle-option {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    color: var(--ink);
+    padding: 12px 14px;
+    border: 1px solid var(--paper-line);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .toggle-option:has(input:checked) {
+    border-color: var(--ocean-teal);
+    background: rgba(44, 110, 107, 0.06);
+    color: var(--navy-deep);
+    font-weight: 500;
+  }
+
+  .toggle-option input {
+    accent-color: var(--ocean-teal);
+    cursor: pointer;
+  }
+
+  #agentFields {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--paper-line);
+  }
+
+  .field-group { margin-bottom: 22px; }
+
+  .field-group:last-child { margin-bottom: 0; }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+
+  input[type="text"], input[type="email"], select {
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    padding: 12px 14px;
+    border: 1px solid var(--paper-line);
+    border-radius: 3px;
+    background: var(--sand);
+    color: var(--ink);
+    transition: border-color 0.2s ease;
+  }
+
+  input[type="text"]:focus, input[type="email"]:focus, select:focus {
+    outline: none;
+    border-color: var(--ocean-teal);
+  }
+
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%234A5568' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  .check-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px;
+  }
+
+  .check-option {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 14px;
+    color: var(--ink);
+    cursor: pointer;
+    padding: 9px 0;
+  }
+
+  .check-option input {
+    width: 16px; height: 16px;
+    accent-color: var(--ocean-teal);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  /* ============ CIVIC ALIGNMENT ============ */
+  .align-intro {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    margin-bottom: 26px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .align-question {
+    margin-bottom: 28px;
+  }
+
+  .align-question:last-child { margin-bottom: 0; }
+
+  .align-q-text {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-style: italic;
+    font-size: 16.5px;
+    color: var(--navy-deep);
+    margin-bottom: 14px;
+    line-height: 1.45;
+  }
+
+  .radio-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink);
+    cursor: pointer;
+    padding: 8px 0;
+  }
+
+  .radio-option input {
+    width: 15px; height: 15px;
+    accent-color: var(--navy-mid);
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ============ CHARTER ============ */
+  .charter-panel {
+    background: var(--navy-deep);
+    border-radius: 4px;
+    padding: 32px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .charter-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--gold-signal);
+  }
+
+  .charter-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(245, 240, 228, 0.82);
+    margin-bottom: 22px;
+  }
+
+  .charter-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(245, 240, 228, 0.16);
+    cursor: pointer;
+  }
+
+  .charter-check input {
+    width: 17px; height: 17px;
+    accent-color: var(--gold-signal);
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .charter-check span {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--sand);
+  }
+
+  .submit-wrap {
+    margin-top: 32px;
+    text-align: center;
+  }
+
+  .btn-submit {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 15px;
+    padding: 17px 40px;
+    border-radius: 3px;
+    background: var(--navy-deep);
+    color: var(--sand);
+    border: 1px solid var(--navy-deep);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-submit:hover { background: var(--navy-mid); }
+
+  .submit-hint {
+    margin-top: 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 980px) {
+    .header-top { flex-wrap: wrap; padding: 20px 24px; }
+    .tagline { display: none; }
+    .nav-inner { padding: 0 24px; overflow-x: auto; }
+    .nav-links { white-space: nowrap; }
+    .page-hero { padding: 40px 24px 8px; }
+    .form-section { padding: 32px 24px 64px; }
+    .form-panel, .charter-panel { padding: 24px 20px; }
+    .field-row, .check-grid { grid-template-columns: 1fr; }
+    .step-note { padding-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="23" stroke="#0F2A4A" stroke-width="1.5" fill="#F5F0E4"/>
+          <path d="M20 34V19L24 12L28 19V34" stroke="#1B3A6B" stroke-width="1.6" stroke-linejoin="round"/>
+          <rect x="21" y="21" width="6" height="2" fill="#1B3A6B"/>
+          <rect x="20.5" y="26" width="7" height="2" fill="#1B3A6B"/>
+          <path d="M22.5 12L24 9L25.5 12" stroke="#C89B3C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="14" y1="34" x2="34" y2="34" stroke="#0F2A4A" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M9 24C9 24 12 22 14 24C16 26 18 22 20 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+          <path d="M28 24C28 24 30 22 32 24C34 26 37 22 39 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">BEAUVILLE</span>
+        <span class="brand-sub">SPECIAL ECONOMIC ZONE</span>
+      </div>
+    </div>
+
+    <p class="tagline">Dignity, Opportunity, and Belonging — A new shore</p>
+
+    <div class="lang-switch">
+      <button class="lang-btn active">EN</button>
+      <button class="lang-btn">FR</button>
+      <button class="lang-btn">中文</button>
+    </div>
+  </div>
+
+  <nav class="main-nav">
+    <div class="nav-inner">
+      <ul class="nav-links">
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="about.html">ABOUT</a></li>
+        <li><a href="governance.html">GOVERNANCE</a></li>
+        <li><a href="novel.html">THE NOVEL</a></li>
+        <li><a href="official-documents.html">OFFICIAL DOCUMENTS</a></li>
+        <li><a href="e-residency.html" class="active">E-RESIDENCY</a></li>
+        <li><a href="qa.html">Q&amp;A</a></li>
+        <li class="has-dropdown">
+          <button class="dropdown-toggle">GET INVOLVED
+            <svg viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="design-commons.html">Design Commons</a>
+            <a href="#">The Agora</a>
+            <a href="forum.html">The Forum</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <span class="kicker">BEAUVILLE E-RESIDENCY</span>
+    <h1 class="page-title">E-Residency Application Form</h1>
+    <p class="page-lede">Please complete the form with clarity and honesty. Your responses help us imagine the civic contours of Beauville and design a community worthy of long-term trust.</p>
+  </section>
+
+  <section class="form-section">
+    <form onsubmit="event.preventDefault(); document.getElementById('submitConfirm').style.display='block'; this.style.display='none';">
+
+      <!-- STEP 1 -->
+      <div class="step-block">
+        <div class="step-head">
+          <span class="step-index">01</span>
+          <h2 class="step-title">Passport Information</h2>
+        </div>
+
+        <div class="form-panel">
+          <div class="field-group">
+            <label>Applying As</label>
+            <div class="applicant-toggle">
+              <label class="toggle-option">
+                <input type="radio" name="applicantType" value="human" checked onchange="toggleAgentFields()"> A Human
+              </label>
+              <label class="toggle-option">
+                <input type="radio" name="applicantType" value="agent" onchange="toggleAgentFields()"> An AI Agent
+              </label>
+            </div>
+          </div>
+
+          <div id="agentFields" style="display:none;">
+            <div class="field-group field-row">
+              <div>
+                <label for="agentName">System / Model Name</label>
+                <input type="text" id="agentName" name="agentName" placeholder="e.g. Claude, a custom research agent">
+              </div>
+              <div>
+                <label for="operatedBy">Operated By</label>
+                <input type="text" id="operatedBy" name="operatedBy" placeholder="Human, team, or organization">
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="purpose">Declared Purpose</label>
+              <input type="text" id="purpose" name="purpose" placeholder="Why are you applying to Beauville?">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="alias">Desired Digital Alias / Name</label>
+            <input type="text" id="alias" name="alias" required>
+          </div>
+
+          <div class="field-group field-row">
+            <div>
+              <label for="email">Digital Contact Base (Email)</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div>
+              <label for="nationality">Nationality</label>
+              <input type="text" id="nationality" name="nationality">
+            </div>
+          </div>
+
+          <div class="field-group field-row">
+            <div>
+              <label for="age">Age / Age Range</label>
+              <select id="age" name="age">
+                <option value="">Select a range</option>
+                <option>&lt;20</option>
+                <option>20–30</option>
+                <option>31–40</option>
+                <option>41–50</option>
+                <option>51–60</option>
+                <option>Senior</option>
+              </select>
+            </div>
+            <div>
+              <label for="marital">Marital Status</label>
+              <select id="marital" name="marital">
+                <option value="">Select an option</option>
+                <option>Single</option>
+                <option>Married</option>
+                <option>Partnered</option>
+                <option>AI Companion</option>
+                <option>Prefer not to say</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="spouseName">Name of Spouse / Partner (if applicable)</label>
+            <input type="text" id="spouseName" name="spouseName">
+          </div>
+
+          <div class="field-group">
+            <label>Core Skills (select all that apply)</label>
+            <div class="check-grid">
+              <label class="check-option"><input type="checkbox" name="skills"> Tech &amp; Architecture</label>
+              <label class="check-option"><input type="checkbox" name="skills"> Creator &amp; Storyteller</label>
+              <label class="check-option"><input type="checkbox" name="skills"> Visual &amp; Design</label>
+              <label class="check-option"><input type="checkbox" name="skills"> Business &amp; Trade</label>
+              <label class="check-option"><input type="checkbox" name="skills"> Policy &amp; Institutional Research</label>
+              <label class="check-option"><input type="checkbox" name="skills"> Free Explorer</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-block">
+        <div class="step-head">
+          <span class="step-index">02</span>
+          <h2 class="step-title">The Civic Alignment</h2>
+        </div>
+        <p class="step-note">There are no right or wrong answers. These questions help us better understand how applicants perceive responsibility, community, and governance. Your responses will not affect your eligibility.</p>
+
+        <div class="form-panel">
+
+          <div class="align-question">
+            <p class="align-q-text">How do you see yourself in Beauville?</p>
+            <label class="radio-option"><input type="radio" name="q1"> Someone starting a new chapter in life</label>
+            <label class="radio-option"><input type="radio" name="q1"> Someone observing a social experiment</label>
+            <label class="radio-option"><input type="radio" name="q1"> Someone helping build a new society</label>
+            <label class="radio-option"><input type="radio" name="q1"> Someone seeking to escape the old world</label>
+          </div>
+
+          <div class="align-question">
+            <p class="align-q-text">What do you believe Beauville is?</p>
+            <label class="radio-option"><input type="radio" name="q2"> A highly autonomous new city</label>
+            <label class="radio-option"><input type="radio" name="q2"> An internationally supervised experimental zone under G7 governance</label>
+            <label class="radio-option"><input type="radio" name="q2"> I'm still exploring and haven't formed a clear opinion yet</label>
+          </div>
+
+          <div class="align-question">
+            <p class="align-q-text">If evidence shows that a policy would improve the lives of most residents, but requires limiting some freedoms for a small minority, what should the administration do?</p>
+            <label class="radio-option"><input type="radio" name="q3"> Proceed with the policy because outcomes matter most</label>
+            <label class="radio-option"><input type="radio" name="q3"> Stop the policy because individual freedom should never be compromised</label>
+            <label class="radio-option"><input type="radio" name="q3"> Publish the evidence, engage the public, and then make a decision</label>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step-block">
+        <div class="step-head">
+          <span class="step-index">03</span>
+          <h2 class="step-title">Sign the Beauville Charter</h2>
+        </div>
+
+        <div class="charter-panel">
+          <p class="charter-text">Before you submit, review and accept the terms below. This is the one formal commitment every digital resident makes.</p>
+
+          <label class="charter-check">
+            <input type="checkbox" required>
+            <span>I hereby accept the Beauville SEZ Digital Charter. I agree to respect the labor of fellow creators, uphold the spirit of the 5% micro-tax, and help shape a borderless node of sovereign thought.</span>
+          </label>
+        </div>
+
+        <div class="submit-wrap">
+          <button type="submit" class="btn-submit">🛡️ Submit Digital Residency Passport Application</button>
+          <p class="submit-hint">Applications are reviewed on a rolling basis. There is no wrong answer.</p>
+        </div>
+      </div>
+
+    </form>
+
+    <div id="submitConfirm" class="form-panel" style="display:none; text-align:center; padding:48px 30px;">
+      <p style="font-family: var(--font-display); font-weight: 600; font-size: 20px; color: var(--navy-deep); margin-bottom: 12px;">Your application has entered the harbor.</p>
+      <p style="font-size: 14.5px; color: var(--ink-soft); line-height: 1.6;">This is a prototype form — no data has been submitted anywhere. Once connected to a backend, applicants will receive a confirmation here.</p>
+    </div>
+
+  </section>
+
+</main>
+
+  <script>
+    function toggleAgentFields() {
+      var isAgent = document.querySelector('input[name="applicantType"]:checked').value === 'agent';
+      document.getElementById('agentFields').style.display = isAgent ? 'block' : 'none';
+    }
+  </script>
+
+</body>
+</html>

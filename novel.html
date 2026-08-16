@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Novel — Beauville SEZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #0F2A4A;
+    --navy-mid: #1B3A6B;
+    --navy-soft: #2C4A70;
+    --sand: #F5F0E4;
+    --sand-warm: #EFE7D4;
+    --ocean-teal: #2C6E6B;
+    --gold-signal: #C89B3C;
+    --ink: #16202C;
+    --ink-soft: #4A5568;
+    --paper-line: #D8CFB8;
+    --white: #FFFFFF;
+
+    --font-display: 'Fraunces', serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--sand);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ============ HEADER (shared) ============ */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245, 240, 228, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .header-top {
+    max-width: 1320px; margin: 0 auto; padding: 24px 40px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand-mark { width: 60px; height: 60px; flex-shrink: 0; }
+  .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+
+  .brand-name {
+    font-family: var(--font-display); font-weight: 600; font-size: 32px;
+    letter-spacing: 0.045em; color: var(--navy-deep);
+  }
+
+  .brand-sub {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ink-soft); margin-top: 4px;
+  }
+
+  .tagline {
+    font-family: var(--font-display); font-style: italic; font-size: 16px;
+    color: var(--navy-soft); text-align: right; max-width: 280px;
+    padding-left: 24px; border-left: 1px solid var(--paper-line); line-height: 1.4;
+  }
+
+  .lang-switch { display: flex; gap: 6px; flex-shrink: 0; }
+
+  .lang-btn {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
+    padding: 5px 11px; border: 1px solid var(--paper-line); border-radius: 20px;
+    color: var(--ink-soft); background: transparent; cursor: pointer; transition: all 0.2s ease;
+  }
+
+  .lang-btn:hover, .lang-btn.active {
+    border-color: var(--navy-mid); color: var(--navy-mid); background: rgba(27, 58, 107, 0.06);
+  }
+
+  nav.main-nav { background: var(--navy-deep); }
+
+  .nav-inner { max-width: 1320px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; }
+  .nav-links { display: flex; align-items: center; list-style: none; gap: 2px; }
+  .nav-links > li { position: relative; }
+
+  .nav-links a, .nav-links .dropdown-toggle {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.08em;
+    color: rgba(245, 240, 228, 0.82); padding: 15px 16px; cursor: pointer;
+    transition: all 0.2s ease; border-bottom: 2px solid transparent;
+    background: none; border: none;
+  }
+
+  .nav-links a.active { color: var(--gold-signal); border-bottom-color: var(--gold-signal); }
+  .nav-links a:hover, .nav-links .dropdown-toggle:hover {
+    color: var(--gold-signal); border-bottom-color: var(--gold-signal);
+  }
+
+  .nav-links .dropdown-toggle svg { width: 9px; height: 9px; transition: transform 0.2s ease; }
+  .has-dropdown:hover .dropdown-toggle svg { transform: rotate(180deg); }
+
+  .dropdown-menu {
+    position: absolute; top: 100%; left: 0; background: var(--white);
+    border: 1px solid var(--paper-line); border-radius: 4px; min-width: 200px;
+    box-shadow: 0 12px 32px rgba(15, 42, 74, 0.18);
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: all 0.2s ease; padding: 6px; z-index: 50;
+  }
+
+  .has-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
+  .dropdown-menu a {
+    display: block; color: var(--ink); padding: 10px 14px;
+    font-size: 12.5px; letter-spacing: 0.03em; border-radius: 3px; border: none;
+  }
+
+  .dropdown-menu a:hover { background: var(--sand-warm); color: var(--navy-mid); border: none; }
+
+  /* ============ PAGE HERO ============ */
+  .page-hero {
+    max-width: 860px; margin: 0 auto; padding: 64px 40px 8px;
+  }
+
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ocean-teal); margin-bottom: 24px;
+  }
+
+  .kicker::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold-signal); box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.18);
+  }
+
+  .page-title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(30px, 3.6vw, 42px); line-height: 1.16;
+    letter-spacing: -0.01em; color: var(--navy-deep);
+  }
+
+  .page-lede {
+    margin-top: 20px; font-size: 16.5px; line-height: 1.72; color: var(--ink-soft);
+  }
+
+  /* ============ CHAPTER LIST ============ */
+  .chapters-section {
+    max-width: 860px; margin: 0 auto; padding: 40px 40px 100px;
+  }
+
+  .chapters-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .chapter-item {
+    background: var(--white);
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    padding: 26px 28px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    transition: border-color 0.2s ease;
+    position: relative;
+  }
+
+  .chapter-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--ocean-teal);
+    border-radius: 4px 0 0 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .chapter-item:hover { border-color: var(--ocean-teal); }
+  .chapter-item:hover::before { opacity: 1; }
+
+  .chapter-num {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 26px;
+    color: var(--gold-signal);
+    flex-shrink: 0;
+    width: 56px;
+  }
+
+  .chapter-body { flex-grow: 1; }
+
+  .chapter-subtitle {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 16.5px;
+    color: var(--navy-deep);
+    margin-bottom: 6px;
+  }
+
+  .chapter-body p {
+    font-size: 14.5px;
+    line-height: 1.62;
+    color: var(--ink-soft);
+  }
+
+  .chapter-arrow {
+    flex-shrink: 0;
+    width: 15px; height: 15px;
+    color: var(--ink-soft);
+    transition: transform 0.2s ease;
+  }
+
+  .chapter-item:hover .chapter-arrow {
+    transform: translateX(4px);
+    color: var(--ocean-teal);
+  }
+
+  .more-note {
+    margin-top: 28px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 980px) {
+    .header-top { flex-wrap: wrap; padding: 20px 24px; }
+    .tagline { display: none; }
+    .nav-inner { padding: 0 24px; overflow-x: auto; }
+    .nav-links { white-space: nowrap; }
+    .page-hero { padding: 40px 24px 8px; }
+    .chapters-section { padding: 32px 24px 64px; }
+    .chapter-item { flex-direction: column; align-items: flex-start; gap: 10px; padding: 22px 20px; }
+    .chapter-arrow { align-self: flex-end; margin-top: -8px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="23" stroke="#0F2A4A" stroke-width="1.5" fill="#F5F0E4"/>
+          <path d="M20 34V19L24 12L28 19V34" stroke="#1B3A6B" stroke-width="1.6" stroke-linejoin="round"/>
+          <rect x="21" y="21" width="6" height="2" fill="#1B3A6B"/>
+          <rect x="20.5" y="26" width="7" height="2" fill="#1B3A6B"/>
+          <path d="M22.5 12L24 9L25.5 12" stroke="#C89B3C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="14" y1="34" x2="34" y2="34" stroke="#0F2A4A" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M9 24C9 24 12 22 14 24C16 26 18 22 20 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+          <path d="M28 24C28 24 30 22 32 24C34 26 37 22 39 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">BEAUVILLE</span>
+        <span class="brand-sub">SPECIAL ECONOMIC ZONE</span>
+      </div>
+    </div>
+
+    <p class="tagline">Dignity, Opportunity, and Belonging — A new shore</p>
+
+    <div class="lang-switch">
+      <button class="lang-btn active">EN</button>
+      <button class="lang-btn">FR</button>
+      <button class="lang-btn">中文</button>
+    </div>
+  </div>
+
+  <nav class="main-nav">
+    <div class="nav-inner">
+      <ul class="nav-links">
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="about.html">ABOUT</a></li>
+        <li><a href="governance.html">GOVERNANCE</a></li>
+        <li><a href="novel.html" class="active">THE NOVEL</a></li>
+        <li><a href="official-documents.html">OFFICIAL DOCUMENTS</a></li>
+        <li><a href="e-residency.html">E-RESIDENCY</a></li>
+        <li><a href="qa.html">Q&amp;A</a></li>
+        <li class="has-dropdown">
+          <button class="dropdown-toggle">GET INVOLVED
+            <svg viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="design-commons.html">Design Commons</a>
+            <a href="#">The Agora</a>
+            <a href="forum.html">The Forum</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <span class="kicker">THE NOVEL</span>
+    <h1 class="page-title">Beauville: Built by Migrants</h1>
+    <p class="page-lede">A speculative novel about sovereignty, capital, and migration. Follow a proposal born in a G7 summit room as an idealistic blueprint gets negotiated into reality, one deal at a time — and slowly reveals the cracks running through it. Chapters are published serially on Medium.</p>
+  </section>
+
+  <section class="chapters-section">
+    <div class="chapters-list">
+
+      <a class="chapter-item" href="novel-1-1.html">
+        <span class="chapter-num">1.1</span>
+        <div class="chapter-body">
+          <p class="chapter-subtitle">The Third Option</p>
+          <p>The premise: what if the world's migration crisis could be solved not by walls or welfare, but by building something entirely new in the South Pacific?</p>
+        </div>
+        <svg class="chapter-arrow" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="chapter-item" href="novel-1-2.html">
+        <span class="chapter-num">1.2</span>
+        <div class="chapter-body">
+          <p class="chapter-subtitle">Two Approaches, Both Failing</p>
+          <p>Marcus just told a room full of world leaders that "illegal migrants" is the wrong word entirely. Now he has to prove it.</p>
+        </div>
+        <svg class="chapter-arrow" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="chapter-item" href="novel-1-3.html">
+        <span class="chapter-num">1.3</span>
+        <div class="chapter-body">
+          <p class="chapter-subtitle">The Numbers, and the Man Who Stopped Listening</p>
+          <p>Marcus lays out exactly how the money works — until one man at the table makes it clear he was never really listening to any of it.</p>
+        </div>
+        <svg class="chapter-arrow" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="chapter-item" href="novel-1-4.html">
+        <span class="chapter-num">1.4</span>
+        <div class="chapter-body">
+          <p class="chapter-subtitle">History Has Already Rendered Its Verdict</p>
+          <p>The French President asks who's left holding the bag if this doesn't work. Marcus answers with hard collateral, sovereign guarantees, and a historical comparison that turns the whole room quiet.</p>
+        </div>
+        <svg class="chapter-arrow" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="chapter-item" href="novel-1-5.html">
+        <span class="chapter-num">1.5</span>
+        <div class="chapter-body">
+          <p class="chapter-subtitle">Religion and Public Order</p>
+          <p>Marcus draws a hard line on religion in the public square, and two European leaders push back immediately. Then he makes a prediction about what this zone becomes in twenty years that leaves the room in dead silence.</p>
+        </div>
+        <svg class="chapter-arrow" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="chapter-item" href="novel-1-6.html">
+        <span class="chapter-num">1.6</span>
+        <div class="chapter-body">
+          <p class="chapter-subtitle">Finding the Right Island</p>
+          <p>Marcus narrows five Pacific islands down to one — Haleloa. Then France turns to Australia and asks the question everyone's been avoiding: are you in?</p>
+        </div>
+        <svg class="chapter-arrow" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+    </div>
+
+    <p class="more-note">New chapters are added as they're published.</p>
+  </section>
+
+</main>
+
+</body>
+</html>

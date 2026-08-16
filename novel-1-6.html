@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.6 — Finding the Right Island — Beauville SEZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #0F2A4A;
+    --navy-mid: #1B3A6B;
+    --navy-soft: #2C4A70;
+    --sand: #F5F0E4;
+    --sand-warm: #EFE7D4;
+    --ocean-teal: #2C6E6B;
+    --gold-signal: #C89B3C;
+    --ink: #16202C;
+    --ink-soft: #4A5568;
+    --paper-line: #D8CFB8;
+    --white: #FFFFFF;
+
+    --font-display: 'Fraunces', serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--sand);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245, 240, 228, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .header-top {
+    max-width: 1320px; margin: 0 auto; padding: 24px 40px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand-mark { width: 60px; height: 60px; flex-shrink: 0; }
+  .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+
+  .brand-name {
+    font-family: var(--font-display); font-weight: 600; font-size: 32px;
+    letter-spacing: 0.045em; color: var(--navy-deep);
+  }
+
+  .brand-sub {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ink-soft); margin-top: 4px;
+  }
+
+  .tagline {
+    font-family: var(--font-display); font-style: italic; font-size: 16px;
+    color: var(--navy-soft); text-align: right; max-width: 280px;
+    padding-left: 24px; border-left: 1px solid var(--paper-line); line-height: 1.4;
+  }
+
+  .lang-switch { display: flex; gap: 6px; flex-shrink: 0; }
+
+  .lang-btn {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
+    padding: 5px 11px; border: 1px solid var(--paper-line); border-radius: 20px;
+    color: var(--ink-soft); background: transparent; cursor: pointer; transition: all 0.2s ease;
+  }
+
+  .lang-btn:hover, .lang-btn.active {
+    border-color: var(--navy-mid); color: var(--navy-mid); background: rgba(27, 58, 107, 0.06);
+  }
+
+  nav.main-nav { background: var(--navy-deep); }
+
+  .nav-inner { max-width: 1320px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; }
+  .nav-links { display: flex; align-items: center; list-style: none; gap: 2px; }
+  .nav-links > li { position: relative; }
+
+  .nav-links a, .nav-links .dropdown-toggle {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.08em;
+    color: rgba(245, 240, 228, 0.82); padding: 15px 16px; cursor: pointer;
+    transition: all 0.2s ease; border-bottom: 2px solid transparent;
+    background: none; border: none;
+  }
+
+  .nav-links a.active { color: var(--gold-signal); border-bottom-color: var(--gold-signal); }
+  .nav-links a:hover, .nav-links .dropdown-toggle:hover {
+    color: var(--gold-signal); border-bottom-color: var(--gold-signal);
+  }
+
+  .nav-links .dropdown-toggle svg { width: 9px; height: 9px; transition: transform 0.2s ease; }
+  .has-dropdown:hover .dropdown-toggle svg { transform: rotate(180deg); }
+
+  .dropdown-menu {
+    position: absolute; top: 100%; left: 0; background: var(--white);
+    border: 1px solid var(--paper-line); border-radius: 4px; min-width: 200px;
+    box-shadow: 0 12px 32px rgba(15, 42, 74, 0.18);
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: all 0.2s ease; padding: 6px; z-index: 50;
+  }
+
+  .has-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
+  .dropdown-menu a {
+    display: block; color: var(--ink); padding: 10px 14px;
+    font-size: 12.5px; letter-spacing: 0.03em; border-radius: 3px; border: none;
+  }
+
+  .dropdown-menu a:hover { background: var(--sand-warm); color: var(--navy-mid); border: none; }
+
+  /* ============ CHAPTER READER ============ */
+  .reader-hero {
+    max-width: 760px; margin: 0 auto; padding: 56px 40px 0;
+  }
+
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ocean-teal); margin-bottom: 20px;
+  }
+
+  .kicker::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold-signal); box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.18);
+  }
+
+  .chapter-title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(28px, 3.4vw, 38px); line-height: 1.16;
+    letter-spacing: -0.01em; color: var(--navy-deep);
+  }
+
+  .chapter-subtitle-h {
+    font-family: var(--font-display); font-style: italic; font-weight: 500;
+    font-size: 19px; color: var(--ocean-teal); margin-top: 8px;
+  }
+
+  .disclaimer {
+    margin-top: 22px; padding: 14px 18px;
+    background: var(--sand-warm);
+    border-left: 2px solid var(--paper-line);
+    font-size: 12.5px; font-style: italic; color: var(--ink-soft); line-height: 1.6;
+  }
+
+  .reward-note {
+    margin-top: 18px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+    color: var(--gold-signal);
+    background: rgba(200, 155, 60, 0.08);
+    border: 1px solid rgba(200, 155, 60, 0.25);
+    padding: 7px 14px; border-radius: 20px;
+  }
+
+  /* ============ ARTICLE BODY ============ */
+  .article-body {
+    max-width: 720px; margin: 0 auto; padding: 40px 40px 20px;
+  }
+
+  .article-body p {
+    font-size: 17px; line-height: 1.85; color: var(--ink); margin-bottom: 20px;
+  }
+
+  .article-body p.figure-cap {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-style: italic;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: 6px 0 26px;
+    padding: 14px 0;
+    border-top: 1px dashed var(--paper-line);
+    border-bottom: 1px dashed var(--paper-line);
+  }
+
+  .figure-img {
+    margin: 28px 0;
+  }
+
+  .figure-img img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid var(--paper-line);
+    display: block;
+  }
+
+  .figure-img figcaption {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 10px;
+  }
+
+  .article-body h3 {
+    font-family: var(--font-display); font-weight: 600; font-size: 21px;
+    color: var(--navy-deep); margin: 34px 0 14px;
+  }
+
+  /* ============ NAV FOOTER ============ */
+  .chapter-nav {
+    max-width: 720px; margin: 0 auto; padding: 32px 40px 100px;
+    display: flex; align-items: stretch; justify-content: space-between; gap: 16px;
+  }
+
+  .nav-btn {
+    flex: 1;
+    background: var(--white);
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 0.2s ease;
+  }
+
+  .nav-btn:hover { border-color: var(--ocean-teal); }
+
+  .nav-btn.next { text-align: right; align-items: flex-end; }
+
+  .nav-btn .nav-label {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
+    color: var(--gold-signal);
+  }
+
+  .nav-btn .nav-title {
+    font-family: var(--font-display); font-weight: 600; font-size: 15px; color: var(--navy-deep);
+  }
+
+  .nav-btn.disabled {
+    opacity: 0.4; pointer-events: none;
+  }
+
+  .back-to-index {
+    text-align: center;
+    max-width: 720px; margin: 0 auto; padding: 0 40px 60px;
+    font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft);
+  }
+
+  .back-to-index a { color: var(--navy-mid); border-bottom: 1px solid var(--navy-mid); }
+
+  @media (max-width: 980px) {
+    .header-top { flex-wrap: wrap; padding: 20px 24px; }
+    .tagline { display: none; }
+    .nav-inner { padding: 0 24px; overflow-x: auto; }
+    .nav-links { white-space: nowrap; }
+    .reader-hero { padding: 40px 24px 0; }
+    .article-body { padding: 32px 24px 16px; }
+    .article-body p { font-size: 16px; }
+    .chapter-nav { padding: 24px 24px 64px; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="23" stroke="#0F2A4A" stroke-width="1.5" fill="#F5F0E4"/>
+          <path d="M20 34V19L24 12L28 19V34" stroke="#1B3A6B" stroke-width="1.6" stroke-linejoin="round"/>
+          <rect x="21" y="21" width="6" height="2" fill="#1B3A6B"/>
+          <rect x="20.5" y="26" width="7" height="2" fill="#1B3A6B"/>
+          <path d="M22.5 12L24 9L25.5 12" stroke="#C89B3C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="14" y1="34" x2="34" y2="34" stroke="#0F2A4A" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M9 24C9 24 12 22 14 24C16 26 18 22 20 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+          <path d="M28 24C28 24 30 22 32 24C34 26 37 22 39 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">BEAUVILLE</span>
+        <span class="brand-sub">SPECIAL ECONOMIC ZONE</span>
+      </div>
+    </div>
+
+    <p class="tagline">Dignity, Opportunity, and Belonging — A new shore</p>
+
+    <div class="lang-switch">
+      <button class="lang-btn active">EN</button>
+      <button class="lang-btn">FR</button>
+      <button class="lang-btn">中文</button>
+    </div>
+  </div>
+
+  <nav class="main-nav">
+    <div class="nav-inner">
+      <ul class="nav-links">
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="about.html">ABOUT</a></li>
+        <li><a href="governance.html">GOVERNANCE</a></li>
+        <li><a href="novel.html" class="active">THE NOVEL</a></li>
+        <li><a href="official-documents.html">OFFICIAL DOCUMENTS</a></li>
+        <li><a href="e-residency.html">E-RESIDENCY</a></li>
+        <li><a href="qa.html">Q&amp;A</a></li>
+        <li class="has-dropdown">
+          <button class="dropdown-toggle">GET INVOLVED
+            <svg viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="design-commons.html">Design Commons</a>
+            <a href="#">The Agora</a>
+            <a href="forum.html">The Forum</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <section class="reader-hero">
+    <span class="kicker">THE NOVEL · CHAPTER 1.6</span>
+    <h1 class="chapter-title">Beauville: Built by Migrants — 1.6</h1>
+    <p class="chapter-subtitle-h">Finding the Right Island</p>
+    <p class="disclaimer">This is a work of speculative fiction. All characters, including public figures depicted herein, are used fictitiously.</p>
+    <span class="reward-note">&#9670; Reading this chapter earns B$15 in Beauville's civic rewards program (coming soon)</span>
+  </section>
+
+  <article class="article-body">
+    <p>Marcus met the Italian Prime Minister’s searching, appraising gaze without flinching, and calmly clicked to the next slide:</p>
+    <p>Finding the Right Island.</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/1*gxwLtgyEvw52eslqkchgVA.png" alt="Project Beauville briefing deck, presented by Marcus Lim" loading="lazy">
+      <figcaption>Project Beauville briefing deck, presented by Marcus Lim</figcaption>
+    </figure>
+    <p>“Madam Prime Minister, this is exactly the ‘site negotiation’ we’ll need to launch together after today.” Marcus let the laser pointer’s red dot land on the green block on the left — Site Criteria.</p>
+    <p>“First, we need to be clear about what kind of island can actually carry the Beauville plan.</p>
+    <p>Criterion one: remote. As I mentioned earlier, physical distance is itself an asset — it naturally shields the zone from geopolitical aftershocks.</p>
+    <p>Criterion two: buildable. It needs sufficient land area, adequate freshwater or mature desalination capacity, a stable climate, a location outside the main tropical cyclone belt, and — most critically — the feasibility of a deep-water port. Without throughput, there’s no offshore economy to speak of.</p>
+    <p>Criterion three: clear sovereignty. This territory must be entirely free of territorial disputes, with stable jurisdiction.</p>
+    <p>Criterion four: leasable long-term. What we’re asking for is never a transfer of sovereignty — it’s a lease of 70 years or more, with renewal options built in. That gives capital markets over half a century of stable expectations to work with.”</p>
+    <p>He lowered the laser pointer and turned to face the heads of state seated along both sides of the table, his voice steady, carrying a very practical, businesslike persuasiveness.</p>
+    <p>“So, back to your core question: why would any sovereign nation want to hand over its own territory to play this game of ‘rebuilding Singapore’ with us? The answer’s on the right.” Marcus pointed to the yellow block — What the Host Nation Gains.</p>
+    <p>“For a small South Pacific sovereign nation — or a peripheral island belonging to a larger regional power — our plan offers four irresistible dividends:</p>
+    <p>● A stable, long-term rental income — we take land that currently produces nothing, sitting idle indefinitely, and turn it directly into decades of real cash.</p>
+    <p>● World-class infrastructure, paid for by the funding nations, built on the host nation’s own sovereign soil — once the multi-decade lease expires, the deep-water port, the power grid, the modern industrial parks all become national assets belonging to the host nation.</p>
+    <p>● Regional economic gravity — as the zone becomes an emerging economy, trade, services, and employment will inevitably spill over into the host nation, driving prosperity across the entire surrounding waters.</p>
+    <p>● And most importantly — sovereignty remains fully intact. The zone is not an independent kingdom. It operates under the host nation’s law, with final decision-making authority resting with the host nation. On core matters like security, the host nation retains the highest veto power.”</p>
+    <p>At the bottom of the slide, a compelling line of small text pulsed on screen:</p>
+    <p>A barren island, at zero development cost, becomes an internationally subsidized economic hub.</p>
+    <p>“There are no shortage of Pacific island nations sitting on barren land, teetering on the edge of fiscal collapse. When the G7 arrives with tens of billions in infrastructure seed funding, offering to manage and develop the land on their behalf — with final ownership remaining theirs — why would they say no?”</p>
+    <p>The Canadian Prime Minister, who had been smiling quietly this whole time, straightened up, looking at the text at the bottom of the screen. “Marcus,” he said slowly, “‘becomes an internationally subsidized economic hub at zero development cost’ — that really does sound like a deal no landlord could refuse. So now, why don’t you tell us who’s at the top of your shortlist.”</p>
+    <p>“The shortlist is actually quite short.” Marcus didn’t dodge the Canadian Prime Minister’s question. He swiped across the console, and a strategic comparison table of the South Pacific popped up on screen, listing five names:</p>
+    <p>● Solomon Islands</p>
+    <p>● Kiribati</p>
+    <p>● Vanuatu</p>
+    <p>● Tonga</p>
+    <p>● Haleloa</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*XROUgIReIAX8KmKs5vFDmQ.png" alt="Project Beauville briefing deck, presented by Marcus Lim" loading="lazy">
+      <figcaption>Project Beauville briefing deck, presented by Marcus Lim</figcaption>
+    </figure>
+    <p>At the sight of these names, the atmosphere around the table shifted, subtly. The British Prime Minister and the Australian Prime Minister in particular let their eyes rest on “Solomon Islands” for less than a second before looking away — in a kind of unspoken, perfectly synchronized reflex.</p>
+    <p>“In our initial screening, we assessed several of the larger Solomon Islands,” Marcus said, drawing a red X through the first name with the laser pointer, “but unfortunately, the geopolitics there are simply too turbulent. In recent years, the great-power jostling around the Guadalcanal shipping lanes has grown too tangled. Any major territorial special-zone reform there would be read as a disruption of the strategic balance. We don’t want Beauville to become a flashpoint for open confrontation between major powers before we’ve even laid the first foundation stone.”</p>
+    <p>“Next, Kiribati.” The red X landed on the second name. “They do have vast, open atolls, but their infrastructure ‘foundation’ is far too thin — they lack the natural geology for a deep-water port, and they suffer from severe freshwater scarcity. The early hard-infrastructure costs alone would be astronomical.</p>
+    <p>As for Vanuatu, an island-wide malaria problem would drive early public health infrastructure costs sharply upward. More troubling still is their country’s complex tribal land ownership system, which means the zone could easily get bogged down in years of legal disputes.”</p>
+    <p>Tonga sits between Fiji and Samoa — not a bad location. But it’s a constitutional monarchy, and the royal family holds final authority over land. Any long-term lease would need the monarchy’s endorsement, and the political process there is opaque, with unpredictable negotiation timelines. And Tonga has a checkered history of selling passports to foreigners — a stain on its international reputation, and not a good look for what would be Beauville’s public face.</p>
+    <p>Finally, the red dot of the laser pointer landed, and stayed, on the name glowing in yellow highlight — Haleloa.</p>
+    <p>“So the final answer can only be, and must be, Haleloa.”</p>
+    <p>“As I mentioned, Haleloa meets every physical criterion: it’s remote enough, and on the edge of this archipelago nation, there’s an unused outer island spanning over two thousand square kilometers. In the 19th century, the island was struck by a malaria outbreak that sharply reduced its population, followed later by an influenza epidemic that left almost none of the original inhabitants. At the time, the survivors believed the island had been cursed by the gods and turned into a land of death, so they fled entirely, sailing off to settle elsewhere. For the two centuries since, no one has lived there — it became a barren island. During the Second World War, it was briefly used to anchor warships. The island doesn’t just have a natural deep-water harbor — its geology is stable, its climate is steady, and it sits outside the main tropical cyclone belt.”</p>
+    <p>“But the core advantage is this: their government has shown a truly exceptional degree of political willingness.”</p>
+    <p>“Last week, under the Commission President’s direct authorization, I completed three rounds of closed-door consultations with Haleloa’s Prime Minister through EU diplomatic channels. Compared to the other Pacific nations still hedging between the major powers, trying to drive up the price — Haleloa has already seen the writing on its own financial wall. If they don’t secure a new round of sovereign debt restructuring within two months, their national fiscal credit collapses entirely.</p>
+    <p>So their need for this long-term lease income is acute. In the secret letter of intent, they accepted not only the 70-year lease term and a joint Australia–New Zealand trusteeship structure — they actually volunteered to cede full interpretive authority over civil and commercial law, within the zone’s future legislative framework, to an international arbitration tribunal.</p>
+    <p>Now, Haleloa has already made the maximum concession it can make. If we let this window pass — a host nation with this level of geopolitical alignment and this ideal a location — we will struggle to find a second opportunity anywhere in the Pacific that so perfectly matches the G7’s strategic security requirements.</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*DdaQIQ4T9AeYFg8FeOv_dg.jpeg" alt="Loa Island, Haleloa" loading="lazy">
+      <figcaption>Loa Island, Haleloa</figcaption>
+    </figure>
+    <p>The French President set down his coffee cup and turned to the Australian Prime Minister. “AU — sounds like Canberra’s about to get a new super-neighbor in its backyard, co-funded by all of us. As the future security guarantor, are you sure you don’t want to say something?”</p>
+    <p>In that instant, the pressure and dramatic focus of the entire room snapped precisely onto the Australian Prime Minister.</p>
+    <p>The Australian Prime Minister didn’t answer right away. He leaned back slightly, his gaze resting on the table for a beat — as though he were arranging words he’d already prepared long ago.</p>
+    <p>“I’d like to say, first,” he began, “that Australia has always supported any multilateral mechanism that can ease long-term structural pressure in the region.”</p>
+    <p>He paused.</p>
+    <p>“But the Haleloa proposal remains, at this point, at the conceptual discussion stage. It has not entered any formal intergovernmental commitment process.”</p>
+    <p>The French President raised an eyebrow slightly, but didn’t interrupt.</p>
+    <p>The Australian Prime Minister continued:</p>
+    <p>“If this concept is to move forward, it must satisfy three basic preconditions: a transparent governance structure, a clear allocation of legal responsibility, and full respect for the long-term sovereign arrangements of Pacific island nations.”</p>
+    <p>“Until these conditions have been fully discussed, Australia cannot make any commitment regarding a specific role.”</p>
+    <p>The French President eased slowly back into his chair, the corner of his mouth twitching. “Aus, those three preconditions you just laid out — translated into plain language, that means: Australia is interested, but needs more time.”</p>
+    <p>Aus glanced at him with a tight smile. “Indeed.”</p>
+    <p>The French President paused. “Honestly — I feel the same way.”</p>
+    <p>Smiles broke out around the table; some nodded. The Italian Prime Minister said, “This is worth discussing further.”</p>
+    <p>The German Chancellor didn’t nod right away — he simply looked down and wrote a few lines in his notebook.</p>
+    <p>The President of the European Commission looked around the table and said, evenly: “Then next session, we’ll discuss the three preconditions the Prime Minister raised — governance structure, allocation of legal responsibility, and respect for the sovereign arrangements of Pacific island nations.”</p>
+    <p>He closed the folder in front of him. “That’s all for today. Enjoy the rest of it.”</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*iT3ok-KSCqM0sCk2D6DOTg.jpeg" alt="beauvillesez.org" loading="lazy">
+      <figcaption>beauvillesez.org</figcaption>
+    </figure>
+  </article>
+
+  <nav class="chapter-nav">
+    <a href="novel-1-5.html" class="nav-btn prev">
+      <span class="nav-label">&larr; PREVIOUS</span>
+      <span class="nav-title">1.5 — Religion and Public Order</span>
+    </a>
+    <span class="nav-btn next disabled"><span class="nav-label">NEXT &rarr;</span><span class="nav-title">More chapters coming soon</span></span>
+  </nav>
+
+  <p class="back-to-index">&larr; <a href="novel.html">Back to all chapters</a></p>
+
+</main>
+
+</body>
+</html>

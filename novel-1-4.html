@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.4 — History Has Already Rendered Its Verdict — Beauville SEZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #0F2A4A;
+    --navy-mid: #1B3A6B;
+    --navy-soft: #2C4A70;
+    --sand: #F5F0E4;
+    --sand-warm: #EFE7D4;
+    --ocean-teal: #2C6E6B;
+    --gold-signal: #C89B3C;
+    --ink: #16202C;
+    --ink-soft: #4A5568;
+    --paper-line: #D8CFB8;
+    --white: #FFFFFF;
+
+    --font-display: 'Fraunces', serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--sand);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245, 240, 228, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .header-top {
+    max-width: 1320px; margin: 0 auto; padding: 24px 40px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand-mark { width: 60px; height: 60px; flex-shrink: 0; }
+  .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+
+  .brand-name {
+    font-family: var(--font-display); font-weight: 600; font-size: 32px;
+    letter-spacing: 0.045em; color: var(--navy-deep);
+  }
+
+  .brand-sub {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ink-soft); margin-top: 4px;
+  }
+
+  .tagline {
+    font-family: var(--font-display); font-style: italic; font-size: 16px;
+    color: var(--navy-soft); text-align: right; max-width: 280px;
+    padding-left: 24px; border-left: 1px solid var(--paper-line); line-height: 1.4;
+  }
+
+  .lang-switch { display: flex; gap: 6px; flex-shrink: 0; }
+
+  .lang-btn {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
+    padding: 5px 11px; border: 1px solid var(--paper-line); border-radius: 20px;
+    color: var(--ink-soft); background: transparent; cursor: pointer; transition: all 0.2s ease;
+  }
+
+  .lang-btn:hover, .lang-btn.active {
+    border-color: var(--navy-mid); color: var(--navy-mid); background: rgba(27, 58, 107, 0.06);
+  }
+
+  nav.main-nav { background: var(--navy-deep); }
+
+  .nav-inner { max-width: 1320px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; }
+  .nav-links { display: flex; align-items: center; list-style: none; gap: 2px; }
+  .nav-links > li { position: relative; }
+
+  .nav-links a, .nav-links .dropdown-toggle {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.08em;
+    color: rgba(245, 240, 228, 0.82); padding: 15px 16px; cursor: pointer;
+    transition: all 0.2s ease; border-bottom: 2px solid transparent;
+    background: none; border: none;
+  }
+
+  .nav-links a.active { color: var(--gold-signal); border-bottom-color: var(--gold-signal); }
+  .nav-links a:hover, .nav-links .dropdown-toggle:hover {
+    color: var(--gold-signal); border-bottom-color: var(--gold-signal);
+  }
+
+  .nav-links .dropdown-toggle svg { width: 9px; height: 9px; transition: transform 0.2s ease; }
+  .has-dropdown:hover .dropdown-toggle svg { transform: rotate(180deg); }
+
+  .dropdown-menu {
+    position: absolute; top: 100%; left: 0; background: var(--white);
+    border: 1px solid var(--paper-line); border-radius: 4px; min-width: 200px;
+    box-shadow: 0 12px 32px rgba(15, 42, 74, 0.18);
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: all 0.2s ease; padding: 6px; z-index: 50;
+  }
+
+  .has-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
+  .dropdown-menu a {
+    display: block; color: var(--ink); padding: 10px 14px;
+    font-size: 12.5px; letter-spacing: 0.03em; border-radius: 3px; border: none;
+  }
+
+  .dropdown-menu a:hover { background: var(--sand-warm); color: var(--navy-mid); border: none; }
+
+  /* ============ CHAPTER READER ============ */
+  .reader-hero {
+    max-width: 760px; margin: 0 auto; padding: 56px 40px 0;
+  }
+
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ocean-teal); margin-bottom: 20px;
+  }
+
+  .kicker::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold-signal); box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.18);
+  }
+
+  .chapter-title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(28px, 3.4vw, 38px); line-height: 1.16;
+    letter-spacing: -0.01em; color: var(--navy-deep);
+  }
+
+  .chapter-subtitle-h {
+    font-family: var(--font-display); font-style: italic; font-weight: 500;
+    font-size: 19px; color: var(--ocean-teal); margin-top: 8px;
+  }
+
+  .disclaimer {
+    margin-top: 22px; padding: 14px 18px;
+    background: var(--sand-warm);
+    border-left: 2px solid var(--paper-line);
+    font-size: 12.5px; font-style: italic; color: var(--ink-soft); line-height: 1.6;
+  }
+
+  .reward-note {
+    margin-top: 18px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+    color: var(--gold-signal);
+    background: rgba(200, 155, 60, 0.08);
+    border: 1px solid rgba(200, 155, 60, 0.25);
+    padding: 7px 14px; border-radius: 20px;
+  }
+
+  /* ============ ARTICLE BODY ============ */
+  .article-body {
+    max-width: 720px; margin: 0 auto; padding: 40px 40px 20px;
+  }
+
+  .article-body p {
+    font-size: 17px; line-height: 1.85; color: var(--ink); margin-bottom: 20px;
+  }
+
+  .article-body p.figure-cap {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-style: italic;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: 6px 0 26px;
+    padding: 14px 0;
+    border-top: 1px dashed var(--paper-line);
+    border-bottom: 1px dashed var(--paper-line);
+  }
+
+  .figure-img {
+    margin: 28px 0;
+  }
+
+  .figure-img img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid var(--paper-line);
+    display: block;
+  }
+
+  .figure-img figcaption {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 10px;
+  }
+
+  .article-body h3 {
+    font-family: var(--font-display); font-weight: 600; font-size: 21px;
+    color: var(--navy-deep); margin: 34px 0 14px;
+  }
+
+  /* ============ NAV FOOTER ============ */
+  .chapter-nav {
+    max-width: 720px; margin: 0 auto; padding: 32px 40px 100px;
+    display: flex; align-items: stretch; justify-content: space-between; gap: 16px;
+  }
+
+  .nav-btn {
+    flex: 1;
+    background: var(--white);
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 0.2s ease;
+  }
+
+  .nav-btn:hover { border-color: var(--ocean-teal); }
+
+  .nav-btn.next { text-align: right; align-items: flex-end; }
+
+  .nav-btn .nav-label {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
+    color: var(--gold-signal);
+  }
+
+  .nav-btn .nav-title {
+    font-family: var(--font-display); font-weight: 600; font-size: 15px; color: var(--navy-deep);
+  }
+
+  .nav-btn.disabled {
+    opacity: 0.4; pointer-events: none;
+  }
+
+  .back-to-index {
+    text-align: center;
+    max-width: 720px; margin: 0 auto; padding: 0 40px 60px;
+    font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft);
+  }
+
+  .back-to-index a { color: var(--navy-mid); border-bottom: 1px solid var(--navy-mid); }
+
+  @media (max-width: 980px) {
+    .header-top { flex-wrap: wrap; padding: 20px 24px; }
+    .tagline { display: none; }
+    .nav-inner { padding: 0 24px; overflow-x: auto; }
+    .nav-links { white-space: nowrap; }
+    .reader-hero { padding: 40px 24px 0; }
+    .article-body { padding: 32px 24px 16px; }
+    .article-body p { font-size: 16px; }
+    .chapter-nav { padding: 24px 24px 64px; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="23" stroke="#0F2A4A" stroke-width="1.5" fill="#F5F0E4"/>
+          <path d="M20 34V19L24 12L28 19V34" stroke="#1B3A6B" stroke-width="1.6" stroke-linejoin="round"/>
+          <rect x="21" y="21" width="6" height="2" fill="#1B3A6B"/>
+          <rect x="20.5" y="26" width="7" height="2" fill="#1B3A6B"/>
+          <path d="M22.5 12L24 9L25.5 12" stroke="#C89B3C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="14" y1="34" x2="34" y2="34" stroke="#0F2A4A" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M9 24C9 24 12 22 14 24C16 26 18 22 20 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+          <path d="M28 24C28 24 30 22 32 24C34 26 37 22 39 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">BEAUVILLE</span>
+        <span class="brand-sub">SPECIAL ECONOMIC ZONE</span>
+      </div>
+    </div>
+
+    <p class="tagline">Dignity, Opportunity, and Belonging — A new shore</p>
+
+    <div class="lang-switch">
+      <button class="lang-btn active">EN</button>
+      <button class="lang-btn">FR</button>
+      <button class="lang-btn">中文</button>
+    </div>
+  </div>
+
+  <nav class="main-nav">
+    <div class="nav-inner">
+      <ul class="nav-links">
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="about.html">ABOUT</a></li>
+        <li><a href="governance.html">GOVERNANCE</a></li>
+        <li><a href="novel.html" class="active">THE NOVEL</a></li>
+        <li><a href="official-documents.html">OFFICIAL DOCUMENTS</a></li>
+        <li><a href="e-residency.html">E-RESIDENCY</a></li>
+        <li><a href="qa.html">Q&amp;A</a></li>
+        <li class="has-dropdown">
+          <button class="dropdown-toggle">GET INVOLVED
+            <svg viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="design-commons.html">Design Commons</a>
+            <a href="#">The Agora</a>
+            <a href="forum.html">The Forum</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <section class="reader-hero">
+    <span class="kicker">THE NOVEL · CHAPTER 1.4</span>
+    <h1 class="chapter-title">Beauville: Built by Migrants — 1.4</h1>
+    <p class="chapter-subtitle-h">History Has Already Rendered Its Verdict</p>
+    <p class="disclaimer">This is a work of speculative fiction. All characters, including public figures depicted herein, are used fictitiously.</p>
+    <span class="reward-note">&#9670; Reading this chapter earns B$15 in Beauville's civic rewards program (coming soon)</span>
+  </section>
+
+  <article class="article-body">
+    <p>At this, the French President leaned forward slightly and said, “Marcus, would you mind going back to the previous slide?”</p>
+    <p>“Of course.” Marcus immediately clicked back to the “Three-Phase Development Path” slide.</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*0DgKVX0cKPAS-RVLReDDPw.png" alt="Project Beauville briefing deck, presented by Marcus Lim" loading="lazy">
+      <figcaption>Project Beauville briefing deck, presented by Marcus Lim</figcaption>
+    </figure>
+    <p>The French President shifted in his seat, arms crossed over his chest, and asked in an even tone:</p>
+    <p>“This eight-year plan sounds tempting. But if it fails to become self-sufficient by year eight, who fills that bottomless hole?”</p>
+    <p>Marcus looked at him. “Yes, Mr. President. That’s a critical point — one we needed to work through ourselves before bringing it here.”</p>
+    <p>He clicked to the next slide, the one addressing risk hedging.</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*5gqIrVy0XIdGlZsNSKwEyg.png" alt="Project Beauville briefing deck, presented by Marcus Lim" loading="lazy">
+      <figcaption>Project Beauville briefing deck, presented by Marcus Lim</figcaption>
+    </figure>
+    <p>“Mr. President, what we’re discussing here isn’t gambling. It’s hedging. We were only willing to put ‘eight-year independence’ on the timeline because the underlying logic of this project isn’t charity — it’s asset securitization.</p>
+    <p>“If the internal loop hasn’t closed by year eight, we have three firewalls in place to protect your capital.”</p>
+    <h3>Firewall One: Infrastructure as Collateral</h3>
+    <p>“First, the ‘seed fund’ invested in the first three years doesn’t evaporate into thin air — it becomes a deep-water port, an automated container terminal, a power plant, a high-tech industrial park. These are hard assets. If the zone’s government runs a fiscal deficit by year eight, the funding consortium automatically triggers a debt-for-equity agreement, taking direct control of the operating rights and revenue rights of this infrastructure. What the concession rights to the most modern offshore logistics hub in the South Pacific would be worth on international capital markets — I think everyone at this table already has a fairly good sense of that.”</p>
+    <h3>Firewall Two: A Sovereign Guarantee Mechanism, With Risk Shared Across Parties</h3>
+    <p>“Second, this is not any single nation’s fiscal black hole. Each nation’s funding share is dynamically tied to the number of residents it sends. At the same time, land ownership remains with the South Pacific sovereign entity, and we’ve brought in political risk guarantees from international multilateral development banks. Even in the worst-case scenario, losses are shared proportionally among the world’s top sovereign funds and multilateral institutions — for any single nation at this table, it amounts to little more than a rounding error in your own budget.”</p>
+    <h3>Firewall Three: The Talent Pipeline as a Reverse Valve</h3>
+    <p>“Finally — and this is the most flexible lever of all — quota adjustment. If, by year eight, the island’s internal economy stalls because certain industries haven’t yet taken root, we can run the Talent Pipeline in reverse: allowing funding nations to open a portion of urgently needed labor quotas early, or recouping funds through a targeted labor-export service fee. In short: as long as the aging societies outside this room have a hard, structural need for high-quality labor, this zone will always retain the ability to convert itself into cash.”</p>
+    <p>A low murmur passed through the room. The Italian representative and the Canadian Prime Minister exchanged a few quiet words.</p>
+    <p>“So,” Marcus straightened up and summarized, “none of you are underwriting a social experiment that might fail. You’re converting money that would otherwise be burned on shelters and border enforcement — pure consumption — into a strategic investment backed by hard assets, sovereign-grade guarantees, and an attached option on premium labor. Worst case, you end up owning a high-value, multinationally-administered offshore industrial and logistics island.”</p>
+    <p>Marcus clicked to the next slide. The title was stark and forceful:</p>
+    <p>“History Has Already Rendered Its Verdict.”</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*7BuwKE3EPUcB89_79GZ7dA.png" alt="Project Beauville briefing deck, presented by Marcus Lim" loading="lazy">
+      <figcaption>Project Beauville briefing deck, presented by Marcus Lim</figcaption>
+    </figure>
+    <p>“To let you see the essential difference between ‘pure welfare aid’ and ‘infrastructure-driven development,’ we don’t need to model the future — we only need to look at history.” He walked toward the screen, pointing to the green block on the left:</p>
+    <p>Hainan Island.</p>
+    <p>“When it was designated a Special Economic Zone in 1988, it was widely regarded as a marginalized place of exile — barren, closed off. Yet within a single generation, it transformed into a thriving, globally connected community. The core ingredients of that success were remarkably simple: concentrate limited capital into infrastructure, which in turn drew hundreds of thousands of pioneers hungry to change their fate. Geographic isolation created room to experiment and fail safely. Clear rules lowered the cost of doing business. Economic freedom unlocked human initiative. The final formula is simple: geographic isolation + clear rules + economic freedom = full self-sufficiency.”</p>
+    <p>His tone shifted. Marcus’s gaze moved to the deep rust-colored region on the right, and his voice turned grim:</p>
+    <p>“The Counter-Lesson of Pure Welfare Aid.”</p>
+    <p>“If we don’t follow the ‘Hainan model,’ we slide toward the other side — the same quagmire we’ve been stuck in for decades in handling certain regional crises.”</p>
+    <p>“As you’re all aware, Gaza has, over the past several decades, received some of the highest per-capita external aid funding anywhere in the world. And yet, under prolonged geopolitical blockade and external pressure, that funding never converted into a real, infrastructure-linked labor economy. When a region lacks the capacity to generate its own productivity, external transfusions eventually curdle into generational dependency and social stagnation. That kind of prolonged, stagnant soil will, inevitably, become fertile ground for extremism.”</p>
+    <p>Marcus’s eyes were sharp, fixed on the heads of state at the far end of the table.</p>
+    <p>“Our current immigration policy is, in essence, an amplified version of that same ‘pure welfare aid’ model. We’ve spent enormous sums cultivating dependency, without ever cultivating productivity. What the Beauville plan does is sever that old road to social stagnation, completely — and replicate the other road, the one that leads to economic growth.”</p>
+    <p>Marcus tapped the keyboard lightly. The screen shifted to a slide titled</p>
+    <h3>Social and Educational Design</h3>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*Le58x-HIN4v5E68-5Iw9yA.png" alt="Beauville SEZ" loading="lazy">
+    </figure>
+    <p>Six neat modules unfolded across a dark blue background, each marked with its own icon.</p>
+    <p>“History teaches us that a community’s success or failure depends not only on its factories and ports, but on how it shapes the generation that grows up within it.” Marcus walked toward the screen and pointed to the red school icon in the top-left corner.</p>
+    <h3>1. Boarding School System: Equal Access to a Modern Civic Education, Regardless of Background</h3>
+    <p>No society can complete its integration through the first generation of migrants alone. It’s the next generation that truly determines the future.</p>
+    <p>“First: the boarding school system for the next generation. From Monday to Friday, children in the zone will attend high-quality boarding schools, staffed entirely by internationally recruited teachers who share a common set of values. They’ll return home on weekends. This design is meant to give children a fully immersive modern civic education.</p>
+    <p>Here they’ll study the sciences, culture and the arts, athletics, and how to think independently and creatively. Curriculum design and instruction must follow principles of equality, freedom, objectivity, and reason — leaning neither left nor right — while weekends and holidays preserve their family bonds. This ensures the next generation is integrated into modern civilization from the very start, rather than reproducing the prejudices of the old world within a closed family environment.</p>
+    <p>Those with academic interests may apply to universities anywhere in the world; the zone will eventually build universities of its own, but its first priority is establishing vocational and technical training schools — for children with no interest in academic paths, and for adults who need to work.”</p>
+    <p>So that every person has the ability to make an independent living once they leave home.</p>
+    <p>We are not worried about what becomes of these children.</p>
+    <p>Here they will master a common language, the scientific method, a spirit of rule of law, and the capacity for independent thought — while growing up in a society that draws together backgrounds from every corner of the world.</p>
+    <p>When they go out into the world, they won’t be simply members of some tribe, religion, or ethnic group, they will be people capable of understanding different civilizations, and moving freely between them.</p>
+    <p>We believe the world’s universities and companies will, in time, recognize this, and come to see them as the most promising generation of all.</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*puehtUc1bgXYTxpHgNlnAg.png" alt="Project Beauville briefing deck, presented by Marcus Lim" loading="lazy">
+      <figcaption>Project Beauville briefing deck, presented by Marcus Lim</figcaption>
+    </figure>
+    <h3>2. Schools With No Majority Group: Natural De-radicalization Through Equality</h3>
+    <p>His finger moved next to the globe icon in the middle. “This gives us a unique sociological advantage — schools with no majority group.</p>
+    <p>In traditional immigrant-receiving nations, migrant children almost always face an entrenched dominant group, and are easily placed at the bottom of a social hierarchy of belonging — breeding alienation and hostility.</p>
+    <p>But here, every child has a migrant background. There is no dominant group here to exclude them. That condition of equality is, in itself, the most powerful force for de-radicalization there is. When everyone is a builder, the divide between ‘us’ and ‘them’ simply ceases to exist.”</p>
+    <h3>3. The Points-Based Advancement System: Hope You Can See</h3>
+    <p>“So how do we sustain this society’s vitality over the long term? That brings us to point three — the points-based advancement system.” Marcus pointed to the prominent gold star. “This is not an indefinite refugee holding camp. What we offer is a clear ladder: seven years of lawful conduct, plus sustained productive contribution. Meet both conditions, and a resident can exchange them for a globally recognized special work permit — a legal path to work and settle in any of the funding nations. This is hope you can actually see, and it’s what will drive everyone here to actively uphold order in the zone, for the sake of their family’s future.”</p>
+    <p>He paused, his gaze sweeping over the varied expressions of the leaders seated around the table, then pointed to the final three modules in the second row, his voice low and practical.</p>
+    <h3>4. Integrated Healthcare: Building World-Class Facilities Through Mismatched Competition</h3>
+    <p>“On day-to-day social welfare — first, integrated healthcare. Building world-class medical facilities is normally prohibitively expensive. But we’ve found a closed loop that benefits everyone: every year, a large number of international medical graduates are unable to obtain clinical placements in their home countries. The zone will open its doors to them. In exchange for providing medical services locally, these graduates can accumulate full, internationally accredited clinical hours.</p>
+    <p>There are also, around the world, no shortage of retired specialists across every medical field who would welcome the chance to keep practicing. I intend to open the door to them as well. Through this mechanism, the zone can build a world-class medical infrastructure at remarkably low cost.”</p>
+    <h3>5. Rule of Law and Zero Tolerance: The Iron Rule as a Filter</h3>
+    <p>“With education and healthcare secured, the bottom layer of the zone’s safety net is an absolute rule of law and zero tolerance.” Marcus pointed to the scales icon in the middle, his tone clipped. “Again, we take our reference from the Singapore model. Strict laws will be enacted. Violent crime, gang activity, or any act attempting to subvert order in the zone will carry a corresponding penalty — imprisonment upon conviction, with the option of reduced sentences in exchange for physical labor. These rules will be made explicit from the moment anyone sets foot here, forming a positive process of self-selection. Only those who obey the law and want to build a future will remain. There is no room here for anyone who wants to tear it down.”</p>
+    <p>Down the line, we may lease other islands for agricultural production — offenders can work there in exchange for reduced sentences.</p>
+    <h3>6. Funding Model: Replacing a Costly Bottomless Pit With Predictable Head Fees, Interest-Free Loans, and International Contributions</h3>
+    <p>“Finally, all of this rests financially on the funding model.” Marcus tapped the briefcase icon in the bottom right. “Funding nations will pay the zone a standardized ‘head fee’ based on the origin of each resident, plus an interest-free loan drawn from a set percentage of their own migrant resettlement budgets, along with contributions from international development funds and charitable organizations. This guarantees our operational capital and preserves our ultra-low tax structure for businesses from day one</p>
+    <p>“These six pillars form a self-consistent social ecosystem. We use iron rules to filter out crime. We turn what was once a parasitic relationship into a mutually beneficial one, through healthcare and education, to reshape the next generation. And we use a points system to give them a legitimate path forward.”</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*wF1qbhrQ2ktdcw1Zb1W3rA.png" alt="Beauville SEZ" loading="lazy">
+    </figure>
+    <p>Marcus clicked to the next slide. Its title was only a few words:</p>
+    <p>Religion and Public Order.</p>
+  </article>
+
+  <nav class="chapter-nav">
+    <a href="novel-1-3.html" class="nav-btn prev">
+      <span class="nav-label">&larr; PREVIOUS</span>
+      <span class="nav-title">1.3 — The Numbers, and the Man Who Stopped Listening</span>
+    </a>
+    <a href="novel-1-5.html" class="nav-btn next">
+      <span class="nav-label">NEXT &rarr;</span>
+      <span class="nav-title">1.5 — Religion and Public Order</span>
+    </a>
+  </nav>
+
+  <p class="back-to-index">&larr; <a href="novel.html">Back to all chapters</a></p>
+
+</main>
+
+</body>
+</html>

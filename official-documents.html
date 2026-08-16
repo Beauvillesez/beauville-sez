@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Official Documents — Beauville SEZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #0F2A4A;
+    --navy-mid: #1B3A6B;
+    --navy-soft: #2C4A70;
+    --sand: #F5F0E4;
+    --sand-warm: #EFE7D4;
+    --ocean-teal: #2C6E6B;
+    --gold-signal: #C89B3C;
+    --ink: #16202C;
+    --ink-soft: #4A5568;
+    --paper-line: #D8CFB8;
+    --white: #FFFFFF;
+
+    --font-display: 'Fraunces', serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--sand);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ============ HEADER (shared) ============ */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245, 240, 228, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .header-top {
+    max-width: 1320px; margin: 0 auto; padding: 24px 40px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand-mark { width: 60px; height: 60px; flex-shrink: 0; }
+  .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+
+  .brand-name {
+    font-family: var(--font-display); font-weight: 600; font-size: 32px;
+    letter-spacing: 0.045em; color: var(--navy-deep);
+  }
+
+  .brand-sub {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ink-soft); margin-top: 4px;
+  }
+
+  .tagline {
+    font-family: var(--font-display); font-style: italic; font-size: 16px;
+    color: var(--navy-soft); text-align: right; max-width: 280px;
+    padding-left: 24px; border-left: 1px solid var(--paper-line); line-height: 1.4;
+  }
+
+  .lang-switch { display: flex; gap: 6px; flex-shrink: 0; }
+
+  .lang-btn {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
+    padding: 5px 11px; border: 1px solid var(--paper-line); border-radius: 20px;
+    color: var(--ink-soft); background: transparent; cursor: pointer; transition: all 0.2s ease;
+  }
+
+  .lang-btn:hover, .lang-btn.active {
+    border-color: var(--navy-mid); color: var(--navy-mid); background: rgba(27, 58, 107, 0.06);
+  }
+
+  nav.main-nav { background: var(--navy-deep); }
+
+  .nav-inner { max-width: 1320px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; }
+  .nav-links { display: flex; align-items: center; list-style: none; gap: 2px; }
+  .nav-links > li { position: relative; }
+
+  .nav-links a, .nav-links .dropdown-toggle {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.08em;
+    color: rgba(245, 240, 228, 0.82); padding: 15px 16px; cursor: pointer;
+    transition: all 0.2s ease; border-bottom: 2px solid transparent;
+    background: none; border: none;
+  }
+
+  .nav-links a.active { color: var(--gold-signal); border-bottom-color: var(--gold-signal); }
+  .nav-links a:hover, .nav-links .dropdown-toggle:hover {
+    color: var(--gold-signal); border-bottom-color: var(--gold-signal);
+  }
+
+  .nav-links .dropdown-toggle svg { width: 9px; height: 9px; transition: transform 0.2s ease; }
+  .has-dropdown:hover .dropdown-toggle svg { transform: rotate(180deg); }
+
+  .dropdown-menu {
+    position: absolute; top: 100%; left: 0; background: var(--white);
+    border: 1px solid var(--paper-line); border-radius: 4px; min-width: 200px;
+    box-shadow: 0 12px 32px rgba(15, 42, 74, 0.18);
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: all 0.2s ease; padding: 6px; z-index: 50;
+  }
+
+  .has-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
+  .dropdown-menu a {
+    display: block; color: var(--ink); padding: 10px 14px;
+    font-size: 12.5px; letter-spacing: 0.03em; border-radius: 3px; border: none;
+  }
+
+  .dropdown-menu a:hover { background: var(--sand-warm); color: var(--navy-mid); border: none; }
+
+  /* ============ PAGE HERO ============ */
+  .page-hero {
+    max-width: 900px; margin: 0 auto; padding: 64px 40px 8px;
+  }
+
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ocean-teal); margin-bottom: 24px;
+  }
+
+  .kicker::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold-signal); box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.18);
+  }
+
+  .page-title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(28px, 3.4vw, 40px); line-height: 1.16;
+    letter-spacing: -0.01em; color: var(--navy-deep);
+  }
+
+  .page-lede {
+    margin-top: 20px; font-size: 16px; line-height: 1.72; color: var(--ink-soft);
+  }
+
+  .status-note {
+    margin-top: 24px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    background: var(--sand-warm);
+    border: 1px solid var(--paper-line);
+    padding: 8px 16px; border-radius: 20px;
+  }
+
+  /* ============ DOCUMENT PANEL ============ */
+  .doc-section {
+    max-width: 900px; margin: 0 auto; padding: 40px 40px 8px;
+  }
+
+  .doc-panel {
+    background: var(--white);
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    padding: 44px 48px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .doc-panel::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--gold-signal);
+    border-radius: 4px 4px 0 0;
+  }
+
+  .doc-letterhead {
+    text-align: center;
+    padding-bottom: 26px;
+    margin-bottom: 32px;
+    border-bottom: 2px solid var(--navy-deep);
+  }
+
+  .doc-letterhead .doc-eyebrow {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.2em;
+    color: var(--gold-signal); display: block; margin-bottom: 14px;
+  }
+
+  .doc-letterhead h2 {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(22px, 2.6vw, 28px); color: var(--navy-deep); line-height: 1.3;
+  }
+
+  .doc-letterhead .doc-meta {
+    margin-top: 12px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
+    color: var(--ink-soft);
+  }
+
+  .doc-preamble {
+    font-family: var(--font-display); font-style: italic; font-size: 15.5px;
+    line-height: 1.7; color: var(--navy-soft);
+    margin-bottom: 34px; padding-bottom: 30px;
+    border-bottom: 1px dashed var(--paper-line);
+  }
+
+  .doc-article { margin-bottom: 30px; scroll-margin-top: 90px; }
+  .doc-article:last-child { margin-bottom: 0; }
+
+  .doc-article h3 {
+    font-family: var(--font-mono); font-weight: 500; font-size: 12.5px;
+    letter-spacing: 0.06em; color: var(--ocean-teal);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .doc-article p {
+    font-size: 14.5px; line-height: 1.78; color: var(--ink);
+    margin-bottom: 14px;
+  }
+
+  .doc-article p:last-child { margin-bottom: 0; }
+
+  .doc-article strong {
+    color: var(--navy-deep);
+    font-weight: 600;
+  }
+
+  .doc-index {
+    max-width: 900px; margin: 0 auto; padding: 28px 40px 0;
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+
+  .doc-index a {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.02em;
+    color: var(--navy-mid); border: 1px solid var(--paper-line);
+    padding: 7px 13px; border-radius: 20px; transition: all 0.2s ease;
+  }
+
+  .doc-index a:hover { border-color: var(--ocean-teal); background: rgba(44,110,107,0.06); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 980px) {
+    .header-top { flex-wrap: wrap; padding: 20px 24px; }
+    .tagline { display: none; }
+    .nav-inner { padding: 0 24px; overflow-x: auto; }
+    .nav-links { white-space: nowrap; }
+    .page-hero { padding: 40px 24px 8px; }
+    .doc-index { padding: 24px 24px 0; }
+    .doc-section { padding: 32px 24px 8px; }
+    .doc-panel { padding: 28px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="23" stroke="#0F2A4A" stroke-width="1.5" fill="#F5F0E4"/>
+          <path d="M20 34V19L24 12L28 19V34" stroke="#1B3A6B" stroke-width="1.6" stroke-linejoin="round"/>
+          <rect x="21" y="21" width="6" height="2" fill="#1B3A6B"/>
+          <rect x="20.5" y="26" width="7" height="2" fill="#1B3A6B"/>
+          <path d="M22.5 12L24 9L25.5 12" stroke="#C89B3C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="14" y1="34" x2="34" y2="34" stroke="#0F2A4A" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M9 24C9 24 12 22 14 24C16 26 18 22 20 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+          <path d="M28 24C28 24 30 22 32 24C34 26 37 22 39 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">BEAUVILLE</span>
+        <span class="brand-sub">SPECIAL ECONOMIC ZONE</span>
+      </div>
+    </div>
+
+    <p class="tagline">Dignity, Opportunity, and Belonging — A new shore</p>
+
+    <div class="lang-switch">
+      <button class="lang-btn active">EN</button>
+      <button class="lang-btn">FR</button>
+      <button class="lang-btn">中文</button>
+    </div>
+  </div>
+
+  <nav class="main-nav">
+    <div class="nav-inner">
+      <ul class="nav-links">
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="about.html">ABOUT</a></li>
+        <li><a href="governance.html">GOVERNANCE</a></li>
+        <li><a href="novel.html">THE NOVEL</a></li>
+        <li><a href="official-documents.html" class="active">OFFICIAL DOCUMENTS</a></li>
+        <li><a href="e-residency.html">E-RESIDENCY</a></li>
+        <li><a href="qa.html">Q&amp;A</a></li>
+        <li class="has-dropdown">
+          <button class="dropdown-toggle">GET INVOLVED
+            <svg viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="design-commons.html">Design Commons</a>
+            <a href="#">The Agora</a>
+            <a href="forum.html">The Forum</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <span class="kicker">OFFICIAL DOCUMENTS</span>
+    <h1 class="page-title">The Beauville Charter</h1>
+    <p class="page-lede">A framework for the Beauville Special Economic Zone, Haleloa. This is not a real international treaty; it is the founding document within the world of the Beauville SEZ novel series.</p>
+    <span class="status-note">&#9670; Working draft — reflects the founding terms as negotiated through the first framework session</span>
+  </section>
+
+  <nav class="doc-index">
+    <a href="#sec1">1. Preamble</a>
+    <a href="#sec2">2. Site & Sovereignty</a>
+    <a href="#sec3">3. Governance</a>
+    <a href="#sec4">4. Economic Development</a>
+    <a href="#sec5">5. Financial Safeguards</a>
+    <a href="#sec6">6. Currency & Internal Economy</a>
+    <a href="#sec7">7. Talent Pipeline & Residency</a>
+    <a href="#sec8">8. Social & Educational Framework</a>
+    <a href="#sec9">9. Religion & Public Order</a>
+    <a href="#sec10">10. Justice & Penal System</a>
+    <a href="#sec11">11. Dispute Resolution</a>
+    <a href="#sec12">12. Official Languages</a>
+    <a href="#sec13">13. Funding Model</a>
+  </nav>
+
+  <section class="doc-section">
+
+    <div class="doc-panel" id="charter">
+      <div class="doc-letterhead">
+        <span class="doc-eyebrow">FOUNDING DOCUMENT</span>
+        <h2>The Beauville Charter</h2>
+        <p class="doc-meta">A Framework for the Beauville Special Economic Zone, Haleloa</p>
+      </div>
+
+      <div class="doc-article" id="sec1">
+        <h3>1. PREAMBLE</h3>
+        <p>For three decades, the world tried two answers to the question of displaced and undocumented people, and both failed.</p>
+        <p>The first was welfare without work: housing and subsidy without a path to contribution, which bred dependency, parallel societies, and taxpayer resentment wherever it was tried at scale. The second was deportation without end: a logistical and moral cost with no return, severing labor supply chains and producing headlines no government wanted to own.</p>
+        <p>Beauville is a third answer. It is not a refugee camp, and it is not a charity. It is a special economic zone — leased, not annexed; governed, not abandoned; built by the people who live in it, for the people who live in it, under rules agreed before a single foundation was poured.</p>
+        <p>This Charter sets out those rules. It exists so that no one arrives without knowing exactly what they are agreeing to, and so that no government backing this project has to take it on faith. Beauville is not a promise. It is a method.</p>
+      </div>
+
+      <div class="doc-article" id="sec2">
+        <h3>2. SITE & SOVEREIGNTY</h3>
+        <p>Beauville is located on Loa Island, part of the sovereign nation of Haleloa, under a long-term lease rather than any transfer of territory.</p>
+        <p><strong>Why here.</strong> A site for a zone like this has to satisfy four conditions at once: it must be remote enough that distance itself does the work of separating the zone from the conflicts people left behind; buildable, with the land, freshwater access, climate stability, and deep-water port potential a real economy requires; free of territorial dispute, under one clear and stable jurisdiction; and available on a lease of fifty years or longer, with renewal built in, so that capital markets can plan against it.</p>
+        <p>Four other candidates were considered and set aside — one for the geopolitical risk of building in contested waters, one for the absence of the geology a deep-water port requires, one for a public health burden and land-title complexity that promised years of litigation before groundbreaking, and one for a land-tenure system too opaque to lease against with confidence. Haleloa met every physical criterion, and its government came to the table ready to move.</p>
+        <p><strong>What the host nation keeps.</strong> Beauville is not an independent state, and the lease is not a sale. Haleloa retains sovereignty over the territory. It retains final say on matters of security. Every asset built on the island — the port, the grid, the housing, the schools — reverts to Haleloa in full at the end of the lease term. In exchange for hosting the zone, Haleloa receives decades of stable rental income, a share in the economic activity the zone generates in its own waters, and first right of recruitment for the zone's graduates.</p>
+      </div>
+
+      <div class="doc-article" id="sec3">
+        <h3>3. GOVERNANCE</h3>
+        <p>Beauville operates under a Managed Autonomy Model. It is not self-governing, and it does not aspire to be. Founding oversight rests with a consortium of funding nations, each holding a functional mandate rather than a general one — security, education, public health, and capital are each the clear responsibility of one lead nation, coordinated through a joint council with the host nation retaining ultimate authority.</p>
+        <p>Residents do not vote to make or unmake the rules of the zone during the founding period. This is a deliberate design choice, not an oversight, and it is stated plainly here so that no one who comes to Beauville is misled about what they are joining. What residents do have is a written charter that binds the authorities as much as it binds them, a functioning court system, and a clear, published path to a different kind of life once conditions are met.</p>
+        <p>The zone operates under strict rule of law, modeled on Singapore's approach: clear rules, published in advance, applied consistently, with serious consequences for serious violations. This is not a slogan. It is meant to be checkable — the rules are public, and so is the record of how they are enforced.</p>
+      </div>
+
+      <div class="doc-article" id="sec4">
+        <h3>4. ECONOMIC DEVELOPMENT</h3>
+        <p>Beauville's economy is designed to move through three phases over eight years, from initial capital investment to full independence.</p>
+        <p><strong>Phase One — Capital Launch and Infrastructure (Years 1–3).</strong> Funding nations contribute a per-resident launch fee plus an interest-free loan drawn from existing migrant resettlement budgets, combined with development-bank and philanthropic funding, into a sovereign seed fund. This money is not spent on aid — it is spent on infrastructure-for-equity: the port, the power grid, desalination, and housing become hard assets of the zone itself, not sunk costs. Residents earn wages through the work of construction and, in doing so, accumulate an ownership stake in what they build.</p>
+        <p><strong>Phase Two — Micro-Economic Autonomy (Years 4–7).</strong> As infrastructure comes online, wages begin circulating internally. With near-zero corporate and personal tax, local retail, services, and small enterprise start up cheaply and quickly. Residents shift from builders to operators — shopkeepers, tradespeople, service providers — and the zone moves toward basic self-sufficiency. External funding tapers accordingly.</p>
+        <p><strong>Phase Three — Export-Driven Independence (Year 8 onward).</strong> With infrastructure complete and a motivated, cost-competitive workforce in place, the zone opens to global manufacturing, digital services, and logistics. Export revenue replaces external subsidy entirely. From this point, Beauville is a net contributor to the region, not a cost to anyone funding it.</p>
+      </div>
+
+      <div class="doc-article" id="sec5">
+        <h3>5. FINANCIAL SAFEGUARDS</h3>
+        <p>Because an eight-year horizon is a forecast, not a guarantee, the Charter builds in three safeguards against the possibility that self-sufficiency takes longer than planned.</p>
+        <p><strong>Infrastructure as collateral.</strong> The hard assets built in Phase One — port, grid, desalination, industrial parks — are not written off if the zone runs a deficit. A debt-for-equity mechanism gives the funding consortium the right to take over operation and revenue of that infrastructure directly, rather than absorbing an open-ended loss.</p>
+        <p><strong>Shared sovereign guarantee.</strong> No single nation is exposed to the full downside. Contribution shares scale with the number of residents each nation sends, land ownership remains with Haleloa, and political risk is backstopped by international development banks — spreading any shortfall across the world's largest sovereign funds and multilateral institutions rather than any one national budget.</p>
+        <p><strong>The talent pipeline as a release valve.</strong> If the internal economy stalls, funding nations can open early access to a portion of the talent pipeline ahead of schedule, or the zone can generate revenue through targeted labor-service arrangements. As long as aging economies outside the zone need skilled labor, Beauville retains a way to convert its human capital into liquidity.</p>
+      </div>
+
+      <div class="doc-article" id="sec6">
+        <h3>6. CURRENCY & INTERNAL ECONOMY</h3>
+        <p>Beauville's internal economy runs on the Beau Dollar (B$), a zone-specific currency used for wages, local commerce, and the property-equity stakes residents accumulate through labor contracts. The Beau Dollar exists to keep the internal economy legible and self-contained during the founding years, while remaining convertible against major external currencies at rates set by the zone's monetary authority, subject to consortium oversight during Phases One and Two.</p>
+        <p>Housing in the zone is issued on 70-year leases rather than freehold sale during the founding period — a deliberate choice to keep homeownership itself affordable and to prevent land speculation from distorting a market with no existing price history.</p>
+        <p><strong>A digital passport for remote builders.</strong> Participation in Beauville's economy is not limited to residents who relocate. A digital passport lets entrepreneurs anywhere in the world register a venture in the zone in minutes, taxed at a transparent 5% micro-rate — a rate designed to reward activity rather than extract from it. This extends the zone's low-friction, low-tax economic model beyond its physical population, giving Beauville a second, borderless layer of participants alongside the residents building it in person.</p>
+      </div>
+
+      <div class="doc-article" id="sec7">
+        <h3>7. TALENT PIPELINE & RESIDENCY</h3>
+        <p>Residency in Beauville is not indefinite, and it is not a holding pattern. It is a ladder with a clear top step: seven years of lawful conduct and sustained productive contribution earns a resident a globally recognized special work permit, opening a legal path to employment and settlement in any funding nation.</p>
+        <p>This is the mechanism that turns "undocumented migrant" into "screened, credentialed workforce" — not by changing who a person is, but by giving them seven years in which to build a documented record the rest of the world already knows how to trust. The pipeline is self-financing: funding nations spend nothing educating this workforce, because the zone's own school and training system does it first.</p>
+      </div>
+
+      <div class="doc-article" id="sec8">
+        <h3>8. SOCIAL & EDUCATIONAL FRAMEWORK</h3>
+        <p>Beauville's long-term success rests less on its port and grid than on how it raises the generation that grows up inside it. Six commitments anchor this:</p>
+        <p><strong>A boarding school system,</strong> Monday through Friday, staffed by an internationally recruited faculty and built around a curriculum committed to objectivity, reason, and independent thought — deliberately built to sit outside any single national or ideological tradition. Weekends and holidays are protected for family life. Vocational and technical training is prioritized alongside academic pathways, so that every resident — child or adult — leaves with the ability to support themselves independently.</p>
+        <p><strong>Schools with no majority group.</strong> Every child in the zone's schools has a migrant background. There is no dominant group for a newcomer to be placed beneath, and no established hierarchy to be excluded from — which the Charter treats as a structural safeguard against the alienation that fuels radicalization elsewhere.</p>
+        <p><strong>A points-based advancement system,</strong> described above under Talent Pipeline — the visible, achievable path that gives residents a reason to invest in the zone's stability rather than wait it out.</p>
+        <p><strong>Integrated healthcare,</strong> built through a mutually beneficial arrangement with the large number of international medical graduates who lack clinical placements in their home countries, and specialists seeking continued practice after retirement — delivering world-class care at a fraction of typical build cost.</p>
+        <p><strong>Absolute rule of law,</strong> with clearly published rules and consistent enforcement from the day of entry, designed to be a filter rather than a trap: it selects for residents who want order and are willing to build, and it does not accommodate those who are not.</p>
+        <p><strong>A predictable funding model</strong> — see Section 13 — that replaces open-ended cost with fixed, foreseeable contributions from funding nations.</p>
+      </div>
+
+      <div class="doc-article" id="sec9">
+        <h3>9. RELIGION & PUBLIC ORDER</h3>
+        <p>Every resident of Beauville has complete freedom of private belief. The zone's public spaces are neutral, on the same principle that governs public order in Singapore: no single faith is permitted to claim the public square.</p>
+        <p>Three rules follow from this. Religious activity is confined to private residences and to registered places of worship; no religious ceremony or proselytizing takes place in public space. Any registered place of worship is capped at 300 square meters and 200 seats, and requires a permit from the zone's governing commission before construction. No registered place of worship may be financed, under any name including religious donation, with funding sourced from outside the zone.</p>
+        <p>None of this restricts belief itself — only its scale and its funding. The intent is to keep faith what it is at its best: a private source of strength, kept apart from the machinery of political mobilization.</p>
+      </div>
+
+      <div class="doc-article" id="sec10">
+        <h3>10. JUSTICE & PENAL SYSTEM</h3>
+        <p>Beauville enforces zero tolerance for violent crime, organized criminal activity, and any act intended to subvert the order of the zone. Conviction carries imprisonment, with the option to reduce a sentence through structured labor — including, for some offenders, agricultural work on a separate, leased outer island reserved for this purpose.</p>
+        <p>These terms are disclosed to every resident before they arrive, which is by design: the Charter treats this disclosure as a filter as much as a deterrent, screening for residents who intend to build rather than disrupt.</p>
+      </div>
+
+      <div class="doc-article" id="sec11">
+        <h3>11. DISPUTE RESOLUTION</h3>
+        <p>Civil and commercial disputes within the zone, and disputes between the zone's administration and the host nation, are resolved through an independent international arbitration tribunal rather than the domestic courts of any single funding nation. Haleloa has agreed, as part of its founding terms, to cede interpretive authority over civil and commercial law within the zone to this tribunal — a concession the Charter does not take lightly, and one that requires the tribunal to operate with full transparency and published precedent.</p>
+        <p>Criminal matters are handled under the zone's own justice system, described in Section 10, with rights of appeal to a panel that includes judges from the host nation and from the funding consortium.</p>
+      </div>
+
+      <div class="doc-article" id="sec12">
+        <h3>12. OFFICIAL LANGUAGES</h3>
+        <p>English is the zone's language of administration, commerce, and instruction across the boarding school system, chosen for its role as the widest common language among a founding population that will arrive speaking many others. This is a practical choice, not a cultural one: residents retain full freedom to use their own languages in private life, in worship, and in community life outside formal instruction, and the zone's public information — including this Charter — is maintained in multiple languages for residents and observers alike.</p>
+      </div>
+
+      <div class="doc-article" id="sec13">
+        <h3>13. FUNDING MODEL</h3>
+        <p>Beauville is financed by three coordinated sources: a standardized per-resident fee paid by each funding nation, scaled to the number of residents it sends; an interest-free loan drawn from a fixed share of each nation's existing migrant resettlement budget — money already being spent, redirected rather than added to; and contributions from international development funds and philanthropic organizations.</p>
+        <p>This structure is deliberately built to replace an open-ended, ever-growing cost — detention, enforcement, indefinite welfare support — with a fixed, foreseeable one. It is why the Charter's authors have consistently described this not as an aid program, but as an investment: predictable in, asset-backed, with a defined horizon to independence.</p>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+</body>
+</html>
