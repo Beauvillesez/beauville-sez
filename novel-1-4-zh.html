@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.4 — 走哪条路，历史早有定论 — 博维尔特区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #0F2A4A;
+    --navy-mid: #1B3A6B;
+    --navy-soft: #2C4A70;
+    --sand: #F5F0E4;
+    --sand-warm: #EFE7D4;
+    --ocean-teal: #2C6E6B;
+    --gold-signal: #C89B3C;
+    --ink: #16202C;
+    --ink-soft: #4A5568;
+    --paper-line: #D8CFB8;
+    --white: #FFFFFF;
+
+    --font-display: 'Fraunces', 'Noto Serif SC', 'PingFang SC', serif;
+    --font-body: 'IBM Plex Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --font-mono: 'IBM Plex Mono', 'PingFang SC', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--sand);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245, 240, 228, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .header-top {
+    max-width: 1320px; margin: 0 auto; padding: 24px 40px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand-mark { width: 60px; height: 60px; flex-shrink: 0; }
+  .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+
+  .brand-name {
+    font-family: var(--font-display); font-weight: 600; font-size: 32px;
+    letter-spacing: 0.045em; color: var(--navy-deep);
+  }
+
+  .brand-sub {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ink-soft); margin-top: 4px;
+  }
+
+  .tagline {
+    font-family: var(--font-display); font-style: italic; font-size: 16px;
+    color: var(--navy-soft); text-align: right; max-width: 280px;
+    padding-left: 24px; border-left: 1px solid var(--paper-line); line-height: 1.4;
+  }
+
+  .lang-switch { display: flex; gap: 6px; flex-shrink: 0; }
+
+  .lang-btn {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
+    padding: 5px 11px; border: 1px solid var(--paper-line); border-radius: 20px;
+    color: var(--ink-soft); background: transparent; cursor: pointer; transition: all 0.2s ease;
+  }
+
+  .lang-btn:hover, .lang-btn.active {
+    border-color: var(--navy-mid); color: var(--navy-mid); background: rgba(27, 58, 107, 0.06);
+  }
+
+  nav.main-nav { background: var(--navy-deep); }
+
+  .nav-inner { max-width: 1320px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; }
+  .nav-links { display: flex; align-items: center; list-style: none; gap: 2px; }
+  .nav-links > li { position: relative; }
+
+  .nav-links a, .nav-links .dropdown-toggle {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.08em;
+    color: rgba(245, 240, 228, 0.82); padding: 15px 16px; cursor: pointer;
+    transition: all 0.2s ease; border-bottom: 2px solid transparent;
+    background: none; border: none;
+  }
+
+  .nav-links a.active { color: var(--gold-signal); border-bottom-color: var(--gold-signal); }
+  .nav-links a:hover, .nav-links .dropdown-toggle:hover {
+    color: var(--gold-signal); border-bottom-color: var(--gold-signal);
+  }
+
+  .nav-links .dropdown-toggle svg { width: 9px; height: 9px; transition: transform 0.2s ease; }
+  .has-dropdown:hover .dropdown-toggle svg { transform: rotate(180deg); }
+
+  .dropdown-menu {
+    position: absolute; top: 100%; left: 0; background: var(--white);
+    border: 1px solid var(--paper-line); border-radius: 4px; min-width: 200px;
+    box-shadow: 0 12px 32px rgba(15, 42, 74, 0.18);
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: all 0.2s ease; padding: 6px; z-index: 50;
+  }
+
+  .has-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
+  .dropdown-menu a {
+    display: block; color: var(--ink); padding: 10px 14px;
+    font-size: 12.5px; letter-spacing: 0.03em; border-radius: 3px; border: none;
+  }
+
+  .dropdown-menu a:hover { background: var(--sand-warm); color: var(--navy-mid); border: none; }
+
+  /* ============ CHAPTER READER ============ */
+  .reader-hero {
+    max-width: 760px; margin: 0 auto; padding: 56px 40px 0;
+  }
+
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ocean-teal); margin-bottom: 20px;
+  }
+
+  .kicker::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold-signal); box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.18);
+  }
+
+  .chapter-title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(28px, 3.4vw, 38px); line-height: 1.16;
+    letter-spacing: -0.01em; color: var(--navy-deep);
+  }
+
+  .chapter-subtitle-h {
+    font-family: var(--font-display); font-style: italic; font-weight: 500;
+    font-size: 19px; color: var(--ocean-teal); margin-top: 8px;
+  }
+
+  .disclaimer {
+    margin-top: 22px; padding: 14px 18px;
+    background: var(--sand-warm);
+    border-left: 2px solid var(--paper-line);
+    font-size: 12.5px; font-style: italic; color: var(--ink-soft); line-height: 1.6;
+  }
+
+  .reward-note {
+    margin-top: 18px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+    color: var(--gold-signal);
+    background: rgba(200, 155, 60, 0.08);
+    border: 1px solid rgba(200, 155, 60, 0.25);
+    padding: 7px 14px; border-radius: 20px;
+  }
+
+  /* ============ ARTICLE BODY ============ */
+  .article-body {
+    max-width: 720px; margin: 0 auto; padding: 40px 40px 20px;
+  }
+
+  .article-body p {
+    font-size: 17px; line-height: 1.85; color: var(--ink); margin-bottom: 20px;
+  }
+
+  .article-body p.figure-cap {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-style: italic;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: 6px 0 26px;
+    padding: 14px 0;
+    border-top: 1px dashed var(--paper-line);
+    border-bottom: 1px dashed var(--paper-line);
+  }
+
+  .figure-img {
+    margin: 28px 0;
+  }
+
+  .figure-img img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid var(--paper-line);
+    display: block;
+  }
+
+  .figure-img figcaption {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 10px;
+  }
+
+  .article-body h3 {
+    font-family: var(--font-display); font-weight: 600; font-size: 21px;
+    color: var(--navy-deep); margin: 34px 0 14px;
+  }
+
+  /* ============ NAV FOOTER ============ */
+  .chapter-nav {
+    max-width: 720px; margin: 0 auto; padding: 32px 40px 100px;
+    display: flex; align-items: stretch; justify-content: space-between; gap: 16px;
+  }
+
+  .nav-btn {
+    flex: 1;
+    background: var(--white);
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 0.2s ease;
+  }
+
+  .nav-btn:hover { border-color: var(--ocean-teal); }
+
+  .nav-btn.next { text-align: right; align-items: flex-end; }
+
+  .nav-btn .nav-label {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
+    color: var(--gold-signal);
+  }
+
+  .nav-btn .nav-title {
+    font-family: var(--font-display); font-weight: 600; font-size: 15px; color: var(--navy-deep);
+  }
+
+  .nav-btn.disabled {
+    opacity: 0.4; pointer-events: none;
+  }
+
+  .back-to-index {
+    text-align: center;
+    max-width: 720px; margin: 0 auto; padding: 0 40px 60px;
+    font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft);
+  }
+
+  .back-to-index a { color: var(--navy-mid); border-bottom: 1px solid var(--navy-mid); }
+
+  @media (max-width: 980px) {
+    .header-top { flex-wrap: wrap; padding: 20px 24px; }
+    .tagline { display: none; }
+    .nav-inner { padding: 0 24px; overflow-x: auto; }
+    .nav-links { white-space: nowrap; }
+    .reader-hero { padding: 40px 24px 0; }
+    .article-body { padding: 32px 24px 16px; }
+    .article-body p { font-size: 16px; }
+    .chapter-nav { padding: 24px 24px 64px; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="23" stroke="#0F2A4A" stroke-width="1.5" fill="#F5F0E4"/>
+          <path d="M20 34V19L24 12L28 19V34" stroke="#1B3A6B" stroke-width="1.6" stroke-linejoin="round"/>
+          <rect x="21" y="21" width="6" height="2" fill="#1B3A6B"/>
+          <rect x="20.5" y="26" width="7" height="2" fill="#1B3A6B"/>
+          <path d="M22.5 12L24 9L25.5 12" stroke="#C89B3C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="14" y1="34" x2="34" y2="34" stroke="#0F2A4A" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M9 24C9 24 12 22 14 24C16 26 18 22 20 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+          <path d="M28 24C28 24 30 22 32 24C34 26 37 22 39 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">BEAUVILLE</span>
+        <span class="brand-sub">博维尔特区</span>
+      </div>
+    </div>
+
+    <p class="tagline">尊严、机遇与归属 — 一片新的海岸</p>
+
+    <div class="lang-switch">
+      <a href="novel-1-4.html" class="lang-btn">EN</a>
+      <button class="lang-btn">FR</button>
+      <button class="lang-btn active">中文</button>
+    </div>
+  </div>
+
+  <nav class="main-nav">
+    <div class="nav-inner">
+      <ul class="nav-links">
+        <li><a href="index-zh.html">首页</a></li>
+        <li><a href="about-zh.html">关于</a></li>
+        <li><a href="governance-zh.html">治理</a></li>
+        <li><a href="novel-zh.html" class="active">小说</a></li>
+        <li><a href="official-documents-zh.html">官方文件</a></li>
+        <li><a href="e-residency-zh.html">数字居留权</a></li>
+        <li><a href="qa-zh.html">问答</a></li>
+        <li class="has-dropdown">
+          <button class="dropdown-toggle">参与共建
+            <svg viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="design-commons.html">设计共创区</a>
+            <a href="#">广场</a>
+            <a href="forum.html">论坛</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <section class="reader-hero">
+    <span class="kicker">小说 · 第 1.4 节</span>
+    <h1 class="chapter-title">博维尔：移民建造 — 1.4</h1>
+    <p class="chapter-subtitle-h">走哪条路，历史早有定论</p>
+    <p class="disclaimer">这是一部政治推演小说。故事中所有人物，包括文中出现的公众人物，均属虚构使用。</p>
+    <span class="reward-note">&#9670; 阅读本节可获得 B$100 博维尔公民奖励（即将上线）</span>
+  </section>
+
+  <article class="article-body">
+    <p>这时，法国总统向前伸了一下手，说："Marcus，能请你把PPT退回前一页吗？"</p>
+    <p>"当然可以，"Marcus马上就把幻灯片调回到"三阶段发展路径"页面。</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*pfJnDz4QHnd4BJ9OGJFVLw.jpeg" alt="博维尔项目演示文稿 — 三阶段发展路径" loading="lazy">
+      <figcaption>博维尔项目演示文稿 — 三阶段发展路径</figcaption>
+    </figure>
+    <p>法国总统换了个坐姿，双手交叉在胸前，语气平静地问：</p>
+    <p>"这个八年计划听着很诱人。但如果第八年它没能自给自足，谁来填那个无底洞？"</p>
+    <p>Marcus 望向他说："是的总统先生，那是非常重要的一点，这也是我们必须要弄清楚的。"</p>
+    <p>他点开涉及风险对冲的下一页。</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*OhO80fC8fug_HG8kqmUwjg.jpeg" alt="博维尔项目演示文稿 — 风险对冲" loading="lazy">
+      <figcaption>博维尔项目演示文稿 — 风险对冲</figcaption>
+    </figure>
+    <p>"总统先生，在这里我们不谈赌博，只谈对冲。我们之所以敢把'八年独立'写进时间表，是因为这个项目的底层逻辑不是慈善，而是资产证券化（Asset Securitization）。"</p>
+    <p>"如果第八年它没有跑通内循环，我们有三道防火墙来确保各位的资本安全。"</p>
+    <p><strong>第一道防火墙：基础设施的"抵押特权"</strong></p>
+    <p>"首先，前三年投入的'种子基金'并没有变成无形的水泡，而是变成了深水港、自动化集装箱码头、发电厂和高新园区。这些是硬资产。如果特区政府在第八年出现财政赤字，出资国财团（Consortium）将自动触发'债转股'协议，直接接管这些基础设施的运营权与收益权。南太平洋最现代化的离岸物流枢纽，其特许经营权在国际资本市场上价值几何，相信在座的各位都心中有数。"</p>
+    <p><strong>第二道防火墙：多方风险共担的"主权担保机制"</strong></p>
+    <p>"其次，这不是任何单一国家的财政无底洞。项目的出资比例是与各方输送的居民人数动态挂钩的。同时，土地所有权属于南太平洋主权实体，我们引入了国际多边开发银行提供政治风险担保。即便出现极端情况，亏损也是由全球最顶级的几大主权基金和多边机构按比例分摊，它对在座任何一个国家的本国财政而言，都只是一笔微不足道的系统误差。"</p>
+    <p><strong>第三道防火墙：人才管道的"逆向调节阀"</strong></p>
+    <p>"最后，也是最具有弹性的调节手段——配额调节。如果第八年岛内经济由于某些行业尚未落地而出现停滞，我们可以通过'人才管道'（Talent Pipeline）进行逆向调节：允许出资国提前开放一部分急需的劳动力配额，或者通过收取'人才定向输出技术服务费'来回笼资金。简而言之，只要有外面老龄化社会对优质劳动力的刚性需求在，这个特区就永远拥有变现能力。"</p>
+    <p>会议室里响起一阵细微的交谈声。意大利代表和加拿大总理低声交换了意见。</p>
+    <p>"所以，"Marcus 站直身体，总结道，"各国不是在为一个可能失败的社会实验买单。而是在用原本就要耗费在收容所和边境执法里的消耗性资金，变成了一笔拥有硬资产抵押、主权级担保、且附带优质劳动力期权的战略投资。最坏的结果，无非是你们拥有了一个由多国联合托管的、高价值的离岸工业物流岛。"</p>
+    <p>Marcus 翻到了下一页幻灯片，标题冷峻而有力："历史有其判决"。</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*uue82UZUspuZ-D_sVf1mQQ.jpeg" alt="博维尔项目演示文稿 — 历史有其判决" loading="lazy">
+      <figcaption>博维尔项目演示文稿 — 历史有其判决</figcaption>
+    </figure>
+    <p>"为了让各位直观地看到'纯福利援助'与'基础设施驱动'的本质区别，我们无需推演未来，只需回顾历史。"他走到屏幕前，指着左侧那道绿色的色块：海南岛。</p>
+    <p>"1988年设立经济特区时，那里曾是公认的'被边缘化的流放之地'，荒芜且封闭。但仅仅一代人，它完成了向全球化繁荣社区的华丽转型。成功的核心要素非常朴素：将有限的资本集中投入基础设施，从而吸引数十万渴望改变命运的拓荒者涌入。地理隔离创造了试错空间，清晰的规则降低了交易成本，经济自由则释放了人的能动性。最终公式很简单：地理隔离 + 规则清晰 + 经济自由 = 完全自给自足。"</p>
+    <p>话锋一转，Marcus 的视线移向右侧那深沉的红褐色区域，语气变得冷峻："纯福利援助的反面教训"。</p>
+    <p>"如果我们不按'海南模式'走，就会滑向另一侧——这也是我们过去几十年在处理某些地区问题时深陷的泥潭。"</p>
+    <p>"正如大家所见，加沙在过去数十年里，接收了全球人均密度最高的外界援助资金。然而，在长期的地缘封锁与外界高压环境下，这些资金未能转化为与基础设施挂钩的实体劳动经济。当一个地区缺乏自主生产力，外界的输血最终只会演变为代际依赖与社会停滞。这种长期困顿的土壤，最终必然定向导向极端主义的滋生。"</p>
+    <p>Marcus 目光如炬，直视着长桌尽头的各国首脑。</p>
+    <p>"我们现在的移民政策，本质上就是这套'纯福利援助'的放大版。我们用高昂的代价养出了依赖，却没能培养出生产力。Beauville 计划要做的，就是彻底切断这条通往'社会停滞'的旧路，复制那条通往'经济增长'的新路。"</p>
+    <p>Marcus 轻轻触碰键盘，屏幕切换到了标题是：社会与教育设计的幻灯片。六个整齐的模块在深蓝色的背景上展开，带着各色图标。</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*vt5ilQOTBcfqSlzXYrYM1w.jpeg" alt="博维尔项目演示文稿 — 社会与教育设计" loading="lazy">
+      <figcaption>博维尔项目演示文稿 — 社会与教育设计</figcaption>
+    </figure>
+    <p>"历史的教训告诉我们，一个社区的成败，不仅取决于工厂和港口，更取决于如何塑造在这个社区里长大的一代人。"Marcus 走向屏幕，指向第一行左侧的红色学校图标。</p>
+    <p><strong>1. 寄宿学校体系：确保不来自同背景的孩子都拥有平等的现代公民教育机会</strong></p>
+    <p>任何社会都无法仅依靠第一代移民完成整合，真正决定未来的是下一代。</p>
+    <p>"首先，是关于下一代的寄宿学校体系。特区的子女周一至周五将就读于高质量的寄宿学校，这些学校全部由国际招聘的价值观一致的优秀教师执教，周末他们可以回家。这种设计旨在让孩子们接受完全浸入式的现代公民教育。</p>
+    <p>他们在这里学习科学知识、文化艺术、体育和创新与独立思考能力，教材的编写和教育者必须遵循平等，自由，客观，理性的原则，以全球视野看待世界问题，做地球公民，而不是盲目接受任何狭隘团体或者极端思想，同时在周末和节假日让孩子们保留家庭纽带。这能有效确保下一代在起步阶段就融入现代文明，而不是在封闭的家庭环境中重复旧世界的偏见。</p>
+    <p>对学术感兴趣的可以申请世界各国大学，本地下一步也会建立大学，但本地的首要任务是建立一些职业技术培训学校给那些无意追求学术的孩子和需要工作的成年人。"让每一个人都拥有脱离家庭后独立谋生的能力。</p>
+    <p>我们并不担心这些孩子的未来。</p>
+    <p>他们将在这里掌握共同语言、科学方法、法治精神与独立思考能力，同时成长于一个汇聚世界各地背景的社会环境之中。</p>
+    <p>当他们走向世界的时候，他们不会只是某个部落、宗教或族群的成员，而将成为能够理解不同文明并在其间自由穿行的人。</p>
+    <p>我们相信，世界各国的大学和企业终将认识到这一点，并把他们视为最具潜力的一代人。</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*lgkViBYJC_R87NN8.png" alt="博维尔特区 — 建筑风景" loading="lazy">
+    </figure>
+    <p><strong>2. 没有多数群体的学校：用平等实现天然的去极端化</strong></p>
+    <p>接着，他的手指移向中间的地球图标，"这带来了一个独特的社会学优势——没有多数群体的学校。</p>
+    <p>在传统移民国家，移民子女往往要面对一个根深蒂固的主导群体，极易被置于底层的归属等级中，从而滋生边缘感和敌意。</p>
+    <p>但在这里，每个孩子都拥有移民背景。这里没有可以排斥他们的主导群体。这种平等处境本身，就是最强大的去极端化力量。当大家都是建设者时，'我们与他们'的对立就不复存在。"</p>
+    <p><strong>3. 积分晋升机制：看得见的希望</strong></p>
+    <p>"那么，如何保持这个社会的长期活力？看第三点，积分晋升机制。"Marcus 指向那颗醒目的金色星星。"这不是一个无限期收容的难民营，我们提供的是一个清晰的阶梯：七年守法记录 + 持续生产贡献。只要满足这两个条件，居民就可以换取全球认可的特别就业许可证，开启前往各出资国工作和定居的合法通道。这是一个看得见的希望，它会促使所有人为了家庭的未来而主动维护特区的秩序。"</p>
+    <p>他停顿了一下，目光扫过长桌两旁神色各异的领导人，随后指向第二行的后三个模块，声音低沉而务实。</p>
+    <p><strong>4. 医疗体系整合：用错位竞争建立世界级设施</strong></p>
+    <p>"关于日常社会保障，首先是医疗体系整合。建立世界级的医疗设施通常昂贵得不可思议，但我们找到了一个多赢的闭环：全球每年有大量在母国无法获得临床实习机会的国际医学毕业生。特区将向他们开放，医学毕业生们可以在特区内获得完整的、国际认证的临床时数，以此换取本地的医疗服务。</p>
+    <p>世界上还有许多已经退休却期望能够继续悬壶济世的各科医疗专家，我也会为他们敞开大门。通过这种机制，特区能以极低的成本建立起高水平的医疗基础设施。"</p>
+    <p><strong>5. 法治与零容忍：铁律即是过滤器</strong></p>
+    <p>"有了教育和医疗的保障，特区的底层安全网则是绝对的法治与零容忍。"Marcus 指向中间的天平图标，语气斩截。"我们再次重申参照新加坡模式。制定严明的法律，任何暴力犯罪、黑帮活动、或者是试图颠覆特区秩序的颠覆行为，都有对应的惩罚，入罪后予以囚禁或者以体力劳动换取减刑。这套规则在入境之初即明确告知，形成正向自我筛选。这里只留守法和渴望建设的人，不容纳任何破坏者。"</p>
+    <p>到时候我们可以租借其它岛屿进行农业生产，犯罪者去岛上劳动可以换取减刑。</p>
+    <p><strong>6. 出资模式：用可预期的人头费和无息贷款和国际社会捐助，取代高昂的无底洞</strong></p>
+    <p>"最后，一切的财务支撑，落在出资模式上。"Marcus 拍了拍右下角的公文包图标。"出资国按居民来源地向特区缴纳标准化的'人头费'，外加本国移民安置预算一定比例的无息贷款，和国际发展基金和慈善机构的捐助。作为土地出租方的东道国将保留这块土地的主权，并且在未来享有优先接收特区优秀毕业生的权利，为他们自己的国家注入源源不断的优质人才。"</p>
+    <p>"这六个板块，构成了一个自洽的社会生态。我们用铁律过滤犯罪，用寄生变互利的医疗、教育体系重塑下一代，用积分制度给予他们合法的出路。"</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2pcxiOw2TvdkF4ceDsJnfw.png" alt="博维尔欢迎你" loading="lazy">
+      <figcaption>博维尔欢迎你</figcaption>
+    </figure>
+    <p>Marcus翻到下一页，页面标题只有几个字：宗教与公共秩序。</p>
+  </article>
+
+
+
+
+  <nav class="chapter-nav">
+    <a href="novel-1-3-zh.html" class="nav-btn prev">
+      <span class="nav-label">&larr; 上一节</span>
+      <span class="nav-title">1.3 — 一组数字，和中途离场的人物</span>
+    </a>
+    <a href="novel-1-5-zh.html" class="nav-btn next">
+      <span class="nav-label">下一节 &rarr;</span>
+      <span class="nav-title">1.5</span>
+    </a>
+  </nav>
+
+  <p class="back-to-index">&larr; <a href="novel-zh.html">返回章节列表</a></p>
+
+</main>
+
+</body>
+</html>
