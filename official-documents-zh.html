@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>官方文件 — 博维尔特区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #0F2A4A;
+    --navy-mid: #1B3A6B;
+    --navy-soft: #2C4A70;
+    --sand: #F5F0E4;
+    --sand-warm: #EFE7D4;
+    --ocean-teal: #2C6E6B;
+    --gold-signal: #C89B3C;
+    --ink: #16202C;
+    --ink-soft: #4A5568;
+    --paper-line: #D8CFB8;
+    --white: #FFFFFF;
+
+    --font-display: 'Fraunces', 'Noto Serif SC', 'PingFang SC', serif;
+    --font-body: 'IBM Plex Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --font-mono: 'IBM Plex Mono', 'PingFang SC', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--sand);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ============ HEADER (shared) ============ */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245, 240, 228, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .header-top {
+    max-width: 1320px; margin: 0 auto; padding: 24px 40px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand-mark { width: 60px; height: 60px; flex-shrink: 0; }
+  .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+
+  .brand-name {
+    font-family: var(--font-display); font-weight: 600; font-size: 32px;
+    letter-spacing: 0.045em; color: var(--navy-deep);
+  }
+
+  .brand-sub {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ink-soft); margin-top: 4px;
+  }
+
+  .tagline {
+    font-family: var(--font-display); font-style: italic; font-size: 16px;
+    color: var(--navy-soft); text-align: right; max-width: 280px;
+    padding-left: 24px; border-left: 1px solid var(--paper-line); line-height: 1.4;
+  }
+
+  .lang-switch { display: flex; gap: 6px; flex-shrink: 0; }
+
+  .lang-btn {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
+    padding: 5px 11px; border: 1px solid var(--paper-line); border-radius: 20px;
+    color: var(--ink-soft); background: transparent; cursor: pointer; transition: all 0.2s ease;
+  }
+
+  .lang-btn:hover, .lang-btn.active {
+    border-color: var(--navy-mid); color: var(--navy-mid); background: rgba(27, 58, 107, 0.06);
+  }
+
+  nav.main-nav { background: var(--navy-deep); }
+
+  .nav-inner { max-width: 1320px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; }
+  .nav-links { display: flex; align-items: center; list-style: none; gap: 2px; }
+  .nav-links > li { position: relative; }
+
+  .nav-links a, .nav-links .dropdown-toggle {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.08em;
+    color: rgba(245, 240, 228, 0.82); padding: 15px 16px; cursor: pointer;
+    transition: all 0.2s ease; border-bottom: 2px solid transparent;
+    background: none; border: none;
+  }
+
+  .nav-links a.active { color: var(--gold-signal); border-bottom-color: var(--gold-signal); }
+  .nav-links a:hover, .nav-links .dropdown-toggle:hover {
+    color: var(--gold-signal); border-bottom-color: var(--gold-signal);
+  }
+
+  .nav-links .dropdown-toggle svg { width: 9px; height: 9px; transition: transform 0.2s ease; }
+  .has-dropdown:hover .dropdown-toggle svg { transform: rotate(180deg); }
+
+  .dropdown-menu {
+    position: absolute; top: 100%; left: 0; background: var(--white);
+    border: 1px solid var(--paper-line); border-radius: 4px; min-width: 200px;
+    box-shadow: 0 12px 32px rgba(15, 42, 74, 0.18);
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: all 0.2s ease; padding: 6px; z-index: 50;
+  }
+
+  .has-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
+  .dropdown-menu a {
+    display: block; color: var(--ink); padding: 10px 14px;
+    font-size: 12.5px; letter-spacing: 0.03em; border-radius: 3px; border: none;
+  }
+
+  .dropdown-menu a:hover { background: var(--sand-warm); color: var(--navy-mid); border: none; }
+
+  /* ============ PAGE HERO ============ */
+  .page-hero {
+    max-width: 900px; margin: 0 auto; padding: 64px 40px 8px;
+  }
+
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ocean-teal); margin-bottom: 24px;
+  }
+
+  .kicker::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold-signal); box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.18);
+  }
+
+  .page-title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(28px, 3.4vw, 40px); line-height: 1.16;
+    letter-spacing: -0.01em; color: var(--navy-deep);
+  }
+
+  .page-lede {
+    margin-top: 20px; font-size: 16px; line-height: 1.72; color: var(--ink-soft);
+  }
+
+  .status-note {
+    margin-top: 24px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    background: var(--sand-warm);
+    border: 1px solid var(--paper-line);
+    padding: 8px 16px; border-radius: 20px;
+  }
+
+  .reward-note {
+    margin-top: 14px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+    color: var(--gold-signal);
+    background: rgba(200, 155, 60, 0.08);
+    border: 1px solid rgba(200, 155, 60, 0.25);
+    padding: 7px 14px; border-radius: 20px;
+  }
+
+  /* ============ DOCUMENT PANEL ============ */
+  .doc-section {
+    max-width: 900px; margin: 0 auto; padding: 40px 40px 8px;
+  }
+
+  .doc-panel {
+    background: var(--white);
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    padding: 44px 48px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .doc-panel::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--gold-signal);
+    border-radius: 4px 4px 0 0;
+  }
+
+  .doc-letterhead {
+    text-align: center;
+    padding-bottom: 26px;
+    margin-bottom: 32px;
+    border-bottom: 2px solid var(--navy-deep);
+  }
+
+  .doc-letterhead .doc-eyebrow {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.2em;
+    color: var(--gold-signal); display: block; margin-bottom: 14px;
+  }
+
+  .doc-letterhead h2 {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(22px, 2.6vw, 28px); color: var(--navy-deep); line-height: 1.3;
+  }
+
+  .doc-letterhead .doc-meta {
+    margin-top: 12px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
+    color: var(--ink-soft);
+  }
+
+  .doc-preamble {
+    font-family: var(--font-display); font-style: italic; font-size: 15.5px;
+    line-height: 1.7; color: var(--navy-soft);
+    margin-bottom: 34px; padding-bottom: 30px;
+    border-bottom: 1px dashed var(--paper-line);
+  }
+
+  .doc-article { margin-bottom: 30px; scroll-margin-top: 90px; }
+  .doc-article:last-child { margin-bottom: 0; }
+
+  .doc-article h3 {
+    font-family: var(--font-mono); font-weight: 500; font-size: 12.5px;
+    letter-spacing: 0.06em; color: var(--ocean-teal);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .doc-article p {
+    font-size: 14.5px; line-height: 1.78; color: var(--ink);
+    margin-bottom: 14px;
+  }
+
+  .doc-article p:last-child { margin-bottom: 0; }
+
+  .doc-article strong {
+    color: var(--navy-deep);
+    font-weight: 600;
+  }
+
+  .doc-index {
+    max-width: 900px; margin: 0 auto; padding: 28px 40px 0;
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+
+  .doc-index a {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.02em;
+    color: var(--navy-mid); border: 1px solid var(--paper-line);
+    padding: 7px 13px; border-radius: 20px; transition: all 0.2s ease;
+  }
+
+  .doc-index a:hover { border-color: var(--ocean-teal); background: rgba(44,110,107,0.06); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 980px) {
+    .header-top { flex-wrap: wrap; padding: 20px 24px; }
+    .tagline { display: none; }
+    .nav-inner { padding: 0 24px; overflow-x: auto; }
+    .nav-links { white-space: nowrap; }
+    .page-hero { padding: 40px 24px 8px; }
+    .doc-index { padding: 24px 24px 0; }
+    .doc-section { padding: 32px 24px 8px; }
+    .doc-panel { padding: 28px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="23" stroke="#0F2A4A" stroke-width="1.5" fill="#F5F0E4"/>
+          <path d="M20 34V19L24 12L28 19V34" stroke="#1B3A6B" stroke-width="1.6" stroke-linejoin="round"/>
+          <rect x="21" y="21" width="6" height="2" fill="#1B3A6B"/>
+          <rect x="20.5" y="26" width="7" height="2" fill="#1B3A6B"/>
+          <path d="M22.5 12L24 9L25.5 12" stroke="#C89B3C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="14" y1="34" x2="34" y2="34" stroke="#0F2A4A" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M9 24C9 24 12 22 14 24C16 26 18 22 20 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+          <path d="M28 24C28 24 30 22 32 24C34 26 37 22 39 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">BEAUVILLE</span>
+        <span class="brand-sub">博维尔特区</span>
+      </div>
+    </div>
+
+    <p class="tagline">尊严、机遇与归属 — 一片新的海岸</p>
+
+    <div class="lang-switch">
+      <a href="official-documents.html" class="lang-btn">EN</a>
+      <button class="lang-btn">FR</button>
+      <button class="lang-btn active">中文</button>
+    </div>
+  </div>
+
+  <nav class="main-nav">
+    <div class="nav-inner">
+      <ul class="nav-links">
+        <li><a href="index-zh.html">首页</a></li>
+        <li><a href="about-zh.html">关于</a></li>
+        <li><a href="governance-zh.html">治理</a></li>
+        <li><a href="novel-zh.html">小说</a></li>
+        <li><a href="official-documents-zh.html" class="active">官方文件</a></li>
+        <li><a href="e-residency-zh.html">数字居留权</a></li>
+        <li><a href="qa-zh.html">问答</a></li>
+        <li class="has-dropdown">
+          <button class="dropdown-toggle">参与共建
+            <svg viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="design-commons.html">设计共创区</a>
+            <a href="#">广场</a>
+            <a href="forum.html">论坛</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <span class="kicker">官方文件</span>
+    <h1 class="page-title">博维尔宪章</h1>
+    <p class="page-lede">博维尔特区（哈莱洛亚）的框架文件。这不是真实的国际条约；它是博维尔特区系列小说世界观中的创始文件。</p>
+    <span class="status-note">&#9670; 工作草案 — 反映首次框架会议协商确定的创始条款</span>
+    <br>
+    <span class="reward-note">&#9670; 阅读本文件可获得 B$200 博维尔公民奖励（即将上线）</span>
+  </section>
+
+  <nav class="doc-index">
+    <a href="#sec1">1. 前言</a>
+    <a href="#sec2">2. 选址与主权</a>
+    <a href="#sec3">3. 治理</a>
+    <a href="#sec4">4. 经济发展</a>
+    <a href="#sec5">5. 财务保障</a>
+    <a href="#sec6">6. 货币与内部经济</a>
+    <a href="#sec7">7. 人才管道与居留权</a>
+    <a href="#sec8">8. 社会与教育框架</a>
+    <a href="#sec9">9. 宗教与公共秩序</a>
+    <a href="#sec10">10. 司法与刑罚制度</a>
+    <a href="#sec11">11. 争议解决</a>
+    <a href="#sec12">12. 官方语言</a>
+    <a href="#sec13">13. 资金模式</a>
+  </nav>
+
+  <section class="doc-section">
+
+    <div class="doc-panel" id="charter">
+      <div class="doc-letterhead">
+        <span class="doc-eyebrow">创始文件</span>
+        <h2>博维尔宪章</h2>
+        <p class="doc-meta">博维尔特区（哈莱洛亚）框架文件</p>
+      </div>
+
+      <div class="doc-article" id="sec1">
+        <h3>1. 前言</h3>
+        <p>三十年来，世界针对流离失所和无证人群的问题尝试了两种答案，两者都失败了。</p>
+        <p>第一种是没有劳动的福利：提供住所和补贴，却没有贡献的路径，这在大规模推行的每一个地方都滋生了依赖、平行社会和纳税人的不满。第二种是没有尽头的驱逐：一项没有回报的物流与道德成本，切断了劳动力供应链，也留下了任何政府都不愿承担的负面头条。</p>
+        <p>博维尔是第三种方案。它不是难民营，也不是慈善机构。它是一个特别经济区——是租借，而非兼并；是治理，而非放任；由生活在其中的人建造，也为生活在其中的人建造，在第一块地基浇筑之前，规则就已经商定完毕。</p>
+        <p>本宪章阐明了这些规则。它的存在，是为了确保没有任何人在未明确自己同意何种条款的情况下盲目到来，也是为了确保支持该项目的所有政府不必全凭侥幸去下注。博维尔并非承诺，而是一种方法。</p>
+      </div>
+
+      <div class="doc-article" id="sec2">
+        <h3>2. 选址与主权</h3>
+        <p>博维尔位于洛阿岛，隶属主权国家哈莱洛亚，通过长期租赁而非任何形式的领土转让来运作。</p>
+        <p><strong>为何选在这里。</strong>这样一个特区的选址必须同时满足四个条件：足够偏远，让距离本身就能把特区与居民所逃离的冲突隔绝开来；具备建造条件，拥有真实经济体所需的土地、淡水资源、气候稳定性和深水港潜力；不存在领土争议，处于单一、清晰、稳定的司法管辖之下；并且可获得五十年以上的租期，附带续约条款，让资本市场能够据此做长期规划。</p>
+        <p>另有四个候选地经过考量后被搁置——一个因在争议水域建设的地缘政治风险，一个因缺乏深水港所需的地质条件，一个因公共卫生负担和土地权属的复杂性，意味着动工前需经年累月的诉讼，还有一个因土地租赁制度过于不透明，难以让人放心签约。哈莱洛亚满足了所有物理条件，其政府也已准备就绪，随时可以推进。</p>
+        <p><strong>东道国保留的权利。</strong>博维尔不是一个独立国家，这份租约也不是出售。哈莱洛亚保留对该领土的主权，在安全事务上拥有最终决定权。岛上建造的每一项资产——港口、电网、住房、学校——租期结束后将完整归还哈莱洛亚。作为承接特区的回报，哈莱洛亚将获得数十年稳定的租金收入、特区在其领海内产生的经济活动分成，以及优先招募特区毕业生的权利。</p>
+      </div>
+
+      <div class="doc-article" id="sec3">
+        <h3>3. 治理</h3>
+        <p>博维尔在"特托管治理模式"下运作。它不是自治的，也不追求成为自治。创始阶段的监督权由一个出资国联盟持有，每个成员国承担的是具体职能授权，而非笼统的全面权力——安全、教育、公共卫生与资本，各自明确由一个牵头国负责，通过一个联合委员会协调，东道国保留最终权威。</p>
+        <p>在创始阶段，居民不通过投票来制定或废除特区的规则。这是一项刻意的设计选择，而非疏漏，在此明确说明，是为了确保任何来到博维尔的人，都不会对自己所加入的是什么有所误解。居民真正拥有的，是一份对当局和居民同样具有约束力的成文宪章、一套运转中的司法体系，以及一条一旦满足条件、便清晰公开可循的、通往另一种生活的路径。</p>
+        <p>特区实行严格法治，参照新加坡模式：规则清晰、提前公布、一致执行，严重违规将面临严重后果。这不是一句口号，而是可以被检验的——规则是公开的，执行记录同样公开。</p>
+      </div>
+
+      <div class="doc-article" id="sec4">
+        <h3>4. 经济发展</h3>
+        <p>博维尔的经济设计为在八年内经历三个阶段，从初期资本投入走向完全独立。</p>
+        <p><strong>第一阶段——资本启动与基础设施（第1—3年）。</strong>出资国缴纳按居民人数计算的启动费，另加从现有移民安置预算中提取的无息贷款，再结合开发银行和慈善资金，共同注入一个主权种子基金。这笔钱不是用于援助，而是用于"基础设施换股权"：港口、电网、海水淡化设施和住房，成为特区自身的硬资产，而非沉没成本。居民通过参与建设获取工资，并在此过程中积累对自己所建造之物的所有权份额。</p>
+        <p><strong>第二阶段——微型经济自治（第4—7年）。</strong>随着基础设施陆续投入使用，工资开始在内部流通。凭借近乎零的企业税与个人所得税，本地零售、服务业与小型企业得以低成本、快速地建立起来。居民的身份从建设者转变为经营者——店主、技术工人、服务提供者——特区朝着基本自给自足迈进，外部资金相应逐步减少。</p>
+        <p><strong>第三阶段——出口驱动的独立（第8年起）。</strong>基础设施建设完成，一支积极、具成本竞争力的劳动力队伍就位后，特区向全球制造业、数字服务和物流业开放。出口收入将完全取代外部补贴。从这一刻起，博维尔成为该地区的净贡献者，而不是任何出资方的负担。</p>
+      </div>
+
+      <div class="doc-article" id="sec5">
+        <h3>5. 财务保障</h3>
+        <p>由于八年这个时间框架是预测，而非保证，本宪章内置了三重保障机制，以应对自给自足所需时间超出预期的可能性。</p>
+        <p><strong>基础设施作为抵押物。</strong>第一阶段建成的硬资产——港口、电网、海水淡化设施、工业园区——即便特区出现赤字，也不会被注销。一套债转股机制赋予出资联盟直接接管这些基础设施运营权和收益权的权利，而不必承受无限期的损失。</p>
+        <p><strong>共同主权担保。</strong>没有任何一个国家需要独自承担全部下行风险。出资份额按各国输送的居民人数分摊，土地所有权始终归属哈莱洛亚，政治风险由国际开发银行提供后盾担保——任何缺口都由全球最大的主权基金和多边机构共同分摊，而非由某一国的财政独自承担。</p>
+        <p><strong>作为泄压阀的人才管道。</strong>如果内部经济陷入停滞，出资国可以提前开放部分人才管道的准入，特区也可以通过定向劳务安排创造收入。只要特区之外的老龄化经济体仍需要熟练劳动力，博维尔就始终保有把人力资本转化为流动性的途径。</p>
+      </div>
+
+      <div class="doc-article" id="sec6">
+        <h3>6. 货币与内部经济</h3>
+        <p>博维尔的内部经济依托 Beau Dollar（฿ BD）运转，这是一种特区专属货币，用于支付工资、本地商业往来，以及居民通过劳动合同积累的产权份额。设立 Beau Dollar 是为了在创始年份保持内部经济的清晰、自成一体，同时可按特区货币管理机构设定的汇率，兑换主要外部货币，第一、第二阶段期间接受出资联盟监督。</p>
+        <p>创始阶段内，特区内的住房以70年租约形式发放，而非永久产权出售——这是一项刻意的选择，旨在让住房本身保持可负担性，并防止土地投机扭曲一个尚无历史价格参照的市场。</p>
+        <p><strong>面向远程建设者的数字护照。</strong>参与博维尔经济，并不局限于实际迁居于此的居民。一本数字护照，能让世界任何地方的创业者在几分钟内于特区注册一项事业，只需缴纳透明的5%微税率——这个税率的设计初衷是奖励活动本身，而非从中榨取。这让特区这套低摩擦、低税率的经济模式，延伸到实际居住人口之外，使博维尔在亲身建设它的居民之外，拥有了第二层无国界的参与者。</p>
+      </div>
+
+      <div class="doc-article" id="sec7">
+        <h3>7. 人才管道与居留权</h3>
+        <p>在博维尔的居留权不是无限期的，也不是一种悬而未决的等待状态。它是一架有着清晰顶端台阶的阶梯：七年守法且持续做出生产性贡献，居民便可获得一份全球认可的特殊工作许可，开启在任何出资国合法就业与定居的路径。</p>
+        <p>这正是将"无证移民"转变为"经过筛选、持有资历证明的劳动力"的机制——不是改变一个人的身份，而是给予他们七年时间，去建立一份世界其他地方早已懂得信任的记录档案。这条管道是自我造血的：出资国无需花一分钱来培养这支劳动力，因为特区自己的学校和培训体系已率先完成了这项工作。</p>
+      </div>
+
+      <div class="doc-article" id="sec8">
+        <h3>8. 社会与教育框架</h3>
+        <p>博维尔的长期成功，更多取决于它如何培养在这里成长起来的这一代人，而非取决于它的港口和电网。六项承诺是其根基：</p>
+        <p><strong>寄宿学校体系，</strong>周一至周五授课，由国际招募的师资团队执教，课程体系致力于客观性、理性与独立思考——刻意设计为不隶属于任何单一国家或意识形态传统。周末与假期留给家庭生活。职业与技术培训与学术路径并重，确保每一位居民——无论成人或儿童——都能获得独立谋生的能力。</p>
+        <p><strong>没有多数群体的学校。</strong>特区学校里的每一个孩子都有移民背景。没有一个主导群体让新来者被置于其下，也没有一套既有的等级秩序将人排除在外——宪章将此视为一种结构性保障，用以防范在其他地方助长极端化的那种疏离感。</p>
+        <p><strong>积分晋升制度，</strong>详见上文人才管道部分——一条清晰可见、切实可达的路径，让居民有理由投入建设特区的稳定，而不是被动等待。</p>
+        <p><strong>整合式医疗体系，</strong>通过与大量在本国缺乏临床实习机会的国际医学毕业生，以及退休后仍希望继续行医的专科医生建立互利安排，以远低于常规建设成本的方式，提供世界级的医疗服务。</p>
+        <p><strong>绝对法治，</strong>规则从入境之日起清晰公布、一致执行，其设计意图是作为一种筛选机制而非陷阱：筛选出渴望秩序、愿意建设的居民，而不为不具备这种意愿的人提供空间。</p>
+        <p><strong>可预见的资金模式</strong>——详见第13条——以出资国固定、可预见的出资，取代无止境增长的成本。</p>
+      </div>
+
+      <div class="doc-article" id="sec9">
+        <h3>9. 宗教与公共秩序</h3>
+        <p>博维尔的每一位居民都拥有完全的私人信仰自由。特区的公共空间保持中立，遵循与新加坡公共秩序治理相同的原则：不允许任何单一信仰占据公共广场。</p>
+        <p>由此衍生出三项规则。宗教活动仅限于私人住所和已登记的礼拜场所；公共空间内不进行任何宗教仪式或传教活动。任何已登记的礼拜场所，面积上限为300平方米，座位上限为200个，动工前须获得特区管理委员会的许可。任何已登记的礼拜场所，不得以任何名义（包括宗教捐赠）接受来自特区外部的资金。</p>
+        <p>这一切并不限制信仰本身，而只是限制了信仰的规模和资金来源。其目的是为了让信仰保持其最佳状态：一种私人的力量源泉，与政治动员机制保持距离。</p>
+      </div>
+
+      <div class="doc-article" id="sec10">
+        <h3>10. 司法与刑罚制度</h3>
+        <p>博维尔对暴力犯罪、有组织犯罪活动以及任何意图破坏区域秩序的行为，采取零容忍态度。一经定罪，将被判处监禁，但可通过有组织的劳动减刑——部分罪犯还需在专门为此目的租用的外岛上从事农业劳动。</p>
+        <p>这些条款会在居民抵达之前告知每一位居民，这是有意为之：《宪章》将此披露视为一种筛选机制，既是一种威慑手段，也是一种筛选机制，旨在筛选出那些打算建设而不是破坏的居民。</p>
+      </div>
+
+      <div class="doc-article" id="sec11">
+        <h3>11. 争议解决</h3>
+        <p>区域内的民事和商事纠纷，以及区域管理机构与东道国之间的纠纷，均由独立的国际仲裁庭而非任何单一出资国的国内法院解决。哈莱洛亚在其创始条款中已同意将区域内民事和商事法律的解释权让渡给该仲裁庭——《宪章》对此让步极为重视，并要求仲裁庭必须以完全透明的方式运作，且所有判例均须公开。</p>
+        <p>刑事案件由该区域自己的司法系统处理，详见第10节，当事人有权向一个由东道国法官和资助联盟法官组成的小组提出上诉。</p>
+      </div>
+
+      <div class="doc-article" id="sec12">
+        <h3>12. 官方语言</h3>
+        <p>英语为特区的行政、商业语言，以及整个寄宿学校体系的教学语言。之所以选择英语，是因为它是创始居民中最广泛使用的通用语言，而这些居民的母语各不相同。这是一个务实的选择，而非文化选择：居民在私人生活、宗教活动和正式教学之外的社区生活中完全可以自由使用自己的语言，而且该地区的公共信息——包括本章程——以多种语言提供，供居民和旁观者使用。在校学生可以自由选择学习任何第二、第三语言。</p>
+      </div>
+
+      <div class="doc-article" id="sec13">
+        <h3>13. 资金模式</h3>
+        <p>博维尔的资金来源有三个协调一致的来源：每个出资国支付的标准化人均费用，该费用与其派遣的居民人数成比例；从每个国家现有的移民安置预算中提取的固定份额的无息贷款——这些资金已经在使用，只是重新分配而不是增加；以及来自国际发展基金和慈善组织的捐款。</p>
+        <p>这种架构旨在用固定且可预见的成本取代无休止且不断增长的成本——拘留、执法、无休止的福利救济。正因如此，《宪章》的起草者始终将其描述为一项投资，而非援助计划：投资可预测、有资产支持，并设定了实现独立的明确期限。</p>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+</body>
+</html>
