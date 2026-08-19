@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.5 — 宗教与公共秩序 — 博维尔特区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #0F2A4A;
+    --navy-mid: #1B3A6B;
+    --navy-soft: #2C4A70;
+    --sand: #F5F0E4;
+    --sand-warm: #EFE7D4;
+    --ocean-teal: #2C6E6B;
+    --gold-signal: #C89B3C;
+    --ink: #16202C;
+    --ink-soft: #4A5568;
+    --paper-line: #D8CFB8;
+    --white: #FFFFFF;
+
+    --font-display: 'Fraunces', 'Noto Serif SC', 'PingFang SC', serif;
+    --font-body: 'IBM Plex Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --font-mono: 'IBM Plex Mono', 'PingFang SC', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--sand);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245, 240, 228, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .header-top {
+    max-width: 1320px; margin: 0 auto; padding: 24px 40px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand-mark { width: 60px; height: 60px; flex-shrink: 0; }
+  .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+
+  .brand-name {
+    font-family: var(--font-display); font-weight: 600; font-size: 32px;
+    letter-spacing: 0.045em; color: var(--navy-deep);
+  }
+
+  .brand-sub {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ink-soft); margin-top: 4px;
+  }
+
+  .tagline {
+    font-family: var(--font-display); font-style: italic; font-size: 16px;
+    color: var(--navy-soft); text-align: right; max-width: 280px;
+    padding-left: 24px; border-left: 1px solid var(--paper-line); line-height: 1.4;
+  }
+
+  .lang-switch { display: flex; gap: 6px; flex-shrink: 0; }
+
+  .lang-btn {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
+    padding: 5px 11px; border: 1px solid var(--paper-line); border-radius: 20px;
+    color: var(--ink-soft); background: transparent; cursor: pointer; transition: all 0.2s ease;
+  }
+
+  .lang-btn:hover, .lang-btn.active {
+    border-color: var(--navy-mid); color: var(--navy-mid); background: rgba(27, 58, 107, 0.06);
+  }
+
+  nav.main-nav { background: var(--navy-deep); }
+
+  .nav-inner { max-width: 1320px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; }
+  .nav-links { display: flex; align-items: center; list-style: none; gap: 2px; }
+  .nav-links > li { position: relative; }
+
+  .nav-links a, .nav-links .dropdown-toggle {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.08em;
+    color: rgba(245, 240, 228, 0.82); padding: 15px 16px; cursor: pointer;
+    transition: all 0.2s ease; border-bottom: 2px solid transparent;
+    background: none; border: none;
+  }
+
+  .nav-links a.active { color: var(--gold-signal); border-bottom-color: var(--gold-signal); }
+  .nav-links a:hover, .nav-links .dropdown-toggle:hover {
+    color: var(--gold-signal); border-bottom-color: var(--gold-signal);
+  }
+
+  .nav-links .dropdown-toggle svg { width: 9px; height: 9px; transition: transform 0.2s ease; }
+  .has-dropdown:hover .dropdown-toggle svg { transform: rotate(180deg); }
+
+  .dropdown-menu {
+    position: absolute; top: 100%; left: 0; background: var(--white);
+    border: 1px solid var(--paper-line); border-radius: 4px; min-width: 200px;
+    box-shadow: 0 12px 32px rgba(15, 42, 74, 0.18);
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: all 0.2s ease; padding: 6px; z-index: 50;
+  }
+
+  .has-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
+  .dropdown-menu a {
+    display: block; color: var(--ink); padding: 10px 14px;
+    font-size: 12.5px; letter-spacing: 0.03em; border-radius: 3px; border: none;
+  }
+
+  .dropdown-menu a:hover { background: var(--sand-warm); color: var(--navy-mid); border: none; }
+
+  /* ============ CHAPTER READER ============ */
+  .reader-hero {
+    max-width: 760px; margin: 0 auto; padding: 56px 40px 0;
+  }
+
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ocean-teal); margin-bottom: 20px;
+  }
+
+  .kicker::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold-signal); box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.18);
+  }
+
+  .chapter-title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(28px, 3.4vw, 38px); line-height: 1.16;
+    letter-spacing: -0.01em; color: var(--navy-deep);
+  }
+
+  .chapter-subtitle-h {
+    font-family: var(--font-display); font-style: italic; font-weight: 500;
+    font-size: 19px; color: var(--ocean-teal); margin-top: 8px;
+  }
+
+  .disclaimer {
+    margin-top: 22px; padding: 14px 18px;
+    background: var(--sand-warm);
+    border-left: 2px solid var(--paper-line);
+    font-size: 12.5px; font-style: italic; color: var(--ink-soft); line-height: 1.6;
+  }
+
+  .reward-note {
+    margin-top: 18px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+    color: var(--gold-signal);
+    background: rgba(200, 155, 60, 0.08);
+    border: 1px solid rgba(200, 155, 60, 0.25);
+    padding: 7px 14px; border-radius: 20px;
+  }
+
+  /* ============ ARTICLE BODY ============ */
+  .article-body {
+    max-width: 720px; margin: 0 auto; padding: 40px 40px 20px;
+  }
+
+  .article-body p {
+    font-size: 17px; line-height: 1.85; color: var(--ink); margin-bottom: 20px;
+  }
+
+  .article-body p.figure-cap {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-style: italic;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: 6px 0 26px;
+    padding: 14px 0;
+    border-top: 1px dashed var(--paper-line);
+    border-bottom: 1px dashed var(--paper-line);
+  }
+
+  .figure-img {
+    margin: 28px 0;
+  }
+
+  .figure-img img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid var(--paper-line);
+    display: block;
+  }
+
+  .figure-img figcaption {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 10px;
+  }
+
+  .article-body h3 {
+    font-family: var(--font-display); font-weight: 600; font-size: 21px;
+    color: var(--navy-deep); margin: 34px 0 14px;
+  }
+
+  /* ============ NAV FOOTER ============ */
+  .chapter-nav {
+    max-width: 720px; margin: 0 auto; padding: 32px 40px 100px;
+    display: flex; align-items: stretch; justify-content: space-between; gap: 16px;
+  }
+
+  .nav-btn {
+    flex: 1;
+    background: var(--white);
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 0.2s ease;
+  }
+
+  .nav-btn:hover { border-color: var(--ocean-teal); }
+
+  .nav-btn.next { text-align: right; align-items: flex-end; }
+
+  .nav-btn .nav-label {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
+    color: var(--gold-signal);
+  }
+
+  .nav-btn .nav-title {
+    font-family: var(--font-display); font-weight: 600; font-size: 15px; color: var(--navy-deep);
+  }
+
+  .nav-btn.disabled {
+    opacity: 0.4; pointer-events: none;
+  }
+
+  .back-to-index {
+    text-align: center;
+    max-width: 720px; margin: 0 auto; padding: 0 40px 60px;
+    font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft);
+  }
+
+  .back-to-index a { color: var(--navy-mid); border-bottom: 1px solid var(--navy-mid); }
+
+  @media (max-width: 980px) {
+    .header-top { flex-wrap: wrap; padding: 20px 24px; }
+    .tagline { display: none; }
+    .nav-inner { padding: 0 24px; overflow-x: auto; }
+    .nav-links { white-space: nowrap; }
+    .reader-hero { padding: 40px 24px 0; }
+    .article-body { padding: 32px 24px 16px; }
+    .article-body p { font-size: 16px; }
+    .chapter-nav { padding: 24px 24px 64px; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="23" stroke="#0F2A4A" stroke-width="1.5" fill="#F5F0E4"/>
+          <path d="M20 34V19L24 12L28 19V34" stroke="#1B3A6B" stroke-width="1.6" stroke-linejoin="round"/>
+          <rect x="21" y="21" width="6" height="2" fill="#1B3A6B"/>
+          <rect x="20.5" y="26" width="7" height="2" fill="#1B3A6B"/>
+          <path d="M22.5 12L24 9L25.5 12" stroke="#C89B3C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="14" y1="34" x2="34" y2="34" stroke="#0F2A4A" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M9 24C9 24 12 22 14 24C16 26 18 22 20 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+          <path d="M28 24C28 24 30 22 32 24C34 26 37 22 39 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">BEAUVILLE</span>
+        <span class="brand-sub">博维尔特区</span>
+      </div>
+    </div>
+
+    <p class="tagline">尊严、机遇与归属 — 一片新的海岸</p>
+
+    <div class="lang-switch">
+      <a href="novel-1-5.html" class="lang-btn">EN</a>
+      <button class="lang-btn">FR</button>
+      <button class="lang-btn active">中文</button>
+    </div>
+  </div>
+
+  <nav class="main-nav">
+    <div class="nav-inner">
+      <ul class="nav-links">
+        <li><a href="index-zh.html">首页</a></li>
+        <li><a href="about-zh.html">关于</a></li>
+        <li><a href="governance-zh.html">治理</a></li>
+        <li><a href="novel-zh.html" class="active">小说</a></li>
+        <li><a href="official-documents-zh.html">官方文件</a></li>
+        <li><a href="e-residency-zh.html">数字居留权</a></li>
+        <li><a href="qa-zh.html">问答</a></li>
+        <li class="has-dropdown">
+          <button class="dropdown-toggle">参与共建
+            <svg viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="design-commons.html">设计共创区</a>
+            <a href="#">广场</a>
+            <a href="forum.html">论坛</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <section class="reader-hero">
+    <span class="kicker">小说 · 第 1.5 节</span>
+    <h1 class="chapter-title">博维尔：移民建造 — 1.5</h1>
+    <p class="chapter-subtitle-h">宗教与公共秩序</p>
+    <p class="disclaimer">这是一部政治推演小说。故事中所有人物，包括文中出现的公众人物，均属虚构使用。</p>
+    <span class="reward-note">&#9670; 阅读本节可获得 B$100 博维尔公民奖励（即将上线）</span>
+  </section>
+
+  <article class="article-body">
+    <p>Marcus翻到下一页，页面标题只有几个字：宗教与公共秩序。</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*dj81hk-6UgcnBmv0OQk5IQ.jpeg" alt="博维尔项目演示文稿 — 宗教与公共秩序" loading="lazy">
+      <figcaption>博维尔项目演示文稿 — 宗教与公共秩序</figcaption>
+    </figure>
+    <p>"最后一点，"他说，语气不重不轻，"也是最容易被回避的一点。"</p>
+    <p>"Beauville对任何宗教信仰一视同仁——居民有完整的私人信仰自由。但特区的公共空间是中性的。"</p>
+    <p>他停顿了一下。</p>
+    <p>"但是我们有三个原则必须坚持，"</p>
+    <p>"1，宗教活动限于私人住所和经登记的礼拜场所。公共场所不得进行任何形式的宗教仪式或宗教宣传；</p>
+    <p>2. 基础礼拜场所总面积限制在300平米以内，不超过200座，建设前需向特区管理委员会申请特别许可；</p>
+    <p>3. 所有登记场所，一律不得以宗教捐款的名义，从境外融资建设。"</p>
+    <p>"这不是歧视任何宗教。这是新加坡模式的核心之一——没有任何一种信仰可以占领公共空间。"</p>
+    <p>"信仰，本质上是个体跟所信仰的神的私人关系。它真正的价值，是让一个人在最黑暗的时刻获得内心的安宁和力量。在私下场合，这种力量是纯洁且高尚的。当他作为群体被煽动的时候，就会发生社会动荡和族群冲突。所以，限制礼拜场所的规模，我们是在用制度让信仰发挥它最好的作用——让它回归心灵，远离政治。"</p>
+    <p>他环视一圈。</p>
+    <p>"Beauville的人们会有各种信仰，但是所有人的认同感不建立在信仰上，而是建立在共同建造这座城市的经历上。"</p>
+    <p>Marcus 的话音刚落，"有道理。"澳大利亚总理点了点头说，语气平静，但分量很实，"我们见过太多因为宗族和信仰撕裂的岛国政权。堪培拉最不想看到的，就是在后院再多一个打着信仰旗号把枪口对准彼此的烂摊子。"</p>
+    <p>"但这有一点过于激进和理想化了。"</p>
+    <p>英国首相摇了摇头，神色变得严肃起来："我们不能在特区宪章的第一页就限制人们的信仰自由。"</p>
+    <p>德国总理也表示了赞同。他揉了揉太阳穴，语气里带着欧洲传统的沉重："首相说得对。信仰自由是不可分割的。你试图用行政力量去切碎宗教，这只会引发地下教会的暴力反弹。历史证明，越是压迫信仰的空间，信仰往往越具有攻击性。"</p>
+    <p>Marcus平静地看着两国元首："首相和总理先生，去Beauville的移民来自不同国家，不同信仰，不同教派。如果我们不从第一天就立好规则，他们很容易就会攀比谁的礼拜堂更大、谁的信众更多，让信仰偏离了核心价值。"</p>
+    <p>他停顿了一下。</p>
+    <p>"我们限制的是规模，不是信仰本身。他们依然可以祈祷，依然可以在信仰里找到平静。我们只是不允许任何势力把信仰'资本化'，把它变成动员工具，导致社会动荡。"</p>
+    <p>"新加坡建国以来一直是这套规则。从来没有发生过宗教骚乱。"</p>
+    <p>他看到日本首相在点头，又看了看一脸严肃的其他人，一字一顿地说：</p>
+    <p>"我们投入巨资，是为了建立一个繁荣的经济体。不是第二个黎巴嫩或叙利亚。"</p>
+    <p>英国首相和德国总理对视了一下，露出的像是无奈苦笑，对Marcus说："好吧，你说得也有道理。"加拿大总理则若有所思，没有出声。意大利总理面无表情，好像还在思考。</p>
+    <p>Marcus 关掉关于医疗和教育的细节，并没有急着切入具体的执行层面，而是再次在屏幕上点开了一张标题为"制度悖论"的幻灯片。</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*pCiJL-WZJncb_I_5qg77qA.jpeg" alt="博维尔项目演示文稿 — 制度悖论" loading="lazy">
+      <figcaption>博维尔项目演示文稿 — 制度悖论</figcaption>
+    </figure>
+    <p>"在我们讨论技术细节之前，我们不得不面对一个不可回避的、甚至让在座各位感到不适的制度悖论。"</p>
+    <p>他指向屏幕中央那段大字：</p>
+    <p><em>"一个最初用于安置无证人员的特区，凭借严格法治、低税负、极高积极性的人口，以及顶尖的教育产出，最终将在经济活力与社会凝聚力上，超越许多传统西方大都市。"</em></p>
+    <p>"目前的各发达国家都拥有数百年的文明积累、最顶尖的大学、最雄厚的资本。但是，这些国家也背负了不可逆转的沉重包袱——高福利带来的财政惰性、过度政治正确导致的司法低效、老龄化引起的社会停滞，以及日益撕裂的阶层对抗。"</p>
+    <p>"而 Beauville是一张白纸。"Marcus 停顿了一下，"它没有选票政治的拉扯，没有盘根错节的利益集团。它从第一天起，实行的就是最纯粹、最现代、不掺杂任何意识形态水分的严格法治与绝对理性经济。那些在你们目前各国因为政治阻力永远无法推行的结构性改革，在这个岛上，将以最高效率运转。"</p>
+    <p>他指向下方那个深蓝色的方块：二十年后。</p>
+    <p>"二十年后，会发生什么？特区的毕业生——他们在现代公民价值观中成长，多语言，拥有在离岸零税率市场搏杀出来的创业经验，更重要的是，他们持有七年清白记录。"</p>
+    <p>Marcus 嘴角微微上挑，带了一丝身为"完美移民样本"的骄傲，"他们恰恰就是各出资国未来最需要的那种人。他们是完美的产业工人和数字精英。而这条人才管道是完全内置的，已经预先筛选，而且完全自我融资。各引进国不需要花一分钱去教育他们，他们自己完成了进化。"</p>
+    <p>幻灯片最底部，一行斜体字在暗色背景中格外醒目：<em>新加坡证明了：一座没有资源的岛屿，靠制度纪律与对人才的开放，可以成为全球繁荣的标杆。</em></p>
+    <p>"这不是一个避难所，各位。"Marcus 挺直了身体，声音在大理石墙壁间回荡，"这是一个制度孵化器。如果你们继续把这些人堵在边境墙之外，他们就是炸弹；但如果把他们放进这台机器里，二十年后，这个由无证人员建立的特区，将成为另一个新加坡。这，就是制度的力量。"</p>
+    <p>会议室里陷入了死一般的沉寂。</p>
+    <p>这个预言不仅深刻，而且带着一种让老牌帝国首脑们脊背发凉的刺痛感——他们无法反驳。因为新加坡已经在历史中证明过一次了。</p>
+    <p>一直面无表情的意大利总理死死盯着屏幕上"超越许多传统西方大都市"这几个字愣了片刻，然后用低沉的声音吐出一句话：</p>
+    <p>"这笔投资听起来越来越像那么回事了。那么……"她看了一眼身边的澳大利亚总理，"刚才我们已经讨论过把这个经济特区设立在南太平洋某个岛上，有没有想过如何才能让某个国家提供这样的一个岛屿？"</p>
+    <figure class="figure-img">
+      <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2pcxiOw2TvdkF4ceDsJnfw.png" alt="博维尔欢迎你" loading="lazy">
+      <figcaption>博维尔欢迎你</figcaption>
+    </figure>
+  </article>
+
+
+
+
+
+  <nav class="chapter-nav">
+    <a href="novel-1-4-zh.html" class="nav-btn prev">
+      <span class="nav-label">&larr; 上一节</span>
+      <span class="nav-title">1.4 — 走哪条路，历史早有定论</span>
+    </a>
+    <a href="novel-1-6-zh.html" class="nav-btn next">
+      <span class="nav-label">下一节 &rarr;</span>
+      <span class="nav-title">1.6 — 寻找合适岛屿</span>
+    </a>
+  </nav>
+
+  <p class="back-to-index">&larr; <a href="novel-zh.html">返回章节列表</a></p>
+
+</main>
+
+</body>
+</html>
