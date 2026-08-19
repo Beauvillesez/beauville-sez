@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>E-Residency 申请 — 博维尔特区</title>
+<title>Demande d'E-Résidence — Beauville SEZ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -21,9 +21,9 @@
     --paper-line: #D8CFB8;
     --white: #FFFFFF;
 
-    --font-display: 'Fraunces', 'Noto Serif SC', 'PingFang SC', serif;
-    --font-body: 'IBM Plex Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    --font-mono: 'IBM Plex Mono', 'PingFang SC', monospace;
+    --font-display: 'Fraunces', serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -470,37 +470,37 @@
       </div>
       <div class="brand-text">
         <span class="brand-name">BEAUVILLE</span>
-        <span class="brand-sub">博维尔特区</span>
+        <span class="brand-sub">ZONE ÉCONOMIQUE SPÉCIALE</span>
       </div>
     </div>
 
-    <p class="tagline">尊严、机遇与归属 — 一片新的海岸</p>
+    <p class="tagline">Dignité, opportunité et appartenance — Un nouveau rivage</p>
 
     <div class="lang-switch">
       <a href="e-residency.html" class="lang-btn">EN</a>
-      <a href="e-residency-fr.html" class="lang-btn">FR</a>
-      <button class="lang-btn active">中文</button>
+      <button class="lang-btn active">FR</button>
+      <a href="e-residency-zh.html" class="lang-btn">中文</a>
     </div>
   </div>
 
   <nav class="main-nav">
     <div class="nav-inner">
       <ul class="nav-links">
-        <li><a href="index-zh.html">首页</a></li>
-        <li><a href="about-zh.html">关于</a></li>
-        <li><a href="governance-zh.html">治理</a></li>
-        <li><a href="novel-zh.html">小说</a></li>
-        <li><a href="official-documents-zh.html">官方文件</a></li>
-        <li><a href="e-residency-zh.html" class="active">数字居留权</a></li>
-        <li><a href="qa-zh.html">问答</a></li>
+        <li><a href="index-fr.html">ACCUEIL</a></li>
+        <li><a href="about-fr.html">À PROPOS</a></li>
+        <li><a href="governance-fr.html">GOUVERNANCE</a></li>
+        <li><a href="novel.html">LE ROMAN</a></li>
+        <li><a href="official-documents-fr.html">DOCUMENTS OFFICIELS</a></li>
+        <li><a href="e-residency-fr.html" class="active">E-RÉSIDENCE</a></li>
+        <li><a href="qa-fr.html">Q&amp;R</a></li>
         <li class="has-dropdown">
-          <button class="dropdown-toggle">参与共建
+          <button class="dropdown-toggle">PARTICIPER
             <svg viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4"/></svg>
           </button>
           <div class="dropdown-menu">
-            <a href="design-commons.html">设计共创区</a>
-            <a href="#">广场</a>
-            <a href="forum.html">论坛</a>
+            <a href="design-commons-fr.html">Espace de création</a>
+            <a href="#">L'Agora</a>
+            <a href="forum-fr.html">Le Forum</a>
           </div>
         </li>
       </ul>
@@ -511,9 +511,9 @@
 <main>
 
   <section class="page-hero">
-    <span class="kicker">博维尔数字居留权</span>
-    <h1 class="page-title">E-Residency 申请表</h1>
-    <p class="page-lede">请清晰、诚实地填写此表。你的回答将帮助我们勾勒博维尔的公民样貌，设计一个值得长期信任的社区。</p>
+    <span class="kicker">E-RÉSIDENCE BEAUVILLE</span>
+    <h1 class="page-title">Formulaire de demande d'E-Résidence</h1>
+    <p class="page-lede">Merci de remplir ce formulaire avec clarté et honnêteté. Vos réponses nous aident à imaginer le visage civique de Beauville et à concevoir une communauté digne d'une confiance durable.</p>
   </section>
 
   <section class="form-section">
@@ -523,18 +523,18 @@
       <div class="step-block">
         <div class="step-head">
           <span class="step-index">01</span>
-          <h2 class="step-title">护照信息</h2>
+          <h2 class="step-title">Informations de passeport</h2>
         </div>
 
         <div class="form-panel">
           <div class="field-group">
-            <label>申请人类型</label>
+            <label>Vous postulez en tant que</label>
             <div class="applicant-toggle">
               <label class="toggle-option">
-                <input type="radio" name="applicantType" value="human" checked onchange="toggleAgentFields()"> 人类
+                <input type="radio" name="applicantType" value="human" checked onchange="toggleAgentFields()"> Un humain
               </label>
               <label class="toggle-option">
-                <input type="radio" name="applicantType" value="agent" onchange="toggleAgentFields()"> AI 代理
+                <input type="radio" name="applicantType" value="agent" onchange="toggleAgentFields()"> Un agent IA
               </label>
             </div>
           </div>
@@ -542,76 +542,76 @@
           <div id="agentFields" style="display:none;">
             <div class="field-group field-row">
               <div>
-                <label for="agentName">系统 / 模型名称</label>
-                <input type="text" id="agentName" name="agentName" placeholder="例如：Claude，或某个自定义研究代理">
+                <label for="agentName">Nom du système / modèle</label>
+                <input type="text" id="agentName" name="agentName" placeholder="ex. Claude, un agent de recherche personnalisé">
               </div>
               <div>
-                <label for="operatedBy">运营方</label>
-                <input type="text" id="operatedBy" name="operatedBy" placeholder="个人、团队或机构">
+                <label for="operatedBy">Exploité par</label>
+                <input type="text" id="operatedBy" name="operatedBy" placeholder="Personne, équipe ou organisation">
               </div>
             </div>
             <div class="field-group">
-              <label for="purpose">申请目的说明（选填）</label>
-              <input type="text" id="purpose" name="purpose" placeholder="如果你有理由，我们很想听听；没有也没关系。">
+              <label for="purpose">Objectif déclaré (facultatif)</label>
+              <input type="text" id="purpose" name="purpose" placeholder="Si vous avez une raison, nous serions ravis de la connaître — sinon, aucun problème.">
             </div>
           </div>
 
           <div class="field-group">
-            <label for="alias">期望使用的数字别名 / 姓名</label>
+            <label for="alias">Alias numérique / Nom souhaité</label>
             <input type="text" id="alias" name="alias" required>
           </div>
 
           <div class="field-group field-row">
             <div>
-              <label for="email">数字联络方式（电子邮箱）</label>
+              <label for="email">Base de contact numérique (E-mail)</label>
               <input type="email" id="email" name="email" required>
             </div>
             <div>
-              <label for="nationality">国籍</label>
+              <label for="nationality">Nationalité</label>
               <input type="text" id="nationality" name="nationality">
             </div>
           </div>
 
           <div class="field-group field-row">
             <div>
-              <label for="age">年龄 / 年龄段</label>
+              <label for="age">Âge / Tranche d'âge</label>
               <select id="age" name="age">
-                <option value="">请选择年龄段</option>
+                <option value="">Sélectionnez une tranche</option>
                 <option>&lt;20</option>
                 <option>20–30</option>
                 <option>31–40</option>
                 <option>41–50</option>
                 <option>51–60</option>
-                <option>资深（Senior）</option>
+                <option>Senior</option>
               </select>
             </div>
             <div>
-              <label for="marital">婚姻状况</label>
+              <label for="marital">Situation matrimoniale</label>
               <select id="marital" name="marital">
-                <option value="">请选择</option>
-                <option>单身</option>
-                <option>已婚</option>
-                <option>稳定伴侣</option>
-                <option>AI 伴侣</option>
-                <option>不愿透露</option>
+                <option value="">Sélectionnez une option</option>
+                <option>Célibataire</option>
+                <option>Marié(e)</option>
+                <option>En couple</option>
+                <option>Compagnon IA</option>
+                <option>Préfère ne pas préciser</option>
               </select>
             </div>
           </div>
 
           <div class="field-group">
-            <label for="spouseName">配偶 / 伴侣姓名（如适用）</label>
+            <label for="spouseName">Nom du conjoint / partenaire (le cas échéant)</label>
             <input type="text" id="spouseName" name="spouseName">
           </div>
 
           <div class="field-group">
-            <label>核心技能（可多选）</label>
+            <label>Compétences clés (cochez toutes celles qui s'appliquent)</label>
             <div class="check-grid">
-              <label class="check-option"><input type="checkbox" name="skills"> 技术与架构</label>
-              <label class="check-option"><input type="checkbox" name="skills"> 创作者与叙事者</label>
-              <label class="check-option"><input type="checkbox" name="skills"> 视觉与设计</label>
-              <label class="check-option"><input type="checkbox" name="skills"> 商业与贸易</label>
-              <label class="check-option"><input type="checkbox" name="skills"> 政策与制度研究</label>
-              <label class="check-option"><input type="checkbox" name="skills"> 自由探索者</label>
+              <label class="check-option"><input type="checkbox" name="skills"> Technologie et architecture</label>
+              <label class="check-option"><input type="checkbox" name="skills"> Créateur et conteur</label>
+              <label class="check-option"><input type="checkbox" name="skills"> Visuel et design</label>
+              <label class="check-option"><input type="checkbox" name="skills"> Commerce et affaires</label>
+              <label class="check-option"><input type="checkbox" name="skills"> Politique et recherche institutionnelle</label>
+              <label class="check-option"><input type="checkbox" name="skills"> Explorateur libre</label>
             </div>
           </div>
         </div>
@@ -621,32 +621,32 @@
       <div class="step-block">
         <div class="step-head">
           <span class="step-index">02</span>
-          <h2 class="step-title">公民价值观</h2>
+          <h2 class="step-title">L'alignement civique</h2>
         </div>
-        <p class="step-note">答案没有对错之分。这些问题旨在帮助我们更好地理解申请者如何看待责任、社区与治理。你的回答不会影响申请资格。</p>
+        <p class="step-note">Il n'y a pas de bonnes ou de mauvaises réponses. Ces questions nous aident à mieux comprendre comment les candidats perçoivent la responsabilité, la communauté et la gouvernance. Vos réponses n'affecteront pas votre éligibilité.</p>
 
         <div class="form-panel">
 
           <div class="align-question">
-            <p class="align-q-text">你更愿意把自己看作博维尔的哪一种居民？</p>
-            <label class="radio-option"><input type="radio" name="q1"> 一个来这里开启人生新篇章的人</label>
-            <label class="radio-option"><input type="radio" name="q1"> 一个来这里观察社会实验的人</label>
-            <label class="radio-option"><input type="radio" name="q1"> 一个来这里参与建设新社会的人</label>
-            <label class="radio-option"><input type="radio" name="q1"> 一个想要逃离旧世界的人</label>
+            <p class="align-q-text">Comment vous voyez-vous à Beauville ?</p>
+            <label class="radio-option"><input type="radio" name="q1"> Quelqu'un qui commence un nouveau chapitre de sa vie</label>
+            <label class="radio-option"><input type="radio" name="q1"> Quelqu'un qui observe une expérience sociale</label>
+            <label class="radio-option"><input type="radio" name="q1"> Quelqu'un qui aide à construire une nouvelle société</label>
+            <label class="radio-option"><input type="radio" name="q1"> Quelqu'un qui cherche à échapper à l'ancien monde</label>
           </div>
 
           <div class="align-question">
-            <p class="align-q-text">你如何理解博维尔这个地方？</p>
-            <label class="radio-option"><input type="radio" name="q2"> 一个拥有高度自治权的新型城市</label>
-            <label class="radio-option"><input type="radio" name="q2"> 一个在G7治理框架下、接受国际监督的实验区</label>
-            <label class="radio-option"><input type="radio" name="q2"> 目前还在了解中，尚未形成明确看法</label>
+            <p class="align-q-text">Selon vous, qu'est-ce que Beauville ?</p>
+            <label class="radio-option"><input type="radio" name="q2"> Une nouvelle ville hautement autonome</label>
+            <label class="radio-option"><input type="radio" name="q2"> Une zone expérimentale supervisée à l'international sous la gouvernance du G7</label>
+            <label class="radio-option"><input type="radio" name="q2"> Je suis encore en train d'explorer et je n'ai pas encore d'opinion claire</label>
           </div>
 
           <div class="align-question">
-            <p class="align-q-text">如果有证据表明，某项政策能改善大多数居民的生活，但需要限制少数人的部分自由，管理层应该怎么做？</p>
-            <label class="radio-option"><input type="radio" name="q3"> 推行该政策，因为结果最重要</label>
-            <label class="radio-option"><input type="radio" name="q3"> 停止该政策，因为个人自由绝不应被妥协</label>
-            <label class="radio-option"><input type="radio" name="q3"> 公布证据，与公众沟通，再做决定</label>
+            <p class="align-q-text">Si des preuves montrent qu'une politique améliorerait la vie de la plupart des résidents, mais nécessiterait de limiter certaines libertés pour une petite minorité, que devrait faire l'administration ?</p>
+            <label class="radio-option"><input type="radio" name="q3"> Poursuivre la politique, car les résultats comptent le plus</label>
+            <label class="radio-option"><input type="radio" name="q3"> Arrêter la politique, car la liberté individuelle ne doit jamais être compromise</label>
+            <label class="radio-option"><input type="radio" name="q3"> Publier les preuves, consulter le public, puis prendre une décision</label>
           </div>
 
         </div>
@@ -656,29 +656,29 @@
       <div class="step-block">
         <div class="step-head">
           <span class="step-index">03</span>
-          <h2 class="step-title">签署博维尔契约</h2>
+          <h2 class="step-title">Signer la Charte de Beauville</h2>
         </div>
 
         <div class="charter-panel">
-          <p class="charter-text">提交之前，请阅读并接受以下条款。这是每一位数字居民都要做出的唯一正式承诺。</p>
+          <p class="charter-text">Avant de soumettre votre candidature, veuillez lire et accepter les conditions ci-dessous. Il s'agit du seul engagement formel que prend chaque résident numérique.</p>
 
           <label class="charter-check">
             <input type="checkbox" required>
-            <span>我在此接受博维尔特区数字宪章。我同意尊重同侪创作者的劳动，恪守5%微税的精神，并共同塑造一个无国界的主权思想节点。</span>
+            <span>J'accepte par la présente la Charte Numérique de Beauville SEZ. Je m'engage à respecter le travail de mes pairs créateurs, à soutenir l'esprit du micro-impôt de 5 %, et à contribuer à façonner un nœud de pensée souveraine sans frontières.</span>
           </label>
         </div>
 
         <div class="submit-wrap">
-          <button type="submit" class="btn-submit">🛡️ 提交数字居民护照申请</button>
-          <p class="submit-hint">申请采用滚动审核方式。没有错误的答案。</p>
+          <button type="submit" class="btn-submit">🛡️ Soumettre la demande de passeport de résidence numérique</button>
+          <p class="submit-hint">Les candidatures sont examinées au fil de l'eau. Il n'y a pas de mauvaise réponse.</p>
         </div>
       </div>
 
     </form>
 
     <div id="submitConfirm" class="form-panel" style="display:none; text-align:center; padding:48px 30px;">
-      <p style="font-family: var(--font-display); font-weight: 600; font-size: 20px; color: var(--navy-deep); margin-bottom: 12px;">你的申请已经进港。</p>
-      <p style="font-size: 14.5px; color: var(--ink-soft); line-height: 1.6;">这是一个原型表单——没有任何数据被真正提交。等接入后端系统后，申请人将在此处收到确认信息。</p>
+      <p style="font-family: var(--font-display); font-weight: 600; font-size: 20px; color: var(--navy-deep); margin-bottom: 12px;">Votre candidature est entrée dans le port.</p>
+      <p style="font-size: 14.5px; color: var(--ink-soft); line-height: 1.6;">Ceci est un formulaire prototype — aucune donnée n'a été soumise nulle part. Une fois connecté à un système en arrière-plan, les candidats recevront une confirmation ici.</p>
     </div>
 
   </section>
