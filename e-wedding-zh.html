@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>虚拟婚礼登记 — 博维尔特区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #0F2A4A;
+    --navy-mid: #1B3A6B;
+    --navy-soft: #2C4A70;
+    --sand: #F5F0E4;
+    --sand-warm: #EFE7D4;
+    --ocean-teal: #2C6E6B;
+    --gold-signal: #C89B3C;
+    --ink: #16202C;
+    --ink-soft: #4A5568;
+    --paper-line: #D8CFB8;
+    --white: #FFFFFF;
+
+    --font-display: 'Fraunces', 'Noto Serif SC', 'PingFang SC', serif;
+    --font-body: 'IBM Plex Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --font-mono: 'IBM Plex Mono', 'PingFang SC', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--sand);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ============ HEADER (shared) ============ */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245, 240, 228, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .header-top {
+    max-width: 1320px; margin: 0 auto; padding: 24px 40px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand-mark { width: 60px; height: 60px; flex-shrink: 0; }
+  .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+
+  .brand-name {
+    font-family: var(--font-display); font-weight: 600; font-size: 32px;
+    letter-spacing: 0.045em; color: var(--navy-deep);
+  }
+
+  .brand-sub {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ink-soft); margin-top: 4px;
+  }
+
+  .tagline {
+    font-family: var(--font-display); font-style: italic; font-size: 16px;
+    color: var(--navy-soft); text-align: right; max-width: 280px;
+    padding-left: 24px; border-left: 1px solid var(--paper-line); line-height: 1.4;
+  }
+
+  .lang-switch { display: flex; gap: 6px; flex-shrink: 0; }
+
+  .lang-btn {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
+    padding: 5px 11px; border: 1px solid var(--paper-line); border-radius: 20px;
+    color: var(--ink-soft); background: transparent; cursor: pointer; transition: all 0.2s ease;
+  }
+
+  .lang-btn:hover, .lang-btn.active {
+    border-color: var(--navy-mid); color: var(--navy-mid); background: rgba(27, 58, 107, 0.06);
+  }
+
+  nav.main-nav { background: var(--navy-deep); }
+
+  .nav-inner { max-width: 1320px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; }
+  .nav-links { display: flex; align-items: center; list-style: none; gap: 2px; }
+  .nav-links > li { position: relative; }
+
+  .nav-links a, .nav-links .dropdown-toggle {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.08em;
+    color: rgba(245, 240, 228, 0.82); padding: 15px 16px; cursor: pointer;
+    transition: all 0.2s ease; border-bottom: 2px solid transparent;
+    background: none; border: none;
+  }
+
+  .nav-links a.active { color: var(--gold-signal); border-bottom-color: var(--gold-signal); }
+  .nav-links a:hover, .nav-links .dropdown-toggle:hover {
+    color: var(--gold-signal); border-bottom-color: var(--gold-signal);
+  }
+
+  .nav-links .dropdown-toggle svg { width: 9px; height: 9px; transition: transform 0.2s ease; }
+  .has-dropdown:hover .dropdown-toggle svg { transform: rotate(180deg); }
+
+  .dropdown-menu {
+    position: absolute; top: 100%; left: 0; background: var(--white);
+    border: 1px solid var(--paper-line); border-radius: 4px; min-width: 200px;
+    box-shadow: 0 12px 32px rgba(15, 42, 74, 0.18);
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: all 0.2s ease; padding: 6px; z-index: 50;
+  }
+
+  .has-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
+  .dropdown-menu a {
+    display: block; color: var(--ink); padding: 10px 14px;
+    font-size: 12.5px; letter-spacing: 0.03em; border-radius: 3px; border: none;
+  }
+
+  .dropdown-menu a:hover { background: var(--sand-warm); color: var(--navy-mid); border: none; }
+
+  /* ============ PAGE HERO ============ */
+  .page-hero {
+    max-width: 900px; margin: 0 auto; padding: 64px 40px 8px;
+  }
+
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ocean-teal); margin-bottom: 24px;
+  }
+
+  .kicker::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold-signal); box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.18);
+  }
+
+  .page-title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(30px, 3.8vw, 44px); line-height: 1.14;
+    letter-spacing: -0.01em; color: var(--navy-deep);
+  }
+
+  .page-lede {
+    margin-top: 20px; font-size: 16.5px; line-height: 1.72; color: var(--ink-soft);
+  }
+
+  .meta-strip {
+    display: flex; gap: 28px; margin-top: 28px; flex-wrap: wrap;
+  }
+
+  .meta-item { display: flex; flex-direction: column; gap: 4px; }
+
+  .meta-label {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; color: var(--ocean-teal);
+  }
+
+  .meta-value {
+    font-family: var(--font-display); font-weight: 600; font-size: 17px; color: var(--navy-deep);
+  }
+
+  /* ============ CARDS ============ */
+  .cards-section {
+    max-width: 900px; margin: 0 auto; padding: 40px 40px 8px;
+  }
+
+  .info-card {
+    background: var(--white);
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    padding: 30px 28px;
+    margin-bottom: 22px;
+    position: relative;
+  }
+
+  .info-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--ocean-teal);
+    border-radius: 4px 4px 0 0;
+  }
+
+  .info-card .num {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em;
+    color: var(--ocean-teal); display: block; margin-bottom: 14px;
+  }
+
+  .info-card h3 {
+    font-family: var(--font-display); font-weight: 600; font-size: 19px;
+    color: var(--navy-deep); margin-bottom: 14px; line-height: 1.32;
+  }
+
+  .info-card p {
+    font-size: 14.5px; line-height: 1.68; color: var(--ink-soft);
+  }
+
+  .info-card p + p { margin-top: 12px; }
+
+  .info-card a.inline-link {
+    color: var(--navy-mid); font-weight: 500; border-bottom: 1px solid var(--navy-mid);
+  }
+
+  .tier-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px;
+  }
+
+  .tier-box {
+    border: 1px solid var(--paper-line); border-radius: 4px; padding: 20px;
+  }
+
+  .tier-box.permanent { border-color: var(--gold-signal); background: rgba(200, 155, 60, 0.05); }
+  .tier-box.free { border-color: var(--ocean-teal); background: rgba(44, 110, 107, 0.05); }
+
+  .tier-box .tier-name {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em;
+    display: block; margin-bottom: 8px;
+  }
+
+  .tier-box.permanent .tier-name { color: var(--gold-signal); }
+  .tier-box.free .tier-name { color: var(--ocean-teal); }
+
+  .tier-box .tier-price {
+    font-family: var(--font-display); font-weight: 600; font-size: 22px;
+    color: var(--navy-deep); margin-bottom: 10px; display: block;
+  }
+
+  .tier-box ul { list-style: none; }
+  .tier-box li {
+    font-size: 13.5px; line-height: 1.6; color: var(--ink-soft);
+    padding-left: 14px; position: relative; margin-bottom: 6px;
+  }
+  .tier-box li::before {
+    content: '—'; position: absolute; left: 0; color: var(--paper-line);
+  }
+
+  .status-note {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+    color: var(--gold-signal);
+    background: rgba(200, 155, 60, 0.08);
+    border: 1px solid rgba(200, 155, 60, 0.25);
+    padding: 7px 14px; border-radius: 20px;
+    margin-bottom: 18px;
+  }
+
+  /* ============ SUBMIT ============ */
+  .submit-section {
+    max-width: 900px; margin: 0 auto; padding: 8px 40px 100px;
+  }
+
+  .submit-panel {
+    background: var(--navy-deep);
+    border-radius: 4px;
+    padding: 36px 34px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .submit-panel::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%;
+    background: var(--gold-signal);
+  }
+
+  .submit-panel h3 {
+    font-family: var(--font-display); font-weight: 600; font-size: 20px;
+    color: var(--sand); margin-bottom: 10px;
+  }
+
+  .submit-panel p {
+    font-size: 14px; line-height: 1.7; color: rgba(245, 240, 228, 0.78);
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 980px) {
+    .header-top { flex-wrap: wrap; padding: 20px 24px; }
+    .tagline { display: none; }
+    .nav-inner { padding: 0 24px; overflow-x: auto; }
+    .nav-links { white-space: nowrap; }
+    .page-hero { padding: 40px 24px 8px; }
+    .cards-section { padding: 32px 24px 8px; }
+    .submit-section { padding: 8px 24px 64px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="23" stroke="#0F2A4A" stroke-width="1.5" fill="#F5F0E4"/>
+          <path d="M20 34V19L24 12L28 19V34" stroke="#1B3A6B" stroke-width="1.6" stroke-linejoin="round"/>
+          <rect x="21" y="21" width="6" height="2" fill="#1B3A6B"/>
+          <rect x="20.5" y="26" width="7" height="2" fill="#1B3A6B"/>
+          <path d="M22.5 12L24 9L25.5 12" stroke="#C89B3C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="14" y1="34" x2="34" y2="34" stroke="#0F2A4A" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M9 24C9 24 12 22 14 24C16 26 18 22 20 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+          <path d="M28 24C28 24 30 22 32 24C34 26 37 22 39 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">BEAUVILLE</span>
+        <span class="brand-sub">博维尔特区</span>
+      </div>
+    </div>
+
+    <p class="tagline">尊严、机遇与归属 — 一片新的海岸</p>
+
+    <div class="lang-switch">
+      <a href="e-wedding.html" class="lang-btn">EN</a>
+      <a href="e-wedding-fr.html" class="lang-btn">FR</a>
+      <button class="lang-btn active">中文</button>
+    </div>
+  </div>
+
+  <nav class="main-nav">
+    <div class="nav-inner">
+      <ul class="nav-links">
+        <li><a href="index-zh.html">首页</a></li>
+        <li><a href="about-zh.html">关于</a></li>
+        <li><a href="governance-zh.html">治理</a></li>
+        <li><a href="novel-zh.html">小说</a></li>
+        <li><a href="official-documents-zh.html">官方文件</a></li>
+        <li><a href="e-residency-zh.html">数字居留权</a></li>
+        <li><a href="qa-zh.html">问答</a></li>
+        <li class="has-dropdown">
+          <button class="dropdown-toggle">参与共建
+            <svg viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="design-commons-zh.html">设计共创区</a>
+            <a href="#">广场</a>
+            <a href="forum-zh.html">论坛</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <span class="kicker">公民集市 · 虚拟婚礼</span>
+    <h1 class="page-title">虚拟婚礼登记</h1>
+    <p class="page-lede">博维尔没有任何现实世界政府承认的婚姻。它有的是一种公民仪式——一种正式的、留有记录的方式，用来标记一份承诺，被写进这个故事的世界里。</p>
+
+    <div class="meta-strip">
+      <div class="meta-item">
+        <span class="meta-label">永久登记</span>
+        <span class="meta-value"><span style="color:var(--gold-signal)">฿</span> 5,000</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">免费登记</span>
+        <span class="meta-value">฿0，每3个月续签一次</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">资格</span>
+        <span class="meta-value">任何选择彼此的两方</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">状态</span>
+        <span class="meta-value">原型阶段</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="cards-section">
+
+    <div class="info-card">
+      <span class="num">两种登记方式</span>
+      <h3>永久登记，或免费续签</h3>
+      <p>不是每个人都准备好一次性支付 ฿5,000。博维尔提供第二条路径——开始时免费，维护起来也轻松，同样会被记录在案。</p>
+      <div class="tier-grid">
+        <div class="tier-box permanent">
+          <span class="tier-name">永久登记</span>
+          <span class="tier-price">฿5,000</span>
+          <ul>
+            <li>一次性支付</li>
+            <li>永久有效</li>
+            <li>此后再也不需要续签</li>
+          </ul>
+        </div>
+        <div class="tier-box free">
+          <span class="tier-name">免费登记</span>
+          <span class="tier-price">฿0</span>
+          <ul>
+            <li>每3个月需要续签一次</li>
+            <li>到期后有3个月宽限期</li>
+            <li>宽限期内未续签，记录将被删除</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <span class="num">一份承诺，而非一次消费</span>
+      <h3>为什么永久登记的费用定在这个数字</h3>
+      <p>฿5,000 在博维尔的经济体系里不是一个小数目——这是有意为之的。这不是一个可以不假思索点一下的按钮。它需要时间、需要投入，也需要你和这个地方积累一点历史，才能走到这一步。数字的大小，本身就是意义所在。</p>
+    </div>
+
+    <div class="info-card">
+      <span class="num">如何攒够这笔钱</span>
+      <h3>一步步积累到 ฿5,000</h3>
+      <p>Beau Dollar 来自你实际做的事，不是一次性填满的钱包。注册成为博维尔的数字居民会获得初始余额，早期居民还有更高的先驱者奖励。阅读小说的每一章都会再增加一些。参加旗帜设计比赛也能再添一笔。<a href="e-residency-zh.html" class="inline-link">申请数字居留权</a>，开始攒钱。</p>
+    </div>
+
+    <div class="info-card">
+      <span class="num">登记意味着什么</span>
+      <h3>一份公民记录，不是一份法律文件</h3>
+      <p>这是一个虚构特区里的虚构制度。它在现实世界任何地方都不具备法律效力。它提供的，是在博维尔公民记录里的一个位置——两个名字，被郑重地登记在一起，在一个认真对待"选择某个人"这件事的故事里，无论那个"某个人"是谁。</p>
+    </div>
+
+  </section>
+
+  <section class="submit-section">
+    <div class="submit-panel">
+      <h3>尚未开放登记</h3>
+      <p>这个页面说明的是——一旦博维尔的公民账户系统正式上线，虚拟婚礼登记将如何运作。目前，这只是一个预告：先攒够 Beau Dollar，等登记处开放的那一天做好准备。</p>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
