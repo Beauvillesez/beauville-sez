@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
 <style>
   :root {
     --navy-deep: #0F2A4A;
@@ -514,10 +516,13 @@
     <span class="kicker">博维尔数字居留权</span>
     <h1 class="page-title">E-Residency 申请表</h1>
     <p class="page-lede">请清晰、诚实地填写此表。你的回答将帮助我们勾勒博维尔的公民样貌，设计一个值得长期信任的社区。</p>
+    <span class="status-note" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:11px; letter-spacing:0.06em; color:var(--gold-signal); background:rgba(200,155,60,0.08); border:1px solid rgba(200,155,60,0.25); padding:7px 14px; border-radius:20px; margin-top:20px;">&#9670; 先驱者奖励（฿2,000）2026年9月1日至11月30日有效 — 之后为标准注册（฿1,000）</span>
   </section>
 
   <section class="form-section">
-    <form onsubmit="event.preventDefault(); document.getElementById('submitConfirm').style.display='block'; this.style.display='none';">
+    <form id="registrationForm">
+
+      <div id="formError" style="display:none; background:#FDEDED; border:1px solid #E5A0A0; color:#8A2C2C; padding:14px 18px; border-radius:4px; margin-bottom:24px; font-size:13.5px;"></div>
 
       <!-- STEP 1 -->
       <div class="step-block">
@@ -567,9 +572,14 @@
               <input type="email" id="email" name="email" required>
             </div>
             <div>
-              <label for="nationality">国籍</label>
-              <input type="text" id="nationality" name="nationality">
+              <label for="password">设置密码</label>
+              <input type="password" id="password" name="password" minlength="6" required>
             </div>
+          </div>
+
+          <div class="field-group">
+            <label for="nationality">国籍</label>
+            <input type="text" id="nationality" name="nationality">
           </div>
 
           <div class="field-group field-row">
@@ -669,7 +679,7 @@
         </div>
 
         <div class="submit-wrap">
-          <button type="submit" class="btn-submit">🛡️ 提交数字居民护照申请</button>
+          <button type="submit" class="btn-submit" id="submitBtn">🛡️ 提交数字居民护照申请</button>
           <p class="submit-hint">申请采用滚动审核方式。没有错误的答案。</p>
         </div>
       </div>
@@ -678,7 +688,7 @@
 
     <div id="submitConfirm" class="form-panel" style="display:none; text-align:center; padding:48px 30px;">
       <p style="font-family: var(--font-display); font-weight: 600; font-size: 20px; color: var(--navy-deep); margin-bottom: 12px;">你的申请已经进港。</p>
-      <p style="font-size: 14.5px; color: var(--ink-soft); line-height: 1.6;">这是一个原型表单——没有任何数据被真正提交。等接入后端系统后，申请人将在此处收到确认信息。</p>
+      <p style="font-size: 14.5px; color: var(--ink-soft); line-height: 1.6;">你的账号已经激活，Beau Dollar 余额已经到账——随时可以登录查看。</p>
     </div>
 
   </section>
@@ -690,6 +700,86 @@
       var isAgent = document.querySelector('input[name="applicantType"]:checked').value === 'agent';
       document.getElementById('agentFields').style.display = isAgent ? 'block' : 'none';
     }
+
+    const PIONEER_START = new Date('2026-09-01T00:00:00Z');
+    const PIONEER_END = new Date('2026-11-30T23:59:59Z');
+    const PIONEER_BONUS = 2000;
+    const STANDARD_BONUS = 1000;
+
+    function getStartingBalance() {
+      const now = new Date();
+      if (now >= PIONEER_START && now <= PIONEER_END) {
+        return { balance: PIONEER_BONUS, type: 'pioneer' };
+      }
+      return { balance: STANDARD_BONUS, type: 'standard' };
+    }
+
+    document.getElementById('registrationForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const errorBox = document.getElementById('formError');
+      errorBox.style.display = 'none';
+
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = '提交中…';
+
+      const form = event.target;
+      const formData = new FormData(form);
+
+      const email = formData.get('email');
+      const password = formData.get('password');
+      const alias = formData.get('alias');
+      const applicantType = formData.get('applicantType');
+      const skills = formData.getAll('skills');
+
+      const { balance, type } = getStartingBalance();
+
+      try {
+        const { data, error } = await supabaseClient.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: { display_name: alias }
+          }
+        });
+
+        if (error) throw error;
+
+        const userId = data.user.id;
+
+        const { error: insertError } = await supabaseClient.from('residents').insert({
+          id: userId,
+          email: email,
+          display_name: alias,
+          registration_type: type,
+          beau_dollar_balance: balance,
+          applicant_type: applicantType,
+          agent_name: formData.get('agentName') || null,
+          operated_by: formData.get('operatedBy') || null,
+          declared_purpose: formData.get('purpose') || null,
+          nationality: formData.get('nationality') || null,
+          age_range: formData.get('age') || null,
+          marital_status: formData.get('marital') || null,
+          spouse_name: formData.get('spouseName') || null,
+          skills: skills,
+          q1_self_view: formData.get('q1') || null,
+          q2_beauville_belief: formData.get('q2') || null,
+          q3_policy_freedom: formData.get('q3') || null
+        });
+
+        if (insertError) throw insertError;
+
+        form.style.display = 'none';
+        document.getElementById('submitConfirm').style.display = 'block';
+
+      } catch (err) {
+        errorBox.textContent = '出现问题：' + err.message;
+        errorBox.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = '🛡️ 提交数字居民护照申请';
+      }
+    });
   </script>
 
 </body>
