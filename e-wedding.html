@@ -498,8 +498,18 @@
 
       <form id="weddingForm">
         <div class="field-group">
+          <label for="myName">Your Full Name (as you'd like it on record)</label>
+          <input type="text" id="myName" name="myName" required>
+        </div>
+
+        <div class="field-group">
           <label for="partnerEmail">Partner's Email (must be a registered Beauville E-Resident)</label>
           <input type="email" id="partnerEmail" name="partnerEmail" required>
+        </div>
+
+        <div class="field-group">
+          <label for="myVow">Your Vow (optional)</label>
+          <textarea id="myVow" name="myVow" rows="3" placeholder="A few words, if you'd like to leave them on record..." style="width:100%; padding:11px 14px; border:1px solid var(--paper-line); border-radius:4px; font-family:var(--font-body); font-size:14.5px; color:var(--ink); resize:vertical;"></textarea>
         </div>
 
         <div class="field-group">
@@ -546,7 +556,9 @@
       btn.disabled = true;
       btn.textContent = 'Sending…';
 
+      const myName = document.getElementById('myName').value.trim();
       const partnerEmail = document.getElementById('partnerEmail').value.trim().toLowerCase();
+      const myVow = document.getElementById('myVow').value.trim();
       const regType = document.querySelector('input[name="regType"]:checked').value;
 
       try {
@@ -604,6 +616,8 @@
           .from('wedding_registrations')
           .insert({
             initiator_id: session.user.id,
+            initiator_name: myName,
+            initiator_vow: myVow || null,
             partner_email: partnerEmail,
             partner_id: partner.id,
             registration_type: regType,
