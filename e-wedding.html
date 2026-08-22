@@ -513,6 +513,11 @@
         </div>
 
         <div class="field-group">
+          <label for="myWitness">Your Witness (optional)</label>
+          <input type="text" id="myWitness" name="myWitness" placeholder="A friend, a fictional character — whoever you'd like to name">
+        </div>
+
+        <div class="field-group">
           <label>Registration Type</label>
           <div class="type-toggle">
             <label class="type-option selected" id="permOption">
@@ -559,6 +564,7 @@
       const myName = document.getElementById('myName').value.trim();
       const partnerEmail = document.getElementById('partnerEmail').value.trim().toLowerCase();
       const myVow = document.getElementById('myVow').value.trim();
+      const myWitness = document.getElementById('myWitness').value.trim();
       const regType = document.querySelector('input[name="regType"]:checked').value;
 
       try {
@@ -618,6 +624,7 @@
             initiator_id: session.user.id,
             initiator_name: myName,
             initiator_vow: myVow || null,
+            initiator_witness: myWitness || null,
             partner_email: partnerEmail,
             partner_id: partner.id,
             registration_type: regType,

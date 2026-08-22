@@ -541,6 +541,10 @@
           '<label>Your Vow (optional)</label>' +
           '<textarea class="invite-vow-input" rows="2" placeholder="A few words, if you\'d like to leave them on record..." style="width:100%; padding:11px 14px; border:1px solid var(--paper-line); border-radius:4px; font-family:var(--font-body); font-size:14.5px; color:var(--ink); resize:vertical;"></textarea>' +
         '</div>' +
+        '<div class="field-group">' +
+          '<label>Your Witness (optional)</label>' +
+          '<input type="text" class="invite-witness-input" placeholder="A friend, a fictional character — whoever you\'d like to name">' +
+        '</div>' +
         '<div class="invite-actions">' +
           '<button class="btn-accept" data-id="' + invite.id + '" data-action="confirm">Accept</button>' +
           '<button class="btn-decline" data-id="' + invite.id + '" data-action="decline">Decline</button>' +
@@ -560,10 +564,12 @@
 
     let partnerName = '';
     let partnerVow = '';
+    let partnerWitness = '';
 
     if (action === 'confirm') {
       partnerName = card.querySelector('.invite-name-input').value.trim();
       partnerVow = card.querySelector('.invite-vow-input').value.trim();
+      partnerWitness = card.querySelector('.invite-witness-input').value.trim();
 
       if (!partnerName) {
         alert('Please enter your name to accept this registration.');
@@ -655,7 +661,8 @@
           status: 'confirmed',
           confirmed_at: new Date().toISOString(),
           partner_name: partnerName,
-          partner_vow: partnerVow || null
+          partner_vow: partnerVow || null,
+          partner_witness: partnerWitness || null
         };
         if (invite.registration_type === 'free') {
           const expiry = new Date();
