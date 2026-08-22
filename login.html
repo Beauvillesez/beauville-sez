@@ -275,6 +275,86 @@
   .btn-accept:hover, .btn-decline:hover { opacity: 0.8; }
   .btn-accept:disabled, .btn-decline:disabled { opacity: 0.5; cursor: default; }
 
+  /* ============ MARRIAGE STATUS + CERTIFICATE ============ */
+  .marriage-card {
+    background: rgba(44, 110, 107, 0.06);
+    border: 1px solid rgba(44, 110, 107, 0.3);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+
+  .marriage-card .marriage-label {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em;
+    color: var(--ocean-teal); display: block; margin-bottom: 6px;
+  }
+
+  .marriage-card p { font-size: 14px; color: var(--ink); }
+
+  .btn-view-cert {
+    background: var(--ocean-teal); color: var(--sand);
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.04em;
+    padding: 10px 18px; border: none; border-radius: 4px; cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .cert-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(15, 42, 74, 0.75);
+    z-index: 200; align-items: center; justify-content: center; padding: 24px;
+  }
+
+  .cert-overlay.open { display: flex; }
+
+  .certificate {
+    background: var(--sand); max-width: 560px; width: 100%;
+    padding: 4px; position: relative; max-height: 90vh; overflow-y: auto;
+  }
+
+  .cert-inner {
+    border: 2px solid var(--gold-signal); padding: 40px 36px; text-align: center;
+    position: relative;
+  }
+
+  .cert-inner::before {
+    content: ''; position: absolute; inset: 8px; border: 1px solid var(--navy-deep); opacity: 0.3; pointer-events: none;
+  }
+
+  .cert-seal {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
+    color: var(--ocean-teal); margin-bottom: 6px;
+  }
+
+  .cert-title {
+    font-family: var(--font-display); font-weight: 600; font-size: 24px;
+    color: var(--navy-deep); margin-bottom: 24px;
+  }
+
+  .cert-names {
+    font-family: var(--font-display); font-weight: 600; font-size: 20px;
+    color: var(--navy-deep); line-height: 1.6; margin-bottom: 20px;
+  }
+
+  .cert-divider { width: 60px; height: 1px; background: var(--gold-signal); margin: 0 auto 20px; }
+
+  .cert-vows { margin-bottom: 24px; }
+  .cert-vow-line {
+    font-family: var(--font-display); font-style: italic; font-size: 14.5px;
+    color: var(--ink-soft); line-height: 1.6; margin-bottom: 10px;
+  }
+
+  .cert-meta {
+    display: flex; justify-content: center; gap: 32px; margin-top: 20px;
+    font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft);
+  }
+
+  .cert-meta strong { display: block; color: var(--navy-deep); font-family: var(--font-display); font-size: 14px; margin-top: 4px; }
+
+  .cert-close {
+    display: block; margin: 20px auto 0; background: var(--navy-deep); color: var(--sand);
+    font-family: var(--font-mono); font-size: 12px; padding: 10px 24px; border: none; border-radius: 4px; cursor: pointer;
+  }
+
   @media (max-width: 980px) {
     .header-top { flex-wrap: wrap; padding: 20px 24px; }
     .tagline { display: none; }
@@ -384,6 +464,7 @@
         <p class="dash-email" id="dashEmail"></p>
 
         <div id="inviteContainer"></div>
+        <div id="marriageContainer"></div>
 
         <div class="balance-box">
           <span class="balance-label">BEAU DOLLAR BALANCE</span>
@@ -404,6 +485,23 @@
         <button class="btn-logout" id="logoutBtn">Log Out</button>
       </div>
     </section>
+  </div>
+
+  <div class="cert-overlay" id="certOverlay">
+    <div class="certificate">
+      <div class="cert-inner">
+        <span class="cert-seal">&#9670; BEAUVILLE SEZ &#9670;</span>
+        <h2 class="cert-title">Certificate of Civic Commitment</h2>
+        <p class="cert-names" id="certNames">— &amp; —</p>
+        <div class="cert-divider"></div>
+        <div class="cert-vows" id="certVows"></div>
+        <div class="cert-meta">
+          <div>REGISTERED<br><strong id="certDate">—</strong></div>
+          <div>TYPE<br><strong id="certType">—</strong></div>
+        </div>
+        <button class="cert-close" onclick="document.getElementById('certOverlay').classList.remove('open')">Close</button>
+      </div>
+    </div>
   </div>
 
 </main>
@@ -579,6 +677,61 @@
     }
   }
 
+  async function loadMarriageStatus(user) {
+    const container = document.getElementById('marriageContainer');
+    container.innerHTML = '';
+
+    const { data: record } = await supabaseClient
+      .from('wedding_registrations')
+      .select('*')
+      .or('initiator_id.eq.' + user.id + ',partner_id.eq.' + user.id)
+      .eq('status', 'confirmed')
+      .maybeSingle();
+
+    if (!record) return;
+
+    const isInitiator = record.initiator_id === user.id;
+    const myName = isInitiator ? record.initiator_name : record.partner_name;
+    const otherName = isInitiator ? record.partner_name : record.initiator_name;
+    const typeLabel = record.registration_type === 'permanent' ? 'Permanent' : 'Free (renews every 3 months)';
+
+    const card = document.createElement('div');
+    card.className = 'marriage-card';
+    card.innerHTML =
+      '<div>' +
+        '<span class="marriage-label">CIVIC COMMITMENT ON RECORD</span>' +
+        '<p>' + myName + ' &amp; ' + otherName + ' — ' + typeLabel + '</p>' +
+      '</div>' +
+      '<button class="btn-view-cert">View Certificate</button>';
+
+    card.querySelector('.btn-view-cert').addEventListener('click', () => showCertificate(record, myName, otherName));
+    container.appendChild(card);
+  }
+
+  function showCertificate(record, myName, otherName) {
+    document.getElementById('certNames').textContent = record.initiator_name + ' & ' + record.partner_name;
+
+    const vowsContainer = document.getElementById('certVows');
+    vowsContainer.innerHTML = '';
+    if (record.initiator_vow) {
+      const p = document.createElement('p');
+      p.className = 'cert-vow-line';
+      p.textContent = '"' + record.initiator_vow + '" — ' + record.initiator_name;
+      vowsContainer.appendChild(p);
+    }
+    if (record.partner_vow) {
+      const p = document.createElement('p');
+      p.className = 'cert-vow-line';
+      p.textContent = '"' + record.partner_vow + '" — ' + record.partner_name;
+      vowsContainer.appendChild(p);
+    }
+
+    document.getElementById('certDate').textContent = new Date(record.confirmed_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('certType').textContent = record.registration_type === 'permanent' ? 'Permanent' : 'Free';
+
+    document.getElementById('certOverlay').classList.add('open');
+  }
+
   async function showDashboard(user) {
     const { data: resident, error } = await supabaseClient
       .from('residents')
@@ -599,6 +752,7 @@
     document.getElementById('dashSince').textContent = new Date(resident.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
     await loadPendingInvites(user);
+    await loadMarriageStatus(user);
 
     loginView.style.display = 'none';
     dashboardView.style.display = 'block';
