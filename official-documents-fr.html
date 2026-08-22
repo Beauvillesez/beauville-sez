@@ -7,6 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/rewards.js"></script>
 <style>
   :root {
     --navy-deep: #0F2A4A;
@@ -170,6 +173,22 @@
     border: 1px solid rgba(200, 155, 60, 0.25);
     padding: 7px 14px; border-radius: 20px;
   }
+
+  /* ============ CLAIM BUTTON ============ */
+  .claim-section {
+    max-width: 900px; margin: 0 auto; padding: 0 40px 100px;
+    display: flex; justify-content: center;
+  }
+
+  .claim-btn {
+    background: var(--navy-deep); color: var(--sand);
+    font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.06em;
+    padding: 16px 32px; border: none; border-radius: 4px; cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .claim-btn:hover { background: var(--navy-mid); }
+  .claim-btn:disabled { opacity: 0.7; cursor: default; }
 
   /* ============ DOCUMENT PANEL ============ */
   .doc-section {
@@ -338,7 +357,7 @@
     <p class="page-lede">Un cadre pour la Zone Économique Spéciale de Beauville, Haleloa. Ceci n'est pas un véritable traité international ; c'est le document fondateur au sein de l'univers de la série de romans Beauville SEZ.</p>
     <span class="status-note">&#9670; Document de travail — reflète les termes fondateurs tels que négociés lors de la première session de cadrage</span>
     <br>
-    <span class="reward-note">&#9670; La lecture de ce document rapporte B$200 dans le programme de récompenses civiques de Beauville (bientôt disponible)</span>
+    <span class="reward-note">&#9670; La lecture de ce document rapporte B$227 dans le programme de récompenses civiques de Beauville — connectez-vous pour le réclamer</span>
   </section>
 
   <nav class="doc-index">
@@ -460,6 +479,10 @@
       </div>
     </div>
 
+  </section>
+
+  <section class="claim-section">
+    <button class="claim-btn" id="claimBtn" onclick="claimOnly('official-documents-fr', 227, this, { signInPrompt: 'Redirection vers la connexion…', alreadyClaimed: 'Déjà réclamé ✓', claimed: 'Réclamé — B$227 ajoutés ✓', error: 'Un problème est survenu — réessayez' })">Réclamer B$227 pour la lecture de la Charte</button>
   </section>
 
 </main>
