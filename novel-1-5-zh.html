@@ -7,6 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/rewards.js"></script>
 <style>
   :root {
     --navy-deep: #0F2A4A;
@@ -335,7 +338,7 @@
     <h1 class="chapter-title">博维尔：移民建造 — 1.5</h1>
     <p class="chapter-subtitle-h">宗教与公共秩序</p>
     <p class="disclaimer">这是一部政治推演小说。故事中所有人物，包括文中出现的公众人物，均属虚构使用。</p>
-    <span class="reward-note">&#9670; 阅读本节可获得 B$100 博维尔公民奖励（即将上线）</span>
+    <span class="reward-note">&#9670; 阅读本节可获得 B$76 博维尔公民奖励——登录后即可领取</span>
   </section>
 
   <article class="article-body">
@@ -400,9 +403,9 @@
       <span class="nav-label">&larr; 上一节</span>
       <span class="nav-title">1.4 — 走哪条路，历史早有定论</span>
     </a>
-    <a href="novel-1-6-zh.html" class="nav-btn next">
-      <span class="nav-label">下一节 &rarr;</span>
-      <span class="nav-title">1.6 — 寻找合适岛屿</span>
+    <a href="#" class="nav-btn next" onclick="claimAndProceed('1.5-zh', 76, 'novel-1-6-zh.html'); return false;">
+      <span class="nav-label">领取奖励并继续</span>
+      <span class="nav-title">B$76 &rarr;</span>
     </a>
   </nav>
 

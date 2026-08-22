@@ -7,6 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/rewards.js"></script>
 <style>
   :root {
     --navy-deep: #0F2A4A;
@@ -170,6 +173,22 @@
     border: 1px solid rgba(200, 155, 60, 0.25);
     padding: 7px 14px; border-radius: 20px;
   }
+
+  /* ============ CLAIM BUTTON ============ */
+  .claim-section {
+    max-width: 900px; margin: 0 auto; padding: 0 40px 100px;
+    display: flex; justify-content: center;
+  }
+
+  .claim-btn {
+    background: var(--navy-deep); color: var(--sand);
+    font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.06em;
+    padding: 16px 32px; border: none; border-radius: 4px; cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .claim-btn:hover { background: var(--navy-mid); }
+  .claim-btn:disabled { opacity: 0.7; cursor: default; }
 
   /* ============ DOCUMENT PANEL ============ */
   .doc-section {
@@ -338,7 +357,7 @@
     <p class="page-lede">博维尔特区（哈莱洛亚）的框架文件。这不是真实的国际条约；它是博维尔特区系列小说世界观中的创始文件。</p>
     <span class="status-note">&#9670; 工作草案 — 反映首次框架会议协商确定的创始条款</span>
     <br>
-    <span class="reward-note">&#9670; 阅读本文件可获得 B$200 博维尔公民奖励（即将上线）</span>
+    <span class="reward-note">&#9670; 阅读本文件可获得 B$227 博维尔公民奖励——登录后即可领取</span>
   </section>
 
   <nav class="doc-index">
@@ -460,6 +479,10 @@
       </div>
     </div>
 
+  </section>
+
+  <section class="claim-section">
+    <button class="claim-btn" id="claimBtn" onclick="claimOnly('official-documents-zh', 227, this, { signInPrompt: '正在跳转至登录页面…', alreadyClaimed: '已经领取过 ✓', claimed: '已领取 — B$227 已到账 ✓', error: '出现问题，请重试' })">阅读宪章，领取 B$227</button>
   </section>
 
 </main>
