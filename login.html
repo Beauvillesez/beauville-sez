@@ -464,6 +464,25 @@
           .eq('id', inviteId);
 
       } else {
+        // Beauville allows one active civic commitment at a time —
+        // check both parties don't already have one confirmed elsewhere.
+        const { data: eitherExisting } = await supabaseClient
+          .from('wedding_registrations')
+          .select('id')
+          .or('initiator_id.eq.' + invite.initiator_id + ',partner_id.eq.' + invite.initiator_id + ',initiator_id.eq.' + invite.partner_id + ',partner_id.eq.' + invite.partner_id)
+          .eq('status', 'confirmed')
+          .maybeSingle();
+
+        if (eitherExisting) {
+          alert('One of you already has an active civic commitment on record. This request cannot be confirmed.');
+          await supabaseClient
+            .from('wedding_registrations')
+            .update({ status: 'declined' })
+            .eq('id', inviteId);
+          await loadPendingInvites(user);
+          return;
+        }
+
         if (invite.registration_type === 'permanent') {
           const { data: initiator } = await supabaseClient
             .from('residents')

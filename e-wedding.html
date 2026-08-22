@@ -565,6 +565,18 @@
           throw new Error("You can't register with yourself.");
         }
 
+        // Beauville allows one active civic commitment at a time.
+        const { data: existingOwn } = await supabaseClient
+          .from('wedding_registrations')
+          .select('id')
+          .or('initiator_id.eq.' + session.user.id + ',partner_id.eq.' + session.user.id)
+          .eq('status', 'confirmed')
+          .maybeSingle();
+
+        if (existingOwn) {
+          throw new Error('You already have an active civic commitment on record. Beauville allows only one at a time.');
+        }
+
         const { data: partner, error: partnerError } = await supabaseClient
           .from('residents')
           .select('id')
@@ -575,6 +587,17 @@
 
         if (!partner) {
           throw new Error('No Beauville E-Resident found with that email. Your partner needs to register first.');
+        }
+
+        const { data: existingPartner } = await supabaseClient
+          .from('wedding_registrations')
+          .select('id')
+          .or('initiator_id.eq.' + partner.id + ',partner_id.eq.' + partner.id)
+          .eq('status', 'confirmed')
+          .maybeSingle();
+
+        if (existingPartner) {
+          throw new Error('That resident already has an active civic commitment on record.');
         }
 
         const { error: insertError } = await supabaseClient
