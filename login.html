@@ -490,16 +490,41 @@
             .eq('id', invite.initiator_id)
             .single();
 
-          if (!initiator || initiator.beau_dollar_balance < 5000) {
-            alert("Your partner doesn't have enough Beau Dollar for a permanent registration.");
+          const { data: partnerResident } = await supabaseClient
+            .from('residents')
+            .select('beau_dollar_balance')
+            .eq('id', invite.partner_id)
+            .single();
+
+          if (!initiator || !partnerResident) {
+            alert('Could not verify balances. Please try again.');
             await loadPendingInvites(user);
             return;
           }
 
+          const combined = initiator.beau_dollar_balance + partnerResident.beau_dollar_balance;
+
+          if (combined < 5000) {
+            alert("Your combined Beau Dollar balance isn't enough yet for a permanent registration (฿5,000 total).");
+            await loadPendingInvites(user);
+            return;
+          }
+
+          // Whoever has more contributes first; the other covers the remainder.
+          const initiatorPays = Math.min(initiator.beau_dollar_balance, 5000);
+          const partnerPays = 5000 - initiatorPays;
+
           await supabaseClient
             .from('residents')
-            .update({ beau_dollar_balance: initiator.beau_dollar_balance - 5000 })
+            .update({ beau_dollar_balance: initiator.beau_dollar_balance - initiatorPays })
             .eq('id', invite.initiator_id);
+
+          if (partnerPays > 0) {
+            await supabaseClient
+              .from('residents')
+              .update({ beau_dollar_balance: partnerResident.beau_dollar_balance - partnerPays })
+              .eq('id', invite.partner_id);
+          }
         }
 
         const updateData = { status: 'confirmed', confirmed_at: new Date().toISOString() };
