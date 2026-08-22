@@ -426,11 +426,23 @@
 
     invites.forEach(invite => {
       const typeLabel = invite.registration_type === 'permanent' ? 'Permanent (฿5,000)' : 'Free (renews every 3 months)';
+      const vowLine = invite.initiator_vow
+        ? '<p style="font-style:italic; opacity:0.85;">"' + invite.initiator_vow + '"</p>'
+        : '';
       const card = document.createElement('div');
       card.className = 'invite-card';
       card.innerHTML =
         '<span class="invite-label">E-WEDDING REQUEST</span>' +
-        '<p><strong>' + (invite.initiator.display_name || invite.initiator.email) + '</strong> has requested to register a civic commitment with you — ' + typeLabel + '.</p>' +
+        '<p><strong>' + (invite.initiator_name || invite.initiator.display_name || invite.initiator.email) + '</strong> has requested to register a civic commitment with you — ' + typeLabel + '.</p>' +
+        vowLine +
+        '<div class="field-group">' +
+          '<label>Your Full Name (as you\'d like it on record)</label>' +
+          '<input type="text" class="invite-name-input" placeholder="Required to accept">' +
+        '</div>' +
+        '<div class="field-group">' +
+          '<label>Your Vow (optional)</label>' +
+          '<textarea class="invite-vow-input" rows="2" placeholder="A few words, if you\'d like to leave them on record..." style="width:100%; padding:11px 14px; border:1px solid var(--paper-line); border-radius:4px; font-family:var(--font-body); font-size:14.5px; color:var(--ink); resize:vertical;"></textarea>' +
+        '</div>' +
         '<div class="invite-actions">' +
           '<button class="btn-accept" data-id="' + invite.id + '" data-action="confirm">Accept</button>' +
           '<button class="btn-decline" data-id="' + invite.id + '" data-action="decline">Decline</button>' +
@@ -446,6 +458,20 @@
   async function handleInviteAction(btn, user) {
     const inviteId = btn.dataset.id;
     const action = btn.dataset.action;
+    const card = btn.closest('.invite-card');
+
+    let partnerName = '';
+    let partnerVow = '';
+
+    if (action === 'confirm') {
+      partnerName = card.querySelector('.invite-name-input').value.trim();
+      partnerVow = card.querySelector('.invite-vow-input').value.trim();
+
+      if (!partnerName) {
+        alert('Please enter your name to accept this registration.');
+        return;
+      }
+    }
 
     btn.parentElement.querySelectorAll('button').forEach(b => b.disabled = true);
     btn.textContent = action === 'confirm' ? 'Confirming…' : 'Declining…';
@@ -527,7 +553,12 @@
           }
         }
 
-        const updateData = { status: 'confirmed', confirmed_at: new Date().toISOString() };
+        const updateData = {
+          status: 'confirmed',
+          confirmed_at: new Date().toISOString(),
+          partner_name: partnerName,
+          partner_vow: partnerVow || null
+        };
         if (invite.registration_type === 'free') {
           const expiry = new Date();
           expiry.setMonth(expiry.getMonth() + 3);
