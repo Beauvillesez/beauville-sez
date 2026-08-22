@@ -7,6 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/rewards.js"></script>
 <style>
   :root {
     --navy-deep: #0F2A4A;
@@ -170,6 +173,22 @@
     border: 1px solid rgba(200, 155, 60, 0.25);
     padding: 7px 14px; border-radius: 20px;
   }
+
+  /* ============ CLAIM BUTTON ============ */
+  .claim-section {
+    max-width: 900px; margin: 0 auto; padding: 0 40px 100px;
+    display: flex; justify-content: center;
+  }
+
+  .claim-btn {
+    background: var(--navy-deep); color: var(--sand);
+    font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.06em;
+    padding: 16px 32px; border: none; border-radius: 4px; cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .claim-btn:hover { background: var(--navy-mid); }
+  .claim-btn:disabled { opacity: 0.7; cursor: default; }
 
   /* ============ DOCUMENT PANEL ============ */
   .doc-section {
@@ -338,7 +357,7 @@
     <p class="page-lede">A framework for the Beauville Special Economic Zone, Haleloa. This is not a real international treaty; it is the founding document within the world of the Beauville SEZ novel series.</p>
     <span class="status-note">&#9670; Working draft — reflects the founding terms as negotiated through the first framework session</span>
     <br>
-    <span class="reward-note">&#9670; Reading this document earns B$200 in Beauville's civic rewards program (coming soon)</span>
+    <span class="reward-note">&#9670; Reading this document earns B$227 in Beauville's civic rewards program — sign in to claim it</span>
   </section>
 
   <nav class="doc-index">
@@ -460,6 +479,10 @@
       </div>
     </div>
 
+  </section>
+
+  <section class="claim-section">
+    <button class="claim-btn" id="claimBtn" onclick="claimOnly('official-documents-en', 227, this, { signInPrompt: 'Redirecting to log in…', alreadyClaimed: 'Already claimed ✓', claimed: 'Claimed — B$227 added ✓', error: 'Something went wrong — try again' })">Claim B$227 for Reading the Charter</button>
   </section>
 
 </main>

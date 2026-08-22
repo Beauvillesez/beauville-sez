@@ -7,6 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/rewards.js"></script>
 <style>
   :root {
     --navy-deep: #0F2A4A;
@@ -335,7 +338,7 @@
     <h1 class="chapter-title">Beauville: Built by Migrants — 1.6</h1>
     <p class="chapter-subtitle-h">Finding the Right Island</p>
     <p class="disclaimer">This is a work of speculative fiction. All characters, including public figures depicted herein, are used fictitiously.</p>
-    <span class="reward-note">&#9670; Reading this chapter earns B$100 in Beauville's civic rewards program (coming soon)</span>
+    <span class="reward-note">&#9670; Reading this chapter earns B$102 in Beauville's civic rewards program — sign in to claim it</span>
   </section>
 
   <article class="article-body">
@@ -416,7 +419,10 @@
       <span class="nav-label">&larr; PREVIOUS</span>
       <span class="nav-title">1.5 — Religion and Public Order</span>
     </a>
-    <span class="nav-btn next disabled"><span class="nav-label">NEXT &rarr;</span><span class="nav-title">More chapters coming soon</span></span>
+    <a href="#" class="nav-btn next" onclick="claimAndProceed('1.6-en', 102, 'novel.html'); return false;">
+      <span class="nav-label">CLAIM &amp; RETURN TO CHAPTERS</span>
+      <span class="nav-title">B$102 &rarr;</span>
+    </a>
   </nav>
 
   <p class="back-to-index">&larr; <a href="novel.html">Back to all chapters</a></p>
