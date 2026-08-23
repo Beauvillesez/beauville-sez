@@ -527,15 +527,15 @@
   const CERT_STYLES = {
     crown: {
       file: 'style-crown.jpg',
+      combineWitnesses: true,
       fields: {
-        name1: { top: '39.5%', left: '50%', width: '70%' },
-        name2: { top: '50%', left: '50%', width: '70%' },
-        day:   { top: '65%', left: '18%', width: '16%' },
-        month: { top: '65%', left: '48%', width: '16%' },
-        year:  { top: '65%', left: '77%', width: '16%' },
-        official:  { top: '86.5%', left: '20%', width: '22%' },
-        witness1:  { top: '86.5%', left: '50%', width: '22%' },
-        witness2:  { top: '86.5%', left: '80%', width: '22%' }
+        name1: { top: '32.4%', left: '50%', width: '68%' },
+        name2: { top: '46.6%', left: '50%', width: '68%' },
+        day:   { top: '58.3%', left: '19%', width: '15%' },
+        month: { top: '58.3%', left: '48%', width: '15%' },
+        year:  { top: '58.3%', left: '78%', width: '15%' },
+        official:  { top: '83.2%', left: '22%', width: '24%' },
+        witness1:  { top: '83.2%', left: '62%', width: '30%' }
       }
     },
     classic: {
@@ -554,14 +554,14 @@
     tropical: {
       file: 'style-tropical.jpg',
       fields: {
-        name1: { top: '41%', left: '50%', width: '55%' },
-        name2: { top: '46.5%', left: '50%', width: '55%' },
-        day:   { top: '52%', left: '38%', width: '14%' },
-        month: { top: '52%', left: '58%', width: '18%' },
-        year:  { top: '57.5%', left: '38%', width: '18%' },
-        official:  { top: '82%', left: '22%', width: '18%' },
-        witness1:  { top: '82%', left: '50%', width: '16%' },
-        witness2:  { top: '82%', left: '72%', width: '16%' }
+        name1: { top: '37.1%', left: '50%', width: '58%' },
+        name2: { top: '48.7%', left: '50%', width: '58%' },
+        day:   { top: '54.6%', left: '38%', width: '14%' },
+        month: { top: '54.6%', left: '62%', width: '20%' },
+        year:  { top: '59.9%', left: '50%', width: '22%' },
+        official:  { top: '83.2%', left: '20%', width: '18%' },
+        witness1:  { top: '83.2%', left: '50%', width: '18%' },
+        witness2:  { top: '83.2%', left: '80%', width: '18%' }
       }
     }
   };
@@ -575,15 +575,34 @@
     const visual = document.getElementById('certificateVisual');
     visual.style.backgroundImage = "url('" + style.file + "')";
 
-    Object.keys(style.fields).forEach(fieldName => {
-      const pos = style.fields[fieldName];
+    const allFieldNames = ['name1', 'name2', 'day', 'month', 'year', 'official', 'witness1', 'witness2'];
+
+    allFieldNames.forEach(fieldName => {
       const el = visual.querySelector('.cert-' + fieldName);
-      if (el) {
-        el.style.top = pos.top;
-        el.style.left = pos.left;
-        el.style.width = pos.width;
+      if (!el) return;
+
+      const pos = style.fields[fieldName];
+      if (!pos) {
+        el.style.display = 'none';
+        return;
       }
+      el.style.display = '';
+      el.style.top = pos.top;
+      el.style.left = pos.left;
+      el.style.width = pos.width;
     });
+
+    // Crown's design has a single witness line — combine both names there.
+    const witness1El = visual.querySelector('.cert-witness1');
+    if (witness1El) {
+      const w1 = witness1El.dataset.raw || '';
+      const w2 = (visual.querySelector('.cert-witness2') || {}).dataset ? visual.querySelector('.cert-witness2').dataset.raw : '';
+      if (style.combineWitnesses) {
+        witness1El.textContent = [w1, w2].filter(Boolean).join(' & ');
+      } else {
+        witness1El.textContent = w1;
+      }
+    }
 
     document.querySelectorAll('.cert-style-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.style === styleKey);
@@ -814,7 +833,9 @@
     document.getElementById('certYear').textContent = confirmedDate.getFullYear();
 
     document.getElementById('certWitness1').textContent = record.initiator_witness || '';
+    document.getElementById('certWitness1').dataset.raw = record.initiator_witness || '';
     document.getElementById('certWitness2').textContent = record.partner_witness || '';
+    document.getElementById('certWitness2').dataset.raw = record.partner_witness || '';
 
     const vowsContainer = document.getElementById('certVowsBelow');
     vowsContainer.innerHTML = '';
