@@ -306,53 +306,59 @@
 
   .cert-overlay.open { display: flex; }
 
-  .certificate {
-    background: var(--sand); max-width: 560px; width: 100%;
-    padding: 4px; position: relative; max-height: 90vh; overflow-y: auto;
+  .cert-modal {
+    background: var(--sand); max-width: 640px; width: 100%;
+    padding: 0; position: relative; max-height: 92vh; overflow-y: auto;
+    border-radius: 4px;
   }
 
-  .cert-inner {
-    border: 2px solid var(--gold-signal); padding: 40px 36px; text-align: center;
-    position: relative;
+  .cert-style-picker {
+    display: flex; gap: 10px; padding: 16px 16px 0;
   }
 
-  .cert-inner::before {
-    content: ''; position: absolute; inset: 8px; border: 1px solid var(--navy-deep); opacity: 0.3; pointer-events: none;
+  .cert-style-btn {
+    flex: 1; padding: 8px; border: 1px solid var(--paper-line); border-radius: 4px;
+    background: var(--white); cursor: pointer; font-family: var(--font-mono);
+    font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-soft);
+    transition: all 0.2s ease;
   }
 
-  .cert-seal {
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
-    color: var(--ocean-teal); margin-bottom: 6px;
+  .cert-style-btn.active { border-color: var(--gold-signal); background: rgba(200, 155, 60, 0.08); color: var(--navy-deep); }
+
+  .certificate-visual {
+    position: relative; width: 100%; aspect-ratio: 1168 / 784;
+    background-size: cover; background-position: center;
+    margin-top: 14px;
   }
 
-  .cert-title {
-    font-family: var(--font-display); font-weight: 600; font-size: 24px;
-    color: var(--navy-deep); margin-bottom: 24px;
+  .cert-field {
+    position: absolute; transform: translate(-50%, -50%);
+    font-family: 'Fraunces', serif; color: #2a1f14; text-align: center;
+    white-space: nowrap; font-size: clamp(9px, 2.1vw, 17px);
   }
 
-  .cert-names {
-    font-family: var(--font-display); font-weight: 600; font-size: 20px;
-    color: var(--navy-deep); line-height: 1.6; margin-bottom: 20px;
-  }
-
-  .cert-divider { width: 60px; height: 1px; background: var(--gold-signal); margin: 0 auto 20px; }
-
-  .cert-vows { margin-bottom: 24px; }
+  .cert-vows-below { padding: 18px 24px 4px; }
   .cert-vow-line {
-    font-family: var(--font-display); font-style: italic; font-size: 14.5px;
-    color: var(--ink-soft); line-height: 1.6; margin-bottom: 10px;
+    font-family: var(--font-display); font-style: italic; font-size: 13.5px;
+    color: var(--ink-soft); line-height: 1.6; margin-bottom: 8px; text-align: center;
   }
 
-  .cert-meta {
-    display: flex; justify-content: center; gap: 32px; margin-top: 20px;
-    font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft);
+  .cert-modal-actions {
+    display: flex; gap: 10px; padding: 16px 24px 24px;
   }
 
-  .cert-meta strong { display: block; color: var(--navy-deep); font-family: var(--font-display); font-size: 14px; margin-top: 4px; }
+  .cert-action-btn {
+    flex: 1; background: var(--navy-deep); color: var(--sand);
+    font-family: var(--font-mono); font-size: 12px; padding: 10px 20px;
+    border: none; border-radius: 4px; cursor: pointer;
+  }
 
-  .cert-close {
-    display: block; margin: 20px auto 0; background: var(--navy-deep); color: var(--sand);
-    font-family: var(--font-mono); font-size: 12px; padding: 10px 24px; border: none; border-radius: 4px; cursor: pointer;
+  .cert-action-close { background: transparent; color: var(--ink-soft); border: 1px solid var(--paper-line); }
+
+  @media print {
+    body * { visibility: hidden; }
+    .certificate-visual, .certificate-visual * { visibility: visible; }
+    .certificate-visual { position: fixed; top: 0; left: 0; width: 100%; }
   }
 
   @media (max-width: 980px) {
@@ -488,18 +494,29 @@
   </div>
 
   <div class="cert-overlay" id="certOverlay">
-    <div class="certificate">
-      <div class="cert-inner">
-        <span class="cert-seal">&#9670; BEAUVILLE SEZ &#9670;</span>
-        <h2 class="cert-title">Certificate of Civic Commitment</h2>
-        <p class="cert-names" id="certNames">— &amp; —</p>
-        <div class="cert-divider"></div>
-        <div class="cert-vows" id="certVows"></div>
-        <div class="cert-meta">
-          <div>REGISTERED<br><strong id="certDate">—</strong></div>
-          <div>TYPE<br><strong id="certType">—</strong></div>
-        </div>
-        <button class="cert-close" onclick="document.getElementById('certOverlay').classList.remove('open')">Close</button>
+    <div class="cert-modal">
+      <div class="cert-style-picker">
+        <button class="cert-style-btn active" data-style="crown">Crown</button>
+        <button class="cert-style-btn" data-style="classic">Classic</button>
+        <button class="cert-style-btn" data-style="tropical">Tropical</button>
+      </div>
+
+      <div class="certificate-visual" id="certificateVisual">
+        <div class="cert-field cert-name1" id="certName1"></div>
+        <div class="cert-field cert-name2" id="certName2"></div>
+        <div class="cert-field cert-day" id="certDay"></div>
+        <div class="cert-field cert-month" id="certMonth"></div>
+        <div class="cert-field cert-year" id="certYear"></div>
+        <div class="cert-field cert-official" id="certOfficial">Marcus Lim</div>
+        <div class="cert-field cert-witness1" id="certWitness1"></div>
+        <div class="cert-field cert-witness2" id="certWitness2"></div>
+      </div>
+
+      <div class="cert-vows-below" id="certVowsBelow"></div>
+
+      <div class="cert-modal-actions">
+        <button class="cert-action-btn" onclick="window.print()">Print Certificate</button>
+        <button class="cert-action-btn cert-action-close" onclick="document.getElementById('certOverlay').classList.remove('open')">Close</button>
       </div>
     </div>
   </div>
@@ -507,6 +524,76 @@
 </main>
 
 <script>
+  const CERT_STYLES = {
+    crown: {
+      file: 'style-crown.jpg',
+      fields: {
+        name1: { top: '39.5%', left: '50%', width: '70%' },
+        name2: { top: '50%', left: '50%', width: '70%' },
+        day:   { top: '65%', left: '18%', width: '16%' },
+        month: { top: '65%', left: '48%', width: '16%' },
+        year:  { top: '65%', left: '77%', width: '16%' },
+        official:  { top: '86.5%', left: '20%', width: '22%' },
+        witness1:  { top: '86.5%', left: '50%', width: '22%' },
+        witness2:  { top: '86.5%', left: '80%', width: '22%' }
+      }
+    },
+    classic: {
+      file: 'style-classic.jpg',
+      fields: {
+        name1: { top: '44%', left: '50%', width: '65%' },
+        name2: { top: '50.5%', left: '50%', width: '65%' },
+        day:   { top: '57.5%', left: '25%', width: '14%' },
+        month: { top: '57.5%', left: '52%', width: '18%' },
+        year:  { top: '57.5%', left: '80%', width: '12%' },
+        official:  { top: '82.5%', left: '22%', width: '20%' },
+        witness1:  { top: '82.5%', left: '52%', width: '20%' },
+        witness2:  { top: '82.5%', left: '80%', width: '20%' }
+      }
+    },
+    tropical: {
+      file: 'style-tropical.jpg',
+      fields: {
+        name1: { top: '41%', left: '50%', width: '55%' },
+        name2: { top: '46.5%', left: '50%', width: '55%' },
+        day:   { top: '52%', left: '38%', width: '14%' },
+        month: { top: '52%', left: '58%', width: '18%' },
+        year:  { top: '57.5%', left: '38%', width: '18%' },
+        official:  { top: '82%', left: '22%', width: '18%' },
+        witness1:  { top: '82%', left: '50%', width: '16%' },
+        witness2:  { top: '82%', left: '72%', width: '16%' }
+      }
+    }
+  };
+
+  let currentCertStyle = 'crown';
+  let currentCertRecord = null;
+
+  function applyCertStyle(styleKey) {
+    currentCertStyle = styleKey;
+    const style = CERT_STYLES[styleKey];
+    const visual = document.getElementById('certificateVisual');
+    visual.style.backgroundImage = "url('" + style.file + "')";
+
+    Object.keys(style.fields).forEach(fieldName => {
+      const pos = style.fields[fieldName];
+      const el = visual.querySelector('.cert-' + fieldName);
+      if (el) {
+        el.style.top = pos.top;
+        el.style.left = pos.left;
+        el.style.width = pos.width;
+      }
+    });
+
+    document.querySelectorAll('.cert-style-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.style === styleKey);
+    });
+  }
+
+  document.querySelectorAll('.cert-style-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyCertStyle(btn.dataset.style));
+  });
+</script>
   const loginView = document.getElementById('loginView');
   const dashboardView = document.getElementById('dashboardView');
 
@@ -541,6 +628,10 @@
           '<label>Your Vow (optional)</label>' +
           '<textarea class="invite-vow-input" rows="2" placeholder="A few words, if you\'d like to leave them on record..." style="width:100%; padding:11px 14px; border:1px solid var(--paper-line); border-radius:4px; font-family:var(--font-body); font-size:14.5px; color:var(--ink); resize:vertical;"></textarea>' +
         '</div>' +
+        '<div class="field-group">' +
+          '<label>Your Witness (optional)</label>' +
+          '<input type="text" class="invite-witness-input" placeholder="A friend, a fictional character — whoever you\'d like to name">' +
+        '</div>' +
         '<div class="invite-actions">' +
           '<button class="btn-accept" data-id="' + invite.id + '" data-action="confirm">Accept</button>' +
           '<button class="btn-decline" data-id="' + invite.id + '" data-action="decline">Decline</button>' +
@@ -560,10 +651,12 @@
 
     let partnerName = '';
     let partnerVow = '';
+    let partnerWitness = '';
 
     if (action === 'confirm') {
       partnerName = card.querySelector('.invite-name-input').value.trim();
       partnerVow = card.querySelector('.invite-vow-input').value.trim();
+      partnerWitness = card.querySelector('.invite-witness-input').value.trim();
 
       if (!partnerName) {
         alert('Please enter your name to accept this registration.');
@@ -655,7 +748,8 @@
           status: 'confirmed',
           confirmed_at: new Date().toISOString(),
           partner_name: partnerName,
-          partner_vow: partnerVow || null
+          partner_vow: partnerVow || null,
+          partner_witness: partnerWitness || null
         };
         if (invite.registration_type === 'free') {
           const expiry = new Date();
@@ -709,9 +803,20 @@
   }
 
   function showCertificate(record, myName, otherName) {
-    document.getElementById('certNames').textContent = record.initiator_name + ' & ' + record.partner_name;
+    currentCertRecord = record;
 
-    const vowsContainer = document.getElementById('certVows');
+    document.getElementById('certName1').textContent = record.initiator_name;
+    document.getElementById('certName2').textContent = record.partner_name;
+
+    const confirmedDate = new Date(record.confirmed_at);
+    document.getElementById('certDay').textContent = confirmedDate.getDate();
+    document.getElementById('certMonth').textContent = confirmedDate.toLocaleDateString('en-US', { month: 'long' });
+    document.getElementById('certYear').textContent = confirmedDate.getFullYear();
+
+    document.getElementById('certWitness1').textContent = record.initiator_witness || '';
+    document.getElementById('certWitness2').textContent = record.partner_witness || '';
+
+    const vowsContainer = document.getElementById('certVowsBelow');
     vowsContainer.innerHTML = '';
     if (record.initiator_vow) {
       const p = document.createElement('p');
@@ -726,9 +831,7 @@
       vowsContainer.appendChild(p);
     }
 
-    document.getElementById('certDate').textContent = new Date(record.confirmed_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    document.getElementById('certType').textContent = record.registration_type === 'permanent' ? 'Permanent' : 'Free';
-
+    applyCertStyle(currentCertStyle);
     document.getElementById('certOverlay').classList.add('open');
   }
 
