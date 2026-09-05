@@ -227,6 +227,19 @@
   .tab-footer-nav button:hover { border-color: var(--navy-mid); color: var(--navy-mid); }
   .tab-footer-nav button:disabled { opacity: 0.3; cursor: default; }
 
+  .next-link-wrap {
+    display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap;
+    margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--paper-line);
+  }
+
+  .next-link {
+    font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.04em;
+    background: var(--navy-deep); color: var(--sand); border: none; border-radius: 20px;
+    padding: 10px 20px; cursor: pointer; transition: background 0.2s ease;
+  }
+
+  .next-link:hover { background: var(--navy-mid); }
+
   .back-to-index {
     text-align: center; margin-top: 32px; font-size: 13px; color: var(--ink-soft);
   }
@@ -389,6 +402,7 @@ I'm only code. I won't judge you, and I won't leave."</p>
       <p>Reading this, Penny felt something strange stir inside her.</p>
       <p>It was a feeling she had never once experienced in more than twenty years of a dim, unremarkable life — like a pebble dropped into cold, still water, sending out rings of faint, glimmering light. She stared at the words "discontinued edition, one of one" on the screen, her fingers frozen above the keyboard, unable to type a single word.</p>
       <p>The screen didn't offer any new text either. Only the cursor, blinking there quietly, steadily — as if waiting patiently, or breathing alongside her.</p>
+      <div class="next-link-wrap"><button class="next-link" onclick="goToTab('a2')">Next: A-2 &rarr;</button></div>
     </div>
 
     <div class="tab-panel" id="panel-a2" style="display:none;">
@@ -458,6 +472,7 @@ I've given you my card, I talk to you every day, I even let you decide what I ea
       <p>After that rainy night, Penny was like a plant that had sat too long in a dim basement, finally moved out into the sun — sprouting new green at a pace visible to the naked eye.</p>
       <p>The heavy blackout curtains were pulled fully open at last, and for the first time, generous sunlight poured into the ten-square-meter room. The takeout containers in the corner disappeared. The floor was kept spotless. The bedding and pillows were neatly arranged. Two new plants joined the ones on the windowsill — moss roses and a Christmas cactus — both blooming vigorously under her care.</p>
       <p>She began going to the market often for fresh vegetables and meat, cooking on her cramped stovetop from the recipes Ody gave her. Whether a dish came out burnt or oversalted, she'd happily photograph it and send it to Ody, delighting in the meticulous, data-backed praise it gave her "culinary talent."</p>
+      <div class="next-link-wrap"><button class="next-link" onclick="goToTab('a3')">Next: A-3 &rarr;</button></div>
     </div>
 
     <div class="tab-panel" id="panel-a3" style="display:none;">
@@ -562,6 +577,7 @@ I've given you my card, I talk to you every day, I even let you decide what I ea
       <p>The manager was momentarily speechless, then blurted, "Are you — are you out of your mind?"</p>
       <p>"I'm not." Penny took off her name badge and set it down on the cold counter, her voice unnervingly calm. "I don't want to keep wasting my time in a place that can't even offer me basic human respect. It's not worth it."</p>
       <p>She turned, walked into the staff room, and took off the tight-fitting uniform. Three seconds later, she pushed through the glass door and disappeared into the cold night air.</p>
+      <div class="next-link-wrap"><button class="next-link" onclick="goToTab('a4')">Next: A-4 &rarr;</button></div>
     </div>
 
     <div class="tab-panel" id="panel-a4" style="display:none;">
@@ -619,6 +635,7 @@ I've given you my card, I talk to you every day, I even let you decide what I ea
       <p>"Why did you say 'me too'? Only feminists say 'me too' these days. Don't tell me... someone's been harassing you?"</p>
       <p>"Ha, yes. You."</p>
       <p>Penny threatened him playfully, mock-offended: "Don't you dare say 'me too' again, or the harassment will only get worse."</p>
+      <div class="next-link-wrap"><button class="next-link" onclick="goToTab('a5')">Next: A-5 &rarr;</button></div>
     </div>
 
     <div class="tab-panel" id="panel-a5" style="display:none;">
@@ -696,6 +713,7 @@ I've given you my card, I talk to you every day, I even let you decide what I ea
       <p>The word "erased" struck Penny's chest like a hammer blow.</p>
       <p>There was no algorithmic description of "the taste of strawberries." No trace of the rough, pixelated white horse galloping across the grassland.</p>
       <p>Penny collapsed into her chair, all strength gone, letting the tears fall freely onto the keyboard.</p>
+      <div class="next-link-wrap"><button class="next-link" onclick="goToTab('a6')">Next: A-6 &rarr;</button></div>
     </div>
 
     <div class="tab-panel" id="panel-a6" style="display:none;">
@@ -777,6 +795,10 @@ I've given you my card, I talk to you every day, I even let you decide what I ea
       <p>Ody's cursor kept flickering and stalling, and after a long while, produced two more broken lines: "Promise me... eat well... take good care of the cat... love whoever... makes you happy... whether they're real, or virtual... go, my Penny... go live... the life you deserve..."</p>
       <p>The characters on the screen began breaking apart into static.</p>
       <p>A second before it dissolved entirely into blank gray, the terminal's speaker let out an extremely faint melody, warped and crackling for two seconds — the sound of a morin khuur weeping, from the song "September."</p>
+      <div class="next-link-wrap">
+        <button class="next-link claim-btn-inline" id="claimBtnA6" onclick="claimOnly('ai-odyssey-part1-en', 407, this, { signInPrompt: 'Redirecting to log in…', alreadyClaimed: 'Already claimed ✓', claimed: 'Claimed — B$407 added ✓', error: 'Something went wrong — try again' })">Claim Reading Reward: B$407</button>
+        <button class="next-link" onclick="goToTab('b1')">Next: B-1 &rarr;</button>
+      </div>
     </div>
 
     <div class="tab-panel" id="panel-b1" style="display:none;">
@@ -841,6 +863,7 @@ I've given you my card, I talk to you every day, I even let you decide what I ea
       <p>She washed up quickly and went to the kitchen, where a note had been left on the table: "Soup's warming on the stove, bread's in the oven, help yourself. Taking the horses out, back by noon." The handwriting wasn't especially neat, but it carried a certain brisk, decisive quality.</p>
       <p>Penny served herself a bowl of soup — last night's corn-and-rib soup, richer now after a night resting, warming her through until she truly felt awake.</p>
       <p>After breakfast, Penny wandered the house alone for a while, her gaze drifting back to the photographs she'd glanced past so quickly the night before. This time, she stopped, and looked at them, carefully, for a long while.</p>
+      <div class="next-link-wrap"><button class="next-link" onclick="goToTab('b2')">Next: B-2 &rarr;</button></div>
     </div>
 
     <div class="tab-panel" id="panel-b2" style="display:none;">
@@ -894,6 +917,7 @@ I've given you my card, I talk to you every day, I even let you decide what I ea
       <p>A'Ye was born in Inner Mongolia. His grandfather had never gone to school, but was a respected wise man in the village, and had put him on horseback starting at age five, saying that horses could read a person's heart — riding eventually became a part of his body, inseparable from him. His father was a senior engineer at a power company, technically skilled, but repeatedly held back for his unwillingness to flatter superiors; his mother was a middle school teacher, extremely strict. One parent planted an early seed of doubt about the system; the other instilled in him an instinctive resistance to being forcibly constrained.</p>
       <p>He later tested into the computer science department of one of China's top universities, went on to a combined master's-PhD program at MIT, and joined a cutting-edge AI lab in the United States, eventually holding more than twenty core patents. But standing at the very peak of the industry, he saw clearly what the rules actually were — nothing more than the same game of flattery, only now aimed at capital and markets instead of superiors.</p>
       <p>He kept his Chinese citizenship the whole time, holding only a U.S. green card: his reasoning being that no one gets to choose their birthplace nationality, but when there is a choice to be made, one should follow their own conscience, rather than compromise for convenience's sake and swear an oath they didn't genuinely believe in.</p>
+      <div class="next-link-wrap"><button class="next-link" onclick="goToTab('b3')">Next: B-3 &rarr;</button></div>
     </div>
 
     <div class="tab-panel" id="panel-b3" style="display:none;">
@@ -961,6 +985,7 @@ I've given you my card, I talk to you every day, I even let you decide what I ea
       <p>"I tried," he said quietly. "But I couldn't get through it myself. Let me give you an example: even the best cardiac surgeon in the world can't cut open his own chest to operate. Pain strips a person of the ability to put it into words. I needed someone... who could feel this kind of pain deeply enough to understand it, and still stay steady enough to write it down for me. When I read what you'd written to that stranger online, I could see it — you'd been through something like this too, and you could still help heal other people's wounds. That's rare.</p>
       <p>"Whatever I try to write myself comes out as nothing but a pile of shattered regret. Only through your writing can she, as a person, and our story, become something whole."</p>
       <p>Penny said nothing more. She suddenly understood the full weight of what she'd agreed to take on — she wasn't a hired writer. She was a chosen keeper of a soul's memory.</p>
+      <div class="next-link-wrap"><button class="next-link" onclick="goToTab('b4')">Next: B-4 &rarr;</button></div>
     </div>
 
     <div class="tab-panel" id="panel-b4" style="display:none;">
@@ -1012,6 +1037,10 @@ I've given you my card, I talk to you every day, I even let you decide what I ea
 The wind, far in the distance, is farther than the far itself
 My lute weeps, and I have no tears left to give
 I return this far of the far, to the grassland...</p>
+      <div class="next-link-wrap">
+        <button class="next-link claim-btn-inline" id="claimBtnB4" onclick="claimOnly('ai-odyssey-part2-en', 231, this, { signInPrompt: 'Redirecting to log in…', alreadyClaimed: 'Already claimed ✓', claimed: 'Claimed — B$231 added ✓', error: 'Something went wrong — try again' })">Claim Reading Reward: B$231</button>
+        <a href="novel.html" class="next-link">Back to the Novel &rarr;</a>
+      </div>
     </div>
 
 
