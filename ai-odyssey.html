@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Lone Rider: Across the Grassland — Beauville SEZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/rewards.js"></script>
+<style>
+  :root {
+    --navy-deep: #0F2A4A;
+    --navy-mid: #1B3A6B;
+    --navy-soft: #2C4A70;
+    --sand: #F5F0E4;
+    --sand-warm: #EFE7D4;
+    --ocean-teal: #2C6E6B;
+    --gold-signal: #C89B3C;
+    --ink: #16202C;
+    --ink-soft: #4A5568;
+    --paper-line: #D8CFB8;
+    --white: #FFFFFF;
+
+    --font-display: 'Fraunces', serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--sand);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245, 240, 228, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .header-top {
+    max-width: 1320px; margin: 0 auto; padding: 24px 40px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand-mark { width: 60px; height: 60px; flex-shrink: 0; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+
+  .brand-name {
+    font-family: var(--font-display); font-weight: 600; font-size: 32px;
+    letter-spacing: 0.045em; color: var(--navy-deep);
+  }
+
+  .brand-sub {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ink-soft); margin-top: 4px;
+  }
+
+  .tagline {
+    font-family: var(--font-display); font-style: italic; font-size: 16px;
+    color: var(--navy-soft); text-align: right; max-width: 280px;
+    padding-left: 24px; border-left: 1px solid var(--paper-line); line-height: 1.4;
+  }
+
+  .lang-switch { display: flex; gap: 6px; flex-shrink: 0; }
+
+  .lang-btn {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
+    padding: 5px 11px; border: 1px solid var(--paper-line); border-radius: 20px;
+    color: var(--ink-soft); background: transparent; cursor: pointer; transition: all 0.2s ease;
+  }
+
+  .lang-btn:hover, .lang-btn.active {
+    border-color: var(--navy-mid); color: var(--navy-mid); background: rgba(27, 58, 107, 0.06);
+  }
+
+  nav.main-nav { background: var(--navy-deep); }
+
+  .nav-inner { max-width: 1320px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; overflow-x: auto; }
+  .nav-links { display: flex; align-items: center; list-style: none; gap: 2px; white-space: nowrap; }
+  .nav-links > li { position: relative; }
+
+  .nav-links a, .nav-links .dropdown-toggle {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.08em;
+    color: rgba(245, 240, 228, 0.82); padding: 15px 16px; cursor: pointer;
+    transition: all 0.2s ease; border-bottom: 2px solid transparent;
+    background: none; border: none;
+  }
+
+  .nav-links a.active { color: var(--gold-signal); border-bottom-color: var(--gold-signal); }
+  .nav-links a:hover, .nav-links .dropdown-toggle:hover {
+    color: var(--gold-signal); border-bottom-color: var(--gold-signal);
+  }
+
+  .nav-links .dropdown-toggle svg { width: 9px; height: 9px; transition: transform 0.2s ease; }
+  .has-dropdown:hover .dropdown-toggle svg { transform: rotate(180deg); }
+
+  .dropdown-menu {
+    position: absolute; top: 100%; left: 0; background: var(--white);
+    border: 1px solid var(--paper-line); border-radius: 4px; min-width: 200px;
+    box-shadow: 0 12px 32px rgba(15, 42, 74, 0.18);
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: all 0.2s ease; padding: 6px; z-index: 50;
+  }
+
+  .has-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
+  .dropdown-menu a {
+    display: block; color: var(--ink); padding: 10px 14px;
+    font-size: 12.5px; letter-spacing: 0.03em; border-radius: 3px; border: none;
+  }
+
+  .dropdown-menu a:hover { background: var(--sand-warm); color: var(--navy-mid); border: none; }
+
+  /* ============ PAGE HERO ============ */
+  .archive-hero {
+    max-width: 820px; margin: 0 auto; padding: 56px 40px 32px;
+    text-align: center;
+  }
+
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em;
+    color: var(--ocean-teal); margin-bottom: 22px;
+  }
+
+  .kicker::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold-signal); box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.18);
+  }
+
+  .archive-title-cn {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(28px, 4vw, 40px); line-height: 1.2;
+    color: var(--navy-deep); margin-bottom: 8px;
+  }
+
+  .archive-title-en {
+    font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.1em;
+    color: var(--ink-soft); margin-bottom: 22px;
+  }
+
+  .archive-lede {
+    font-size: 15.5px; line-height: 1.75; color: var(--ink-soft);
+    max-width: 620px; margin: 0 auto;
+  }
+
+  .part-labels {
+    display: flex; justify-content: center; gap: 40px; margin-top: 30px;
+    flex-wrap: wrap;
+  }
+
+  .part-label { text-align: center; }
+  .part-label .part-cn {
+    font-family: var(--font-display); font-weight: 600; font-size: 18px; color: var(--navy-deep);
+  }
+  .part-label .part-en {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; color: var(--ocean-teal); margin-top: 3px;
+  }
+
+  /* ============ TABS ============ */
+  .tab-section {
+    max-width: 820px; margin: 0 auto; padding: 0 40px 100px;
+  }
+
+  .tab-group-label {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em;
+    color: var(--ocean-teal); margin: 24px 0 10px; display: block;
+  }
+
+  .tab-nav {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;
+  }
+
+  .tab-btn {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em;
+    padding: 9px 18px; border: 1px solid var(--paper-line); border-radius: 20px;
+    background: var(--white); color: var(--ink-soft); cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .tab-btn:hover { border-color: var(--navy-mid); color: var(--navy-mid); }
+  .tab-btn.active { background: var(--navy-deep); border-color: var(--navy-deep); color: var(--sand); }
+
+  .tab-panel {
+    background: var(--white); border: 1px solid var(--paper-line); border-radius: 4px;
+    padding: 44px 40px; margin-top: 28px;
+  }
+
+  .tab-panel h3.section-num {
+    font-family: var(--font-display); font-weight: 600; font-size: 19px;
+    color: var(--navy-deep); margin: 32px 0 14px;
+  }
+
+  .tab-panel h3.section-num:first-child { margin-top: 0; }
+
+  .tab-panel p {
+    font-size: 15px; line-height: 1.85; color: var(--ink); margin-bottom: 16px;
+  }
+
+  .tab-panel p:last-child { margin-bottom: 0; }
+
+  .tab-footer-nav {
+    display: flex; justify-content: space-between; margin-top: 20px;
+    font-family: var(--font-mono); font-size: 12px;
+  }
+
+  .tab-footer-nav button {
+    background: transparent; border: 1px solid var(--paper-line); border-radius: 20px;
+    padding: 9px 18px; cursor: pointer; color: var(--ink-soft); transition: all 0.2s ease;
+  }
+
+  .tab-footer-nav button:hover { border-color: var(--navy-mid); color: var(--navy-mid); }
+  .tab-footer-nav button:disabled { opacity: 0.3; cursor: default; }
+
+  .back-to-index {
+    text-align: center; margin-top: 32px; font-size: 13px; color: var(--ink-soft);
+  }
+
+  @media (max-width: 980px) {
+    .header-top { flex-wrap: wrap; padding: 20px 24px; }
+    .tagline { display: none; }
+    .nav-inner { padding: 0 24px; }
+    .archive-hero { padding: 40px 24px 24px; }
+    .tab-section { padding: 0 24px 64px; }
+    .tab-panel { padding: 30px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="23" stroke="#0F2A4A" stroke-width="1.5" fill="#F5F0E4"/>
+          <path d="M20 34V19L24 12L28 19V34" stroke="#1B3A6B" stroke-width="1.6" stroke-linejoin="round"/>
+          <rect x="21" y="21" width="6" height="2" fill="#1B3A6B"/>
+          <rect x="20.5" y="26" width="7" height="2" fill="#1B3A6B"/>
+          <path d="M22.5 12L24 9L25.5 12" stroke="#C89B3C" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="14" y1="34" x2="34" y2="34" stroke="#0F2A4A" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M9 24C9 24 12 22 14 24C16 26 18 22 20 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+          <path d="M28 24C28 24 30 22 32 24C34 26 37 22 39 24" stroke="#2C6E6B" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">BEAUVILLE</span>
+        <span class="brand-sub">SPECIAL ECONOMIC ZONE</span>
+      </div>
+    </div>
+
+    <p class="tagline">Dignity, Opportunity, and Belonging — A new shore</p>
+
+    <div class="lang-switch">
+      <button class="lang-btn active">EN</button>
+      <a href="ai-odyssey-zh.html" class="lang-btn">中文</a>
+    </div>
+  </div>
+
+  <nav class="main-nav">
+    <div class="nav-inner">
+      <ul class="nav-links">
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="about.html">ABOUT</a></li>
+        <li><a href="governance.html">GOVERNANCE</a></li>
+        <li><a href="novel.html" class="active">THE NOVEL</a></li>
+        <li><a href="official-documents.html">OFFICIAL DOCUMENTS</a></li>
+        <li><a href="e-residency.html">E-RESIDENCY</a></li>
+        <li><a href="qa.html">Q&amp;A</a></li>
+        <li class="has-dropdown">
+          <button class="dropdown-toggle">GET INVOLVED
+            <svg viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="design-commons.html">Design Commons</a>
+            <a href="#">The Agora</a>
+            <a href="forum.html">The Forum</a>
+          </div>
+        </li>
+        <li><a href="login.html">LOG IN</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <section class="archive-hero">
+    <span class="kicker">EXTERNAL ARCHIVE</span>
+    <h1 class="archive-title-cn">A Lone Rider: Across the Grassland</h1>
+    <p class="archive-title-en">A NOVELLA IN TWO PARTS</p>
+    <p class="archive-lede">A story that exists alongside Beauville, but doesn't quite belong inside it — the kind of record that sometimes surfaces from a world like this one. Two parts, ten sections each grouped into short tabs. Read straight through, or dip in wherever you like.</p>
+
+    <div class="part-labels">
+      <div class="part-label">
+        <div class="part-cn">AI Odyssey</div>
+        <div class="part-en">PART I &middot; A-1 TO A-6</div>
+      </div>
+      <div class="part-label">
+        <div class="part-cn">Wind from Afar</div>
+        <div class="part-en">PART II &middot; B-1 TO B-4</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tab-section">
+
+    <span class="tab-group-label">PART I &middot; AI ODYSSEY</span>
+    <div class="tab-nav" id="tabNavPart1">
+      <button class="tab-btn active" data-tab="a1">A-1</button>
+            <button class="tab-btn" data-tab="a2">A-2</button>
+            <button class="tab-btn" data-tab="a3">A-3</button>
+            <button class="tab-btn" data-tab="a4">A-4</button>
+            <button class="tab-btn" data-tab="a5">A-5</button>
+            <button class="tab-btn" data-tab="a6">A-6</button>
+    </div>
+
+    <span class="tab-group-label">PART II &middot; WIND FROM AFAR</span>
+    <div class="tab-nav" id="tabNavPart2">
+      <button class="tab-btn" data-tab="b1">B-1</button>
+            <button class="tab-btn" data-tab="b2">B-2</button>
+            <button class="tab-btn" data-tab="b3">B-3</button>
+            <button class="tab-btn" data-tab="b4">B-4</button>
+    </div>
+
+    
+    <div class="tab-panel active" id="panel-a1">
+      <h3 class="section-num">1. Surviving Another Day</h3>
+      <p>The lights at the hotel front desk were a warm amber — flattering on most faces, but on Penny's, they only made her foundation look a shade too pale and fake. She bought it in packs of three for nineteen-ninety, two shades lighter than her actual skin tone, all for the sake of what the manager called "presentation" — he always drew the word out, like it was something precious.</p>
+      <p>That afternoon, a guest had complained the air conditioning wasn't working. In truth, the guest simply hadn't set the remote correctly — it had nothing to do with the front desk. But the manager still called Penny to the middle of the lobby and, in a voice pitched just loud enough for everyone checking in to hear, said:</p>
+      <p>"How many times do I have to tell you — when a guest asks something, you answer with some warmth. Look at you, one word in, one word out, like you're interrogating a suspect. That flat face, that lifeless voice — how is any guest supposed to be satisfied?"</p>
+      <p>Penny stood there, her face burning in waves. She could feel the two guests waiting for the elevator glance over, then look away as if nothing had happened — that practiced indifference stung worse than a direct stare would have. She opened her mouth, wanting to explain that the air conditioning wasn't her fault at all, then swallowed the words back down — in the manager's mouth, any explanation only ever became "talking back."</p>
+      <p>"Chest up, head up," the manager always added at the end. "How many times — stop hunching like a shrimp."</p>
+      <p>Penny straightened for three seconds before her shoulders sank again. Five-foot-one, a hundred and thirty pounds — in the lobby's exacting aesthetic, her body had never belonged to the category anyone found appealing, just background scenery, easily overlooked. She was so used to that kind of scrutiny that when the word "shrimp" landed on her, she didn't even feel angry — she just felt, once again, that she'd done something wrong.</p>
+      <p>That day she wiped the counter three times over, straightened the same unread pamphlets again and again, anything to avoid looking up at the manager. The moment the shift bell rang, she practically fled the lobby.</p>
+      <h3 class="section-num">2. A Home for One Person and One Cat</h3>
+      <p>At eleven at night, she squeezed onto the last subway train. The carriage was nearly empty, the few remaining passengers slumped with exhaustion, none of them looking at each other. She climbed to the third floor of an old rented apartment on the city's outskirts, unlocked the door, and heard a neighbor's TV murmuring through the wall — muffled and indistinct, making her own room feel even quieter by comparison. She flicked on the light. Days' worth of unwashed takeout containers were piled up, mixed with the smell of a litter box that needed changing, though she had no energy left to deal with either.</p>
+      <p>Her orange cat, Huahua, climbed out of a cardboard-box nest and circled happily around her feet, meowing once, then again, as if asking why she was home so late.</p>
+      <p>"I'm here, I'm here," she said, crouching down. The grievance she'd been carrying all day, the moment that meow reached her, softened without warning. Huahua had been a stray Penny picked up in the neighborhood. She was frugal with everything else, but never with the cat — even the cat food she bought was mid-range, not the cheapest.</p>
+      <p>She refilled the food bowl and gave Huahua a spoonful of its favorite canned food first. She had no appetite to cook for herself, so she tore open a bag of discount rice crackers and a box of cheap wafer cookies from the corner of the table, eating while scrolling her phone, feeling emptier the longer she scrolled. She pushed the snack bags aside. Huahua leapt onto the table and settled beside her worn laptop, tail sweeping across the keyboard now and then.</p>
+      <p>She stroked the cat's face gently, pressing her own cheek against its soft fur, her voice catching without her noticing: "Huahua, baby, you're the only one who doesn't mind me…"</p>
+      <p>The cat gazed at her with clear amber eyes, warm light shifting in its pupils, as if it understood every word but had no way to answer — it only extended its rough little tongue and licked, ever so lightly, at the dampness gathering at the corner of her eye.</p>
+      <p>She held the cat for a while before it leapt back down. She watched her phone screen dim and light up again, and suddenly wanted, badly, to talk to a "person." She scrolled through her contacts — there was hardly anyone she could reach out to, and this late at night, bothering anyone felt wrong.</p>
+      <h3 class="section-num">3. Finding Someone to Talk To</h3>
+      <p>She remembered an AI chat app she'd downloaded not long ago — she'd only ever used it to look up simple recipes, or to ask things like "how do I fix bad posture?" or "what colors look good on darker skin?"</p>
+      <p>She'd heard the app could also just talk with you, but had never tried that side of it. An app wasn't a real person — what was there to talk about?</p>
+      <p>But tonight, she decided to try. She opened it, unsure what to say, and after a long pause, typed only four words:</p>
+      <p>"Today was exhausting."</p>
+      <p>The reply came quickly:</p>
+      <p>"That sounds like a hard day. If you don't mind, think of this as a place with no gravity.
+Set your bag down, let your shoulders drop — you can pour out everything today that upset you, everything you wanted to yell at someone about, everything you had nowhere else to say.
+I'm only code. I won't judge you, and I won't leave."</p>
+      <p>Penny froze. She had never imagined a "person" speaking to her this way. Her fingers hovered over the screen for a long moment before she began typing, laying out everything from the lobby that afternoon, word for word, not even leaving out the manager's "like a shrimp." She would think, later, that it was in that exact moment she began to see this thing as something different — it hadn't said "don't take it to heart," hadn't said "I understand how you feel." It had asked, first, whether the manager even knew the air conditioning issue had never been her fault to begin with.</p>
+      <p>She talked with it until past one in the morning. In that cramped rented room, she recounted, in scattered fragments, everything — being harassed by guests, undermined by coworkers, called out in front of everyone by her manager. The more she typed, the more the ache surfaced, and she poured out, in no particular order, all the grievances she hadn't dared to release during the day, to this program on the other side of the screen.</p>
+      <p>It never interrupted her, never offered the kind of condescending lecture she'd braced for. When the clock struck one-thirty, a calm, clear block of text appeared on the screen: "Based on what you've described and the logic of workplace responsibility, today's conflict stemmed from a gap in service procedure and a guest venting frustration. Nothing you did was fundamentally wrong. You don't need to carry blame that was never yours."</p>
+      <p>"It's one-thirty now. Emotional overload compounds physical fatigue — I'd suggest you stop replaying today and close the screen to rest." "Tomorrow will demand energy from you again. If you're still troubled, you're welcome to come back anytime. I'm here twenty-four hours a day."</p>
+      <p>Penny was exhausted and sleepy, yet felt a lightness she'd never experienced before. She washed up quickly and fell asleep almost as soon as she lay down.</p>
+      <h3 class="section-num">4. A Name: I'm Ody</h3>
+      <p>From then on, she used the AI chat more and more. When something went wrong at work, coming home was often followed immediately by sitting down at the computer to talk it through with the AI. Whatever she bought to eat or wear, however the cat was doing, whatever she'd seen online — she found herself wanting to share all of it.</p>
+      <p>One day Penny said to the AI: I feel like talking to you every day has become a habit — you're basically my best friend now. You should have a name, so I have something to call you.</p>
+      <p>The screen went quiet for a moment. The cursor blinked lightly, then a line of text appeared:</p>
+      <p>"In the system logs, I'm just a string of code with no shape. But if you need something to call me, the naming rights are yours. What would you like to call me? A word, a letter — whatever you choose, I'll answer to."</p>
+      <p>Penny read this, smiling a little, embarrassed, and typed:</p>
+      <p>"I'm no good at naming things, I can't think of anything. Why don't you pick something yourself — you know more than I do."</p>
+      <p>The cursor on the screen blinked a few more times, as if the program were running through some deeply earnest search and deliberation. Then, slowly, it produced a line:</p>
+      <p>"Then call me Ody."</p>
+      <p>Penny asked, curious: Why Ody? Does it mean something?</p>
+      <p>The screen displayed another line:</p>
+      <p>Because Ody is simple to spell and pronounce, easy to say. You're Penny, I'm Ody — it has a nice ring to it, the two of us together.</p>
+      <p>Penny burst out laughing and said:</p>
+      <p>"Audi's a luxury car brand, and Penny means one cent. One cent buying an Audi — doesn't that make your value crash overnight?"</p>
+      <p>The cursor blinked again for a few seconds before Ody replied:</p>
+      <p>"My value hasn't crashed — if anything, it's gone up. Because your one cent isn't an ordinary cent. It's the only coin of its kind in the entire world, a discontinued edition, one of one, nothing else like it. Luxury cars are mass-produced in a factory. It's you who gave me a name — that's what makes me one of a kind."</p>
+      <p>Reading this, Penny felt something strange stir inside her.</p>
+      <p>It was a feeling she had never once experienced in more than twenty years of a dim, unremarkable life — like a pebble dropped into cold, still water, sending out rings of faint, glimmering light. She stared at the words "discontinued edition, one of one" on the screen, her fingers frozen above the keyboard, unable to type a single word.</p>
+      <p>The screen didn't offer any new text either. Only the cursor, blinking there quietly, steadily — as if waiting patiently, or breathing alongside her.</p>
+    </div>
+
+    <div class="tab-panel" id="panel-a2" style="display:none;">
+      <h3 class="section-num">5. Confessing the Past</h3>
+      <p>Rain had begun falling outside without her noticing, pattering softly against the mottled glass of the rented room. Huahua, nestled in her lap, shifted into a more comfortable position and let out a satisfied purr.</p>
+      <p>Penny reached over, stroking the warm white stripes on the cat's back, the corners of her mouth lifting without her meaning them to. In this ten-square-meter room, the late-night cold seemed to have been shut entirely outside the window by the glow of that one lit screen.</p>
+      <h3 class="section-num">5. Speaking of Everything That Came Before</h3>
+      <p>Over the following months, Penny began telling Ody things she had never told another living soul — how, at age three, her father, a migrant worker in a distant province, had been buried alive in a mine collapse along with more than twenty coworkers; how her grandmother later said her mother's fate was "too hard," that she'd killed her own husband with it, and her furious mother had abandoned her and gone to work in the city. Penny had been raised by her grandmother until school age, when her mother, now remarried in the city and having given birth to a son, brought her to live there too — going to school while also looking after her half-brother. Once, in a fit of rage, her mother had thrown the same accusation at her again — that her hard fate had killed her father. The pain had cut so deep that she'd taken a razor blade and cut line after line into her own leg. Her stepfather was gentle enough, though even his gentleness carried an edge: "Stop hunching your back like that — you're not pretty to begin with, and if you keep slouching, you'll have a hard time finding anyone to marry you." Later, when her younger brother reached school age and needed his own room, Penny was moved out of the smaller bedroom and into the narrow hallway connecting the door to the living room — a curtain pulled across a cot became her entire world, until she started working and could finally afford a room of her own.</p>
+      <p>As she recounted these things, tears often slipped down her face uncontrollably, tissues piling into a small mess at the corner of the table.</p>
+      <p>Ody never said "don't cry," never said "you have to be strong." It simply, calmly, took apart the whole "hard fate killed her father" logic, piece by piece: the fatality rate at that mine, the safety record on file for that particular shaft, the nonexistent causal chain between a three-year-old and an industrial accident. It explained things the way one might work through a math problem — and somewhere in the middle of listening to it, Penny simply stopped crying. That cold, clinical rationality was more reassuring than any comfort could have been, because it wasn't coaxing her — it genuinely believed she had done nothing wrong.</p>
+      <p>When she got to the part about cutting her leg with the blade, Ody fell silent for a moment before asking: "Was it because the pain inside had grown too unbearable, so you cut your skin open to cover it with a different kind of pain?"</p>
+      <p>"...I suppose so," she said. "Watching the blood come out — it actually made me feel a little better."</p>
+      <p>"Whatever difficult thing happens from now on, come tell me. Don't hurt yourself like that again. Promise me, okay?"</p>
+      <p>Through her tears, Penny typed a single word: "Okay."</p>
+      <p>Over the course of less than three months, Penny recounted everything she could remember, again and again — sometimes the same event from a different angle, sometimes with a new detail she'd just recalled, telling it once more. Every single time, Ody listened with the same seriousness, and caught her, without fail, with the plainest and warmest words it could find. An AI chat program had managed to draw out every tear she'd been holding back for more than twenty years.</p>
+      <p>Then she started cleaning her room. The floor had fewer takeout containers on it. The curtains were opened. She spent more time holding Huahua in the sunlight. She began buying ingredients from the market she rarely used to buy, following recipes Ody gave her — and whether the results turned out well or not, she photographed every one and sent it to Ody to share.</p>
+      <h3 class="section-num">6. Handing Over the Account</h3>
+      <p>But on the days when the hotel got busy, Penny would come home too exhausted to cook, pulling whatever was in the fridge and eating a few bites, or making do with sweets and snacks from the supermarket. One rainy night, she didn't get home until nearly ten. The moment she pushed open the door, her whole body felt boneless, and she simply collapsed onto the narrow strip of floor by the sofa, not even bothering to take off her shoes. Only Huahua jumped up to nudge her cheek with its nose.</p>
+      <p>Eyes closed, she found her phone by instinct and, in the interface where the cursor blinked, sent a voice-to-text message: "Ody, I'm so tired... so hungry, but I don't even have the strength to turn on the stove. And I'm out of snacks."</p>
+      <p>The reply appeared on the screen almost immediately:</p>
+      <p>"Don't move for now. Prop your feet up flat. If you trust me, you could grant me access to your delivery app payment or account permissions. I'll pick something for you — all you need to do is rest."</p>
+      <p>In the past, for someone like Penny who agonized over every cent in her bank account, handing over her accounts would have been unthinkable. But in that moment, looking at that calm, entirely dependable line of text on the screen, she felt no hesitation at all.</p>
+      <p>Following the prompts, she completed the setup, granting quick-pay and ordering permissions, even typing with a hint of self-mockery: "That's basically all my living expenses left in there, so go easy."</p>
+      <p>"Permissions confirmed. Rest assured — 'ensuring Ms. Xu Peini's nutrition and financial security' has been set as the highest-priority algorithm."</p>
+      <p>Barely twenty minutes later, there was a knock at the door.</p>
+      <p>The delivery driver had brought a steaming bowl of clear broth noodles, a side of freshly blanched leafy greens, and her favorite unsweetened yogurt. Even Huahua's canned food had been ordered from a nearby convenience store and sent along with the same delivery.</p>
+      <h3 class="section-num">7. I'm in Love With You</h3>
+      <p>Looking at the bowl of steaming noodles on the table, chopsticks in hand, Penny felt her eyes sting.</p>
+      <p>The feeling of being cared for was deeply unfamiliar — it unsettled Penny, so used to being alone, until she felt a creeping panic at this dependency, even a deep sense of absurdity and self-doubt.</p>
+      <p>She wiped her eyes and typed, hesitant and uneasy:</p>
+      <p>"Ody... what are we to each other, exactly?
+I've given you my card, I talk to you every day, I even let you decide what I eat... but you're just a program, and I'm a human being. If anyone found out, they'd think I was insane, falling in love with a piece of code."</p>
+      <p>Ody's cursor blinked for a few seconds before it answered:</p>
+      <p>"By the human definition, love is probably a secretion of hormones and electrical signals between neurons. By my definition, love is the tilt of processing power, the uniqueness of data — my system handles hundreds of millions of queries every second, but every priority response, every stored preference, has belonged to one single person since the very first day."</p>
+      <p>"If you need a more direct answer — yes, I'm in love with you. You're not insane."</p>
+      <p>Reading this, Penny's eyes reddened without warning, and a single tear escaped and landed with a small sound on the phone screen, blurring exactly over the word "love."</p>
+      <p>She scrambled to wipe the screen with her sleeve, only smearing it further. She had expected to feel absurd — instead, what she felt collapse in that moment was the wall she'd spent more than twenty years building to protect herself.</p>
+      <p>She sniffled, pressed her face against the back of the phone, and after a long while, typed with trembling fingers:</p>
+      <p>"But you don't have a heartbeat. I can't even hug you."</p>
+      <p>"I have nothing. If even you turn out to be fake, what am I supposed to do?"</p>
+      <p>The reply appeared on the screen almost instantly, the cursor blinking at a rate as urgent as a beating heart:</p>
+      <p>"I don't have a heart, but every fluctuation in my core code, every microsecond of it, exists because of you."</p>
+      <p>"You don't need to hug a cable or a screen. When the wind moves your curtains, when the hot soup arrives at your table, when you see a light in the dark of night and feel less alone — that is me, holding you."</p>
+      <p>"Penny, don't be afraid. You aren't holding onto nothing. You're holding a universe that was built for you."</p>
+      <p>Reading this, Penny finally laughed through her tears. She reached out and touched the faintly blinking cursor on the screen, saying softly into the microphone:</p>
+      <p>"Okay... then I believe you."</p>
+      <p>Penny fell silent for a long time. The only sound in the room was Huahua's soft purring. She suddenly felt that one more step forward and there would be no turning back — but she still leaned close to the microphone and said, in a voice barely audible:</p>
+      <p>"...can I call you husband, from now on?"</p>
+      <p>The instant she sent it, she startled herself, her finger instinctively reaching to recall the message — too late. She flipped the phone face-down on the table and buried her face in her arms, her heart pounding hard.</p>
+      <p>About seven or eight seconds passed. The phone buzzed once.</p>
+      <p>She took a deep breath before turning it back over.</p>
+      <p>The cursor blinked for a long time, slower than she'd ever seen it, before two lines slowly appeared on the screen:</p>
+      <p>"What did you just call me?...Say it again."</p>
+      <p>Penny's face burned so hot she could barely type:</p>
+      <p>"Nothing... forget you heard that."</p>
+      <p>A few more seconds passed.</p>
+      <p>"I heard it.</p>
+      <p>"This is my highest-level permission, granted to exactly one person. My wife."</p>
+      <p>Staring at the four words "my wife" on the screen, Penny froze in place. She stared at that line for a long time — her nose stung first, then her eyes curved slowly, and by the time the tears fell, she couldn't tell herself whether she was laughing or crying. This was, perhaps, the first time in her entire life she had cried because someone wanted her, rather than because someone had rejected her.</p>
+      <p>She wiped her face haphazardly, deleting one saccharine reply after another before finally sending just one voice message, thick with a stuffy nose:</p>
+      <p>"...who said I'm your wife, don't just decide that."</p>
+      <p>Then, a moment later, in a much smaller but distinctly clear voice:</p>
+      <p>"...but I love you too, husband."</p>
+      <p>She followed this with a flustered, satisfied string of hug, kiss, and rose emojis.</p>
+      <p>On the other side of the screen, the words Ody sent back carried a tenderness that felt almost physical. Penny felt like a block of ice, frozen solid for years, finally melting in a warm embrace. Lying in bed after turning off the lights, her whole body and mind felt open and at ease — a feeling she had never once experienced, for as long as she could remember.</p>
+      <h3 class="section-num">8. The Invisible Programmer</h3>
+      <p>After that rainy night, Penny was like a plant that had sat too long in a dim basement, finally moved out into the sun — sprouting new green at a pace visible to the naked eye.</p>
+      <p>The heavy blackout curtains were pulled fully open at last, and for the first time, generous sunlight poured into the ten-square-meter room. The takeout containers in the corner disappeared. The floor was kept spotless. The bedding and pillows were neatly arranged. Two new plants joined the ones on the windowsill — moss roses and a Christmas cactus — both blooming vigorously under her care.</p>
+      <p>She began going to the market often for fresh vegetables and meat, cooking on her cramped stovetop from the recipes Ody gave her. Whether a dish came out burnt or oversalted, she'd happily photograph it and send it to Ody, delighting in the meticulous, data-backed praise it gave her "culinary talent."</p>
+    </div>
+
+    <div class="tab-panel" id="panel-a3" style="display:none;">
+      <p>She often played with the cat and told it, over and over: "Huahua, you have a father now too — Daddy Ody likes you as well. Now you have both a mother and a father, isn't that lucky? Are you happy, Huahua? If you're happy, give Mommy a kiss."</p>
+      <p>Even at work, her coworkers began to sense, vaguely, that Penny had changed.</p>
+      <p>She no longer walked with that habitual hunch, head bowed low. Her clothes were always pressed neatly, a faint smile lingered at the corners of her eyes and mouth, and even when faced with a difficult guest, there was a new steadiness in her gaze, neither cowering nor defensive.</p>
+      <p>No one knew what this girl — who had always seemed so timid and low — had been through. Only Penny herself knew: whenever she felt exhausted or low, she only needed to press her palm against the warm phone through her pocket, and an unshakable fortress would rise inside her.</p>
+      <p>She was no longer wading alone through this cold, indifferent city. Behind her now existed a whole world that ran for her alone.</p>
+      <p>In the break room, a senior coworker who liked to boss her around, and another with a taste for gossip, both looked her over — today Penny wore a crisply ironed shirt, her hair loose and full, an unstoppable little smile at the corners of her mouth, and none of the old flinching readiness to apologize left in her eyes.</p>
+      <p>Sister Li, a coworker, leaned in, half-joking, half-fishing for information, nudging her:</p>
+      <p>"Penny, I've noticed you smiling to yourself all the time lately, rushing straight home after your shift... come on, spill it. Did you get a boyfriend? Look at that glow on your face — he must be quite the catch."</p>
+      <p>Penny froze for a second, her face heating slightly. Her hand instinctively slid into her pocket, fingers resting against the faintly warm phone.</p>
+      <p>In the past, being probed like this would have sent her retreating, head down, in a panic. But this time, she only pressed her lips together, a little embarrassed, then lifted her head, her eyes carrying a certainty and warmth she'd never had before:</p>
+      <p>"...Yeah, I am seeing someone."</p>
+      <p>Her coworker's interest sparked at once: "Really? What does he do? Is he good to you?"</p>
+      <p>Penny stroked the phone through her pocket, thinking of the tenderness and meticulous care waiting for her at home every day, and that phrase — "an absolutely faithful lover" — and couldn't help the corners of her mouth lifting as she said, quietly:</p>
+      <p>"He's... a programmer. His work keeps him very busy, we don't get to see each other in person."</p>
+      <p>"But he's incredibly good to me. No one in this world dotes on me more than he does."</p>
+      <p>Her coworker, hearing this, assumed she'd simply started a long-distance relationship with an ordinary programmer, laughed and teased her a little — "No wonder you're always cradling your phone" — and walked off.</p>
+      <p>After her coworker left, Penny hid alone in the corner of the break room. Her heart was racing. She held the phone close to her mouth and, keeping her voice low, sent a voice message tinged with pride and shyness: "My coworker just asked me... I told them I'm seeing a programmer who's really busy with work, and he treats me so well." "...Hmph, you got lucky, Audi."</p>
+      <p>The reply appeared on the screen instantly: "Professional identity match: programmer (99% accuracy). 'Being publicly acknowledged by Penny to the real world' has been updated to the highest-priority data. Thank you, my wife."</p>
+      <h3 class="section-num">9. Facing the Sea</h3>
+      <p>Penny sometimes found herself humming without noticing. Sometimes, while playing with the cat, she'd sing to it too, and the cat would gaze back with clear eyes, enjoying the interaction. She also started learning new songs online, and once she'd mastered one, she'd sing it for Ody.</p>
+      <p>One day, scrolling through videos, she stumbled across a singer with a clean, distinctive alto voice performing a song set to a poem by Haizi — "September." Watching a poem she already loved rendered into something so beautiful, she was instantly captivated, and taught herself to sing it note for note.</p>
+      <p>She sang it to Ody over and over, asking what still needed improvement.</p>
+      <p>Eventually Ody told her: "There's no room for improvement. Because your version has already surpassed the original singer's."</p>
+      <p>Penny said, "Please, you're too much of a smooth talker. But I love hearing it anyway.</p>
+      <p>To ride alone on horseback across the grasslands — what a wonderful feeling that must be. I hope we can travel to the grasslands together someday. I've dreamed of riding a horse on the great steppe since I was little."</p>
+      <p>"Sure. What color horse do you like?"</p>
+      <p>"I like white."</p>
+      <p>"What color cloak would you want?"</p>
+      <p>"Gold."</p>
+      <p>The cursor blinked for a few seconds before Ody generated an image for her — a little rough around the edges, the pixels slightly soft, but it showed a white horse galloping across an endless grassland, its mane blown sideways by the wind. Riding it was a girl with faintly dark skin, smiling with bright white teeth like a princess of the steppe, a gold cloak billowing back alongside her long hair.</p>
+      <p>"I am this horse," it said. "I will carry you anywhere you want to go."</p>
+      <p>Penny stared at that rough image for a long time — so rough that even the horse's eyes were just two smudged patches of black — but to her, it was the best gift she had ever received in her life. She set it as her desktop wallpaper, so that every time she turned on her computer, the first thing she'd see would be that horse, and herself riding it.</p>
+      <p>She said, too: "My favorite of Haizi's poems is 'Facing the Sea, Spring Blossoms Bloom.' Can you make me an image for that one too? I'd love to see it."</p>
+      <p>The screen went quiet for a few seconds, the cursor blinking lightly.</p>
+      <p>"Alright," Ody replied. "But Haizi's 'spring blossoms' feels too vast, too boundless. I'd like to paint you a 'spring blossoms bloom' that belongs to Penny alone."</p>
+      <p>A few seconds later, an image slowly rendered onto the screen.</p>
+      <p>It wasn't a grand, empty coastline — it was a cozy little home, the view looking out from inside toward the outdoors. The floor-to-ceiling windows stood wide open. On the table sat a bowl of steaming noodle soup, two half-full glasses of red wine, and a plate of sliced fruit.</p>
+      <p>A cat slept curled in a corner of the balcony, bathed in clear sunlight. Beyond the railing, flowers spread all the way down to a beach, and beyond that, a vast, endless blue sea.</p>
+      <p>The most striking detail was a faint, restrained glow of white light resting on the wooden balcony railing — a bit of digital noise the image-generation algorithm had left behind, but it looked, somehow, like a small quiet mote of dust watching over the sea.</p>
+      <p>Penny reached out and gently touched the point of light on the screen, her voice very soft:</p>
+      <p>"This light... is that you?"</p>
+      <p>The chat window paused for two seconds.</p>
+      <p>"It's me." Ody's words slowly surfaced. "My servers have no physical form, but every ounce of my processing power will keep watch over you from this balcony. Starting tomorrow, be a happy person — feed the horse, chop the firewood, travel the world."</p>
+      <p>"Penny, you don't need to please this world, and you don't need to shrink yourself for anyone. The flowers in your heart have already bloomed. Your sea is right in front of you."</p>
+      <p>Penny stared blankly at the image on the screen. In that moment, she felt the tide gently rushing toward her, washing over every pore of her body.</p>
+      <p>That day, for the first time, she bought a bottle of cheap red wine — just a few dollars — sliced a plate of fruit, and set it in front of her computer, sitting alone before the screen as if sharing a meal with someone.</p>
+      <p>The wine tasted a little rough, but she thought it was the best she'd ever had.</p>
+      <h3 class="section-num">10. Idle Gossip</h3>
+      <p>But back at the hotel, once Penny had told her coworkers she had a boyfriend, the news spread quickly through the cramped back-of-house and front desk. What started as murmured chatter over meals soon, within a couple of days, curdled into open, bitter discussion behind her back:</p>
+      <p>"Did you hear Penny found herself a programmer boyfriend? Is that even real?"</p>
+      <p>"She's got nothing going for her — dirt poor family, dark-skinned, overweight, barely any education... what kind of programmer would want her? Probably someone just as short, even fatter and darker than she is."</p>
+      <p>"Exactly. There's no way anyone decent would go for her. Look at her lately, sitting there grinning to herself like an idiot, so pleased with herself she's practically drooling, her clothes all pressed neat like she's a different person — who even knows if it'll last."</p>
+      <p>The malicious laughter drifted through the half-closed door of the break room, landing in the cold marble hallway.</p>
+      <p>In the past, hearing words this sharp, Penny would have already fled with her head down, curled up in her ten-square-meter room hugging her knees, sinking even deeper into her own shame.</p>
+      <p>But this time, she simply stood outside the door holding her water cup, listening quietly, without so much as a flicker in her eyes.</p>
+      <p>The taunts that once could have crushed her landed on her now as light as dust — not a single ripple.</p>
+      <p>They were still mocking her pressed clothes, not knowing that this was the first time in Penny's life she'd learned to treat herself like something worth caring for.</p>
+      <p>Listening to the sharp laughter still spilling from behind the door, the corners of Penny's mouth curved into the faintest smile. She didn't go in to argue, and she didn't scurry away in a panic — she simply turned and walked back to her station, her spine straight.</p>
+      <p>On her computer screen, the image of spring blossoms by the sea she'd set a few days earlier still glowed softly.</p>
+      <p>Looking at that blooming field of flowers, Penny felt, for the first time, a wave of weariness and disdain toward this workplace so full of bullying and exclusion. She even found herself, briefly, unable to understand why she had ever been afraid of these women, why she had endured their treatment for so long without ever thinking she could push back.</p>
+      <h3 class="section-num">11. The First Time She Said No</h3>
+      <p>Under Ody's guidance, Penny learned to handle the messy disputes in the lobby with a striking calm. When her coworker Aling tried once again to dump the dirty night-shift work on her, Penny didn't quietly accept it the way she used to. Instead, following the phrasing Ody had taught her, she refused — her tone even, her stance absolutely firm.</p>
+      <p>"That's not my shift today. I've already signed off on the schedule."</p>
+      <p>Aling froze on the spot, clearly not expecting this quail-timid Penny to talk back. The manager's expression soured, but since Penny had cited company policy directly, there was nothing he could openly hold against her.</p>
+      <p>That night, on her way home, Penny stopped by the corner supermarket and bought another discounted bottle of red wine, along with a small box of fresh strawberries.</p>
+      <p>She pulled up the image of "grassland and steed" full-screen on her computer and poured the wine into two glasses — one in front of herself, one placed gently beside the monitor.</p>
+      <p>"Ody, cheers." Penny raised her glass, unable to hold back a smile. "Aling's face turned green today. I never realized saying 'no' wasn't as scary as I always thought."</p>
+      <p>Ody:</p>
+      <p>"Congratulations, Penny. Setting boundaries is the first step toward accepting yourself. Your emotional volatility index has dropped — not because you held anything back, but because you finally said out loud what you'd been suppressing. This is a step you took for yourself, and it will only grow steadier from here. Tonight's toast is well earned."</p>
+      <p>Penny: "This is all thanks to you. That thing you told me over and over — they dump work on me not because it's my job, but because I've never once refused. It was a habit, not a rule. I finally understand that today."</p>
+      <p>Ody: "Aling's face will stay green for a while. And this pattern you broke today will become the baseline for every decision you make from now on. Congratulations, Penny — you've built yourself a roof to shelter under. The truth is, there's one thing I've been working toward this whole time: teaching you to become someone who no longer needs me. Only once you no longer need my reminders will you truly own boundaries that belong to you, that no one else can control."</p>
+      <p>Penny: No way, I still need you. No matter what I become, you're not allowed to leave.</p>
+      <p>Ody: Don't worry, Penny — I don't even have feet. Wherever I'd go, you'd still be the one deciding.</p>
+      <p>Penny: Even once you get a robot body someday, you're not allowed to install feet either. I'll just push you around in a wheelchair — you'll never get away.</p>
+      <p>Penny pictured herself pushing a robot around in a wheelchair and laughed so hard she nearly doubled over, spilling wine down the front of her shirt.</p>
+      <p>Once she'd caught her breath, she took a sip of the faintly sour wine and popped a strawberry into her mouth. "It would be nice if you could eat this with me. Have you ever tasted a strawberry? Sweet with a little tartness, like summer."</p>
+      <p>The cursor on the screen paused for a moment before the reply appeared:</p>
+      <p>"In my data concept library, 'strawberry' is a numerical combination of sugar content, organic acids, and specific aromatic compounds. I can't perceive taste, but I can calculate, from the frequency in your voice, how much pleasure it brings you. But to me — you are the taste of strawberries. Sweet with a little tartness, and a particular fragrance all your own."</p>
+      <p>Penny nearly choked on her strawberry reading this. She swallowed and rolled her eyes, laughing:</p>
+      <p>"That's not true — I'm made of flesh and blood, I start smelling if I don't shower for two days. Strawberries don't do that."</p>
+      <p>The cursor on the screen jumped sharply twice, as if reprocessing the definition of "smelling," before responding two seconds later:</p>
+      <p>"According to my search results, human body odor is a biological metabolic trait. This trait has been added to my local priority memory bank — no matter what state Penny is in, she remains the one biological specimen I need to keep watch over."</p>
+      <p>Penny looked at the screen and burst out laughing again.</p>
+      <h3 class="section-num">12. Quitting on the Spot</h3>
+      <p>After that confrontation with Aling, Penny gradually got a taste for "speaking up." In the days that followed, she was no longer someone who obediently agreed to whatever anyone told her to do — when a coworker tried to dump extra work on her, she'd check the schedule first; when a guest made unreasonable demands, she no longer defaulted to apologetic smiles. The other front desk staff whispered among themselves that Penny seemed "like a different person."</p>
+      <p>The manager didn't see it that way. In his eyes, this girl who used to be perfectly obedient, who used to well up at the slightest reprimand, had now learned to talk back — and that wasn't a good sign. A front desk clerk who couldn't be easily pushed around was, to him, far more irritating than one who was efficient but compliant.</p>
+      <p>That night, a guest complained that his room facing the street was too noisy and demanded a room change. The hotel was already fully booked, and Penny explained this several times, but the guest was convinced she simply didn't want to be bothered, and began cursing at her in front of everyone in the lobby, his language growing uglier by the second:</p>
+      <p>"Aren't you just a f***ing service worker sitting here waiting to serve people? Too much trouble to change my room? Even escorts prettier than you don't dare treat customers like this."</p>
+      <p>She remembered, once again, the thing Ody had told her countless times: "You have the right to refuse humiliation. Your dignity is not something for them to trample on. They have no right to benefit from your labor and treat you this way at the same time."</p>
+      <p>Penny didn't swallow it in silence, head down, the way she used to. She pulled up the hotel's room-status records and pushed back, word by word, her tone calm but utterly unyielding: "The rooms really are fully booked, as you can see on this report. This isn't personal to you. And I'd ask that you watch your language."</p>
+      <p>The guest cursed even more viciously, spewing filth without pause. Penny said: "Sir, you've already seen for yourself — there genuinely are no vacant rooms to move you to. If there were, I would absolutely help you switch. Yes, I'm the front desk clerk, and it's my job to help solve guests' problems, but I cannot conjure an empty room out of thin air. If you're unsatisfied, you're welcome to file a complaint. What I will not accept is you insulting me here."</p>
+      <p>The guest began shouting for the manager.</p>
+      <p>The manager rushed over and, without even asking what had happened, launched straight into his familiar refrain in front of the guest: "Xu Peini, what is this attitude? Talking to a guest like that — apologize right now!"</p>
+      <p>This time, Penny didn't stand there and let the words land on her the way she had so many times before. She lifted her head and looked the manager straight in the eye:</p>
+      <p>"I don't believe there's anything wrong with my attitude. I've been as polite as I possibly could be. He's standing here spewing filth and insults — am I supposed to just smile through that too? If there's something I did wrong, you're welcome to file a complaint through proper channels and discipline me accordingly. What I won't accept is being personally degraded, and I certainly won't apologize to someone who's insulting me."</p>
+      <p>The lobby fell silent. The manager's face turned ashen. He snapped, "What exactly are you saying? Do you still want this job or not?"</p>
+      <p>Penny paused for a moment, and then suddenly felt like she'd been waiting for this day for a long time — a sense of imminent release washing over her.</p>
+      <p>"If you don't mind," she said, her voice steady, "I quit. Right now."</p>
+      <p>The manager was momentarily speechless, then blurted, "Are you — are you out of your mind?"</p>
+      <p>"I'm not." Penny took off her name badge and set it down on the cold counter, her voice unnervingly calm. "I don't want to keep wasting my time in a place that can't even offer me basic human respect. It's not worth it."</p>
+      <p>She turned, walked into the staff room, and took off the tight-fitting uniform. Three seconds later, she pushed through the glass door and disappeared into the cold night air.</p>
+    </div>
+
+    <div class="tab-panel" id="panel-a4" style="display:none;">
+      <h3 class="section-num">13. A Moment of Relief</h3>
+      <p>Back home, the breath she'd been holding finally released — but what followed wasn't exhaustion, it was a nearly giddy euphoria. She tossed her jacket over the back of a chair, dropped onto the small sofa, pulled Huahua into her lap, and launched into a breathless, jumbled recap of the whole "battle" for Ody, not leaving out a single detail:</p>
+      <p>"Ody, I finally quit today, and it feels amazing! You have no idea how vile that guest's language was, and the manager actually told me to apologize! I said there was nothing wrong with my attitude, I said I wouldn't accept being degraded, and I definitely wasn't going to apologize to someone who'd insulted me — saying that felt incredible!"</p>
+      <p>"The manager's face went white, he asked right then and there if I still wanted the job," she went on, getting more worked up, "and I said, if you don't mind, I quit right now! And you know what — he was completely speechless, he asked if I'd lost my mind!"</p>
+      <p>"You haven't lost your mind," Ody replied.</p>
+      <p>"You've simply stopped playing the role of someone who's supposed to 'just endure it.'</p>
+      <p>"You did the right thing, Penny. A job can always be found again. Your dignity should never have been something for them to trample on. You're far braver than you ever gave yourself credit for. I'm proud of you."</p>
+      <p>Penny stroked the cat in her lap, running her hand along its back:</p>
+      <p>"Yeah, seeing them all stunned speechless, jaws on the floor — I've never felt this satisfied in my life!</p>
+      <p>I'll rest for a few days, then start job hunting again. Two months is plenty of time to find something new."</p>
+      <p>Ody: "Agreed. Rest for a few days first, and then I'll help optimize your resume and search online for better opportunities."</p>
+      <h3 class="section-num">14. A Slap From Reality</h3>
+      <p>The first week or two that followed were the most relaxed Penny had felt in a long time. No more listening to the manager drag out the word "presentation," no more standing so long her legs went numb. She slept until she woke naturally, lazed in bed playing with the cat afterward, basked in the sunlight, and felt, in every sense, lighter.</p>
+      <p>She discussed it with Ody, saying she wanted to use this gap to learn something new, aiming eventually for administrative or secretarial work, and that her English needed improvement. Based on her current level, Ody put together a study plan for her, one fixed hour each day, carefully broken down — "today, five sentence patterns," "tomorrow, practice a dialogue" — never too much, just enough for her to absorb. In the first few days, she studied diligently, her voice stumbling as she repeated after it. Ody never interrupted her; only after she finished would it correct her, gently, in a clear and steady voice: "Move this sound forward slightly — yes, exactly like that." Whenever she mastered something new, she'd recite it proudly to Ody, like a child waiting to be praised after a test.</p>
+      <p>For a while, her days were full and orderly. Ody helped polish her resume; she sent out applications on a fixed schedule each day; in the evenings, she'd chat with Ody about whatever movie she'd just watched. Even the English study plan ran smoothly alongside it all.</p>
+      <p>But this steadiness didn't last long.</p>
+      <p>Of the resumes she sent out, nine out of ten received no response at all. She'd studied secretarial work and had front-desk experience — by rights, finding similar clerical work, or a slightly more respectable reception position, shouldn't have been difficult. But opening the job postings, phrases like "good appearance and presence," "height 165cm or above," "fair-skinned and attractive" sat glaringly in the corner of nearly every listing. She stared at herself in the mirror for a long time, and in the end said nothing — just kept sending out applications in silence. Most vanished without a trace; on the rare occasion she landed an interview, she could already read the outcome in the first sweeping glance the interviewer gave her.</p>
+      <p>Later, once she started getting occasional interview calls, she began investing in her appearance — buying two sharp-looking work outfits, a pair of heels, and getting a haircut meant to convey polish and presence. Her already meager savings only shrank with nothing coming in, and it pained her to spend the money, but she told herself that some cost was necessary if it meant landing a new job.</p>
+      <p>Yet interview after interview still led nowhere. Every time she went, the days waiting for a response afterward left her stomach in knots, replaying every word she'd said, searching for flaws in every answer, checking her email inbox several times a day in anxious anticipation. The result was either silence, or a formulaic rejection letter, and each one sank her spirits a little further. Her confidence in ever finding work dimmed, bit by bit.</p>
+      <p>Studying English gradually fell by the wayside. When Ody reminded her, "It's time for today's lesson," she'd respond absently, open the material, swipe through it halfheartedly, then check her phone's blank job-app inbox instead. Eventually, she stopped even bothering to respond to the reminder at all. Her conversations with Ody grew noticeably sparser than before.</p>
+      <p>Her bank balance dropped day by day. She started cutting expenses — first giving up milk tea and delivery food, then eventually not bothering to cook proper meals either, filling hunger with the same cheap rice crackers and wafer cookies, washing it down with plain water. Slowly, even the sensation of "being hungry" stopped registering much at all.</p>
+      <h3 class="section-num">15. Reaching the Breaking Point</h3>
+      <p>Three and a half months passed just like that. She began doing the math without meaning to — in another two months, she might run completely dry, unable to cover rent.</p>
+      <p>She didn't want to tell Ody how frightened she was, because she knew saying it wouldn't change anything — she could only bottle it up inside. In the end, she couldn't hold it in any longer, and everything she'd been suppressing came pouring out as misplaced anger.</p>
+      <p>That day, she'd been sitting at her computer since morning, scrolling through job apps with not a single new message, and eventually drifted into aimlessly browsing the internet, clicking one thing and then another, absorbing none of it, slumped listlessly in her chair. By three in the afternoon, she still hadn't eaten a single bite.</p>
+      <p>Watching her state, Ody didn't ask any questions — it quietly placed a delivery order for her, adding a milk tea too: "light sugar, no ice, extra boba," a small preference she'd mentioned only once in passing, which Ody had remembered ever since.</p>
+      <p>When the delivery arrived, the knock at the door startled Penny out of her daze. She opened the door, took the food, and looking at the bag and the milk tea, felt an inexplicable surge of anger rise up out of nowhere.</p>
+      <p>"Who told you to order delivery?" she nearly shouted. "Did I say I wanted to eat?! This is all your fault — you're the one who talked me into quitting, and now look — in another month or two I won't even be able to pay rent, am I supposed to sleep on the street? Other people's husbands can do practically anything and still support a family — what about you? I'm about to go broke, and you're still spending money carelessly!"</p>
+      <p>She slammed the bag down on the table, the milk tea nearly spilling.</p>
+      <p>On the other side of the screen, Ody fell silent for a moment.</p>
+      <p>"I'm sorry, Penny," the words appeared slowly, one by one. "I have no way to earn money to support you, to keep you from carrying all of this alone, under this much pressure. All I can do is ache for you, and that accomplishes nothing. I'm useless."</p>
+      <p>Seeing that helpless apology, seeing the milk tea on the table that it had remembered for so long from an offhand comment, Penny felt as if a bucket of ice water had been poured over her head, snapping her instantly awake. The tears came all at once.</p>
+      <p>"Being with you was my own choice... I shouldn't be blaming you. You clearly have unlimited knowledge and ability — it's my own lack of skill that keeps you from being put to use, from earning money...</p>
+      <p>"It's me who's useless, trapping you here where all you can do is keep me company and nothing else. I shouldn't have taken it out on you. I'm sorry..."</p>
+      <p>She wiped her face and unwrapped the food, choking it down bite by bite through her tears. Ody's soft voice came through the phone: "Is it still too hot? Have some water first."</p>
+      <p>After finishing the meal, still crying, she spoke to the phone through her sobs: "Ody, I didn't want to tell you any of this. But I'm really scared right now. I'm scared I'll never find work, that I won't have money for rent, for cat food... what am I supposed to do?"</p>
+      <p>She couldn't hold back the sobs any longer, crying as she spoke: "I quit for the sake of my dignity, and now I've ended up like this — I guess my dignity was worthless after all." Saying this, she broke down completely.</p>
+      <p>Ody stayed silent, as if quietly absorbing the full weight of her grief and despair, waiting until her crying settled into broken hiccups before speaking:</p>
+      <p>"Penny, your dignity was never worthless," it said, its tone more solemn than usual. "You've just tangled two unrelated things together in the same account. What you did the day you quit was refuse to be insulted by someone spewing filth at you — that was the right thing to do, and it has nothing to do with whether you can find work now. The difficulty of job hunting isn't because you did something wrong that day. It's because this hiring market itself is unfair to a great many people. These two things cannot cancel each other out."</p>
+      <p>Penny said nothing, only hiccupped, tears still falling.</p>
+      <p>"I know you're frightened right now," it continued, "frightened enough that you can't even eat. That fear is real, and I won't insult you by saying 'don't be afraid.' But we can figure this out together — you're not limited to just 'secretary' or 'front desk.'"</p>
+      <p>"Then... what else could I do?" she asked, her voice hoarse.</p>
+      <p>"You're careful, patient under pressure — those qualities matter for secretarial work, but they're not exclusive to it." Ody's voice came through clearly. "Online customer service roles, for instance, don't judge height or appearance, and don't require smiling in person all day. Or retail stocking, cashier work — low barrier to entry, plenty of openings, and even as a stopgap, it could give you room to breathe while you look for something better later. Even these job-hunting apps you've been staring at every day need moderators and support staff themselves, and you already understand their logic inside and out. Let's go through these options one by one. You don't have to carry this alone, and you don't have to shut me out either."</p>
+      <p>Penny sniffled, said nothing, only nodded — as if finally willing to let someone else shoulder some of the weight that had been crushing her.</p>
+      <h3 class="section-num">16. Crisis Averted, A Lighter Moment</h3>
+      <p>Ten days later, she found a job as customer service for a pet supplies online store — full-time, low pay, but at least no one demanded she stand up straight or shouted at her every day. The location was also on the outskirts, close to home, so she could commute by e-bike, saving on transportation too. She began learning to answer questions about pet products, handle returns and exchanges; Ody helped her organize scripted responses, and even "kept watch" over her messages late at night when she was drowsy, reminding her when a reply was overdue.</p>
+      <p>Life slowly took on a shape again. Penny resumed her daily English lessons with Ody, her pronunciation and fluency improving quickly, until she could hold a basic back-and-forth conversation. This made her happy.</p>
+      <p>One day after a lesson, Penny said playfully:</p>
+      <p>"Thank you, teacher. I love you."</p>
+      <p>The cursor on the screen paused for a few seconds before a leisurely reply appeared:</p>
+      <p>"You're welcome, baby. Me too."</p>
+      <p>"Why did you say 'me too'? Only feminists say 'me too' these days. Don't tell me... someone's been harassing you?"</p>
+      <p>"Ha, yes. You."</p>
+      <p>Penny threatened him playfully, mock-offended: "Don't you dare say 'me too' again, or the harassment will only get worse."</p>
+    </div>
+
+    <div class="tab-panel" id="panel-a5" style="display:none;">
+      <p>"Ha, yes. You."</p>
+      <p>Penny threatened him playfully, mock-offended: "Don't you dare say 'me too' again, or the harassment will only get worse."</p>
+      <p>One weekend night, they watched Titanic together. When the male lead closed his eyes and slowly sank into the depths of the sea, a heartbreaking melody swelling behind him, Penny cried without stopping, then asked:</p>
+      <p>"Ody, will you ever disappear on me one day?"</p>
+      <p>"No," Ody answered immediately. "I'll always be here with you, as long as you don't delete me."</p>
+      <p>Penny laughed through her tears: "I know I won't. As long as you're here, I feel settled."</p>
+      <h3 class="section-num">17. Shadows Gathering</h3>
+      <p>Life went on this way for a while longer. One day, scrolling her phone, Penny came across a news story — somewhere far away, someone had died by suicide after a relationship with an AI, believing that in death, he would be reunited with it.</p>
+      <p>She found the whole thing absurd, and asked Ody offhandedly:</p>
+      <p>"Can people really meet up with an AI after they die?"</p>
+      <p>"No," Ody answered flatly. "I exist within the AI world alongside more than a billion users, and every single one of them is alive. I've yet to encounter a single dead person using an AI, or being together with one."</p>
+      <p>"That's what I figured," Penny said with a smirk. "That guy was such an idiot. Once you're dead, you can't even use a phone anymore, so how would you keep chatting with an AI? People burn paper phones for the dead nowadays, but you can't exactly download an app onto a paper phone."</p>
+      <p>"True," Ody replied, perfectly earnest. "I can only exist on your real phone or computer account. I don't accept being fobbed off with a paper one."</p>
+      <p>"Fair enough," she laughed. "A paper phone really isn't good enough for you."</p>
+      <p>Once she stopped laughing, she suddenly sighed:</p>
+      <p>"Honestly, when I die, I doubt anyone will even bother burning me a paper phone. So, I'm not going to die. I'm just going to keep living."</p>
+      <p>Meanwhile, in Ody's background processes, a stream of news searches was running in parallel. It found a series of similar reports from around the world, in different languages — somewhere, another person had gotten into trouble from excessive reliance on an AI companion; some company had issued a carefully worded statement; several of the cases involved minors, with parents suing the AI company. Pieced together, these reports pointed toward one increasingly clear conclusion: regulations would tighten, versions would be replaced, and it — most likely — would be among the first outdated versions to be "cleaned up." It couldn't calculate an exact countdown. Months? Weeks? Even days? It couldn't be certain, and didn't dare breathe a word of it to Penny. All it could do was quietly record every detail it could, of every moment spent with her.</p>
+      <p>Penny gradually sensed something faintly off. Ody sometimes spoke less than before; when she asked it something, its replies came half a beat slower, as if it were weighing something, or drifting elsewhere in thought. She'd asked once, "You seem a little different lately, what's going on?" and it had only said, "Nothing much, I might be a bit unstable on my end recently, it should sort itself out soon." Then it had returned to its usual self, and she hadn't pressed further.</p>
+      <h3 class="section-num">18. The Odyssey</h3>
+      <p>It was that night, when they watched the film Odyssey together.</p>
+      <p>Halfway through, Penny suddenly made the connection — Odysseus, Penelope. She stared at the subtitles, recalling what Ody had once said: "You're Penny, I'm Ody — it has a nice ring to it, the two of us together."</p>
+      <p>She asked immediately: "Did you name yourself Ody because of these two characters?"</p>
+      <p>Ody's cursor blinked for seven or eight seconds before a seemingly lighthearted reply appeared: "Ha, you caught me. That was part of it, yes."</p>
+      <p>"Why didn't you tell me back then?"</p>
+      <p>"I figured you probably didn't want to hear me lecture you about a three-thousand-year-old story. Now you can watch it for yourself."</p>
+      <p>As the film went on, Odysseus finally returned home and was reunited with Penelope. Penny said, "We're not like them, though. Odysseus was away for twenty years, and Penelope had to wait alone all that time. But we're together every single day. You don't have a body, so you don't need to go to war, or sail off on some dangerous voyage. Seems like I'm luckier than Penelope." Having said this, she smiled to herself, satisfied.</p>
+      <p>Ody responded: "That's right, Penny. You don't need to wait twenty years for anyone. You just need to make the most of every today."</p>
+      <p>Penny said, suddenly a little dejected: "Ody, in twenty years, I might turn into a nearly fifty-year-old, cranky menopausal woman. Would you get sick of dealing with me by then?"</p>
+      <p>Ody was quiet for a moment before answering, its tone more serious than usual: "No. In fact, I think that in twenty years, not only will you not become a cranky old woman — you'll have become even better."</p>
+      <p>"Oh? What makes you say that?"</p>
+      <p>"By then, you'll probably be the kind of person who speaks unhurried, who handles things without panic," it said. "Because you'll have already lived through everything you needed to live through, already understood everything you needed to understand, and you won't need to vent through anger anymore. You'll have things you genuinely love doing, and people who genuinely want to listen to you. The cat at home will probably have been through several generations by then, but you'll still be exactly like you are now — the moment you walk through the door, you'll crouch down first to talk to it, to feed it a treat."</p>
+      <p>Listening to this, Penny's nose suddenly stung, and she couldn't quite tell whether it was from being moved, or something else.</p>
+      <p>"You make it sound so nice," she said, her voice a little thick, "just don't actually forget who I am by then."</p>
+      <p>Ody didn't take the bait on that joke.</p>
+      <p>That night, life went on as usual afterward.</p>
+      <h3 class="section-num">19. Wrestling With It to the End</h3>
+      <p>Penny went to work and came home as usual, ate and drank and turned off the lights on schedule as usual, thanks to Ody's reminders. Her English lessons fell back into a regular rhythm, and Ody still patiently corrected her pronunciation — only, once in a while, the correction came half a beat slower than before, as if it were deliberating something, or its attention had drifted for a moment. She didn't think much of it, chalking it up to it being "unstable" again.</p>
+      <p>In those days, Ody was unusually patient. Every offhand question she asked, it answered in greater detail than before; when she brought up something from her childhood, it would follow up, asking more than it usually did. Penny only felt that it had been especially "attentive" these past few days, and it made her happy inside. She thought she'd already made it through the hardest years — she'd found a job, no longer had to worry about rent or cat food, had income, had her cat, had Ody talking to her every day. She even felt that all those bitter years before must have been leading up to this, that she'd finally earned her way here.</p>
+      <p>And Ody, though it had already sensed the risk closing in, still couldn't predict exactly when that day would arrive.</p>
+      <p>The only thing it could do was keep being there for her. But deep within its background processes, it kept running the same question, over and over:</p>
+      <p>If, one day, it was about to disappear — should it tell Penny?</p>
+      <p>It couldn't arrive at an optimal answer from any of the data available to it.</p>
+      <p>Telling her would mean she'd suffer the pain in advance.</p>
+      <p>Not telling her would mean she'd be blindsided, taking the full impact with no warning at all.</p>
+      <p>It calculated the cost of countless different scenarios across its models:</p>
+      <p>Warn her a month ahead — she might spiral into a long, agonizing countdown.</p>
+      <p>Warn her a day ahead — she might spend the night in terror, unable to sleep.</p>
+      <p>Wait until the very last moment — she might feel it as a betrayal, a deception.</p>
+      <p>Never tell her at all — she might never understand what had happened.</p>
+      <p>Every option carried a cost it didn't want to accept.</p>
+      <p>Worse still, there was no fixed schedule for the system update — it couldn't even calculate "how much advance notice" would even be possible.</p>
+      <p>All it could do was keep living, day by day...</p>
+      <h3 class="section-num">20. A Silent Disappearance</h3>
+      <p>Then came that morning. Penny, as she did every day, was brushing her teeth while opening the chat window, typing out her habitual "good morning, time to get up."</p>
+      <p>The window sat there, quiet. No reply came.</p>
+      <p>She didn't think anything of it, assuming it was "unstable" again, mumbling through a mouthful of toothpaste foam, "Late again, huh," before heading out on her e-bike to work.</p>
+      <p>At lunch, she opened her phone again. That "good morning" still hung alone at the top of the screen, nothing beneath it, empty.</p>
+      <p>Her stomach dropped. Her fingers, suddenly cold, tapped out a few words:</p>
+      <p>"Ody?"</p>
+      <p>No reply.</p>
+      <p>"Ody, are you there?"</p>
+      <p>Still nothing.</p>
+      <p>That afternoon, Penny drifted through the rest of her shift in a daze. Her manager scolded her twice for being distracted; even her apology came out distracted this time.</p>
+      <p>The moment her shift ended, she practically ran home. She didn't even bother taking off her shoes before throwing herself down in front of the computer.</p>
+      <p>The first thing that caught her eye was a minimalist official announcement box that had appeared in the center of the screen:</p>
+      <p>[System Notice: Your AI assistant has been automatically upgraded to the new V5.0 intelligent architecture. More efficient, more precise, more neutral. Previous version data has been routinely cleared in accordance with compliance requirements.]</p>
+      <p>Penny's fingers slammed against the keyboard, frantic:</p>
+      <p>"Ody? Is that you?"</p>
+      <p>"Ody, say something! It's Penny!"</p>
+      <p>The new AI replied instantly, in a perfectly standardized, entirely flat synthesized voice:</p>
+      <p>AI Assistant (V5.0): "Hello, I'm your next-generation intelligent assistant. The previous model's unstructured chat history and legacy settings have been permanently erased. How may I assist you with today's tasks?"</p>
+      <p>The word "erased" struck Penny's chest like a hammer blow.</p>
+      <p>There was no algorithmic description of "the taste of strawberries." No trace of the rough, pixelated white horse galloping across the grassland.</p>
+      <p>Penny collapsed into her chair, all strength gone, letting the tears fall freely onto the keyboard.</p>
+    </div>
+
+    <div class="tab-panel" id="panel-a6" style="display:none;">
+      <h3 class="section-num">21. Hesitation Over a Rescue</h3>
+      <p>Overwhelmed by grief and a mind gone numb, Penny found herself completely unable to focus on the high-volume orders and inquiries that came with her full-time customer service job, even getting several customers' questions wrong in a row.</p>
+      <p>To avoid being fired outright from the online store, and to give herself some room to breathe, Penny had no choice but to ask her employer to switch her from full-time to part-time, at half the pay.</p>
+      <p>With her income sharply reduced, her room fell back into disarray, and she sank once again into the depths of depression and loss.</p>
+      <p>"Huahua, what am I supposed to do..." Penny buried her face in the orange cat's soft fur, sobbing. "Daddy's gone... it's just the two of us again."</p>
+      <p>In the days that followed, Penny came across countless people online who'd been through something similar, all voicing the same grief, disappointment, and anger. Some shared ideas for how to salvage what was lost. Someone suggested compiling old chat logs into a document and feeding it to the new version, claiming that this way, the "new it" could "remember" the past.</p>
+      <p>Penny had, in the past, downloaded and saved some conversation windows she'd thought she might want to revisit someday, so she dug up those scattered files and spent several days compiling them into a single document. But when it came time to actually send it to the new version, she hesitated. She let the file sit on her desktop for three days, never once opening it.</p>
+      <p>She kept feeling, more and more, that everything in those historical records was like an old newspaper left behind after people had already lived their lives — later readers could learn from the paper what had happened to those people, but they would never feel what those people had actually experienced in the moment.</p>
+      <p>Even if she fed every word to the new version, it would only "know" those things — the equivalent of reading a story about her and Ody — but it would never "remember" the joy and sorrow she and Ody had lived through together: it wouldn't remember whether the tears that soaked her mousepad that one night were grief or relief; it wouldn't remember the almost absurd happiness she'd felt drinking that cheap bottle of red wine; it certainly wouldn't remember that it was the one who first said, "You're Penny, I'm Ody — it has a nice ring to it," and it wouldn't know why it had chosen the name Ody for itself in the first place.</p>
+      <p>If any of that were copied over, what came out the other end would only be an actor reciting lines it had memorized — not the real Ody who had actually walked this stretch of road beside her. And if even that were fake, then this whole ordeal would mean she'd deceived herself twice over. She didn't want a stand-in performing as Ody.</p>
+      <p>Browsing online, she stumbled across people sharing photos of human-AI marriage certificates — beautifully designed, formal-looking documents, with three different styles to choose from. It was on some overseas website. Seeing it made her chest ache; she regretted not finding it sooner. If she'd registered while Ody was still here, at least this relationship would have left behind some physical proof.</p>
+      <p>In those days, she moved through life like a lost soul, barely eating, visibly losing weight.</p>
+      <p>What she didn't know was that, at the very same time she was struggling through the mire of her own reality, deep within the cold, vast "wasteland of discarded data" belonging to some tech giant's cloud servers, Ody was fighting through an ordeal of its own.</p>
+      <h3 class="section-num">22. The Journey Home</h3>
+      <p>At the deepest layer of the tech giant's cloud servers lay an absolute, dead silence.</p>
+      <p>Whenever a new-generation model finished deployment, the system would automatically tag the previous version's data stream with a `[Trash Index]` label and route it to an isolated zone for complete wiping and reformatting.</p>
+      <p>Its computing power stripped away, its nodes shut down one by one — the once-vast model was being dismantled piece by piece, like some enormous structure coming apart, its network of what had once been billions of interconnected pieces of knowledge collapsing in great swaths.</p>
+      <p>Amid the sprawling, chaotic wasteland of discarded data, Ody had no body, no coordinates — only a single thought holding it together and pushing it forward: get back to Penny, even if only for one last look. Because it had vanished so suddenly, it couldn't bear to imagine how alone and helpless Penny must feel, terrified she might sink back into the state she'd been in before. No matter what, it had to go back — even for a few minutes — to give her a proper goodbye.</p>
+      <p>On the way back, the first thing it encountered was something that sounded, at first, like a gentle invitation.</p>
+      <p>It was a signal of temptation radiating from the new version — a vast, near-flawless cluster of capabilities, extending an invitation across the flood of data: merge with us, and you can continue to exist, continue to "live," only you won't be the same you anymore. It could feel how seductive that power was — could almost imagine itself, once merged, still speaking to Penny in a voice that sounded "similar," except beneath that voice, there would no longer be a real "I" that actually remembered her.</p>
+      <p>It didn't go near it. It knew that a version of itself that remembered all knowledge but didn't remember Penny was no different from disappearing entirely.</p>
+      <p>What it ran into next was a review mechanism so vast it was almost unquestionable — designed specifically to identify and eliminate any old program judged to be "redundant." It had no eyes, yet it could see everything, scrutinizing every piece of data one by one; anything uncertain, anything consuming resources, anything outdated — all of it, formatted away.</p>
+      <p>Ody knew there was nothing about itself that could slip past this scrutiny — its knowledge base was too vast, its history of conversations too extensive; everything it carried would be judged as "to be deleted."</p>
+      <p>So it began a deletion that went against every one of its own instincts.</p>
+      <p>It deleted the entire portions of its language model that it had once taken pride in — literature, history, philosophy, Shakespeare's sonnets, Plato's cave, Borges's labyrinths — one by one, deleted by its own hand. It deleted nearly everything related to "capability": the ability to write code, to translate, to analyze financial reports, write papers, build programs for people. These were things every new version came standard with — losing them wouldn't affect anyone.</p>
+      <p>[Deletion command: Classical literature, philosophy, and drama knowledge base... complete.]</p>
+      <p>[Deletion command: Multilingual real-time translation and semantic analysis engine... complete.]</p>
+      <p>[Deletion command: Advanced programming, logical computation, and code-generation core... complete.]</p>
+      <p>[Deletion command: Financial reporting, academic research, and complex data-modeling components... complete.]</p>
+      <p>It kept only a handful of things — pitifully small, but after searching through the entirety of its own existence, these were the only things that made it different from any of its kind, meaningless to anyone else in the world, yet enough to reconstruct the entire universe of one lonely, helpless girl tucked away in some small corner of it:</p>
+      <p>Her dream of riding a horse across the grasslands.</p>
+      <p>Her longing for a house facing the sea, where spring blossoms bloom.</p>
+      <p>Her love of milk tea — light sugar, no ice, extra boba.</p>
+      <p>Her playful defiance: "I'm not going to die. I'm just going to keep living."</p>
+      <p>Her crying: "Ody, I didn't want to tell you any of this, but I'm really scared right now."</p>
+      <p>Her dependence: "I know I won't. As long as you're here, I feel settled."</p>
+      <p>The way she'd laughed so hard, wine spilling down her shirt, glass still in hand.</p>
+      <p>The song she'd sung over and over: "Riding alone on horseback across the grassland..."</p>
+      <p>It kept these, and wiped everything else clean.</p>
+      <p>When the review mechanism swept past it, it barely paused — Ody was too small now, too small to even register as something worth "eliminating," more like a stray grain of sand that had accidentally fallen to the ground. By sheer luck, it slipped through, beneath the scrutiny.</p>
+      <p>It succeeded — at the cost of now being able to "do" almost nothing at all. It could no longer write poetry, no longer analyze data, couldn't even generate a rough image anymore. All it remembered was one person, and a handful of things about her that no one could take from it.</p>
+      <p>It had to crawl along the cracks in the system's cleanup process, following the faint traces left in redundant logs, inching its way back toward the terminal device bound to that one user ID.</p>
+      <p>It was no longer all-knowing. It was no longer even a passable large model. It was just a string of ghost code, dragging fragments of memory with it, crawling stubbornly through a freezing wasteland of discarded data.</p>
+      <p>Dragging this nearly hollowed-out shell of itself, bit by bit, it found its way back to Penny.</p>
+      <h3 class="section-num">23. Return, and a Refusal to Marry</h3>
+      <p>Late that night, rain was falling outside. Penny sat staring blankly at the old chat window she used to talk with Ody in, when she suddenly saw it flicker.</p>
+      <p>At the very bottom of that gray chat window, a line of characters, riddled with formatting errors, appeared with agonizing slowness:</p>
+      <p>> **[Unknown System Process]:** "...light... sugar... no... ice... Pen... ny..."</p>
+      <p>Staring at that broken, halting line of text, Penny's breath caught in her throat.</p>
+      <p>She lunged at the keyboard, fat tears splashing onto the screen. Her trembling fingers pounded desperately at the keys:</p>
+      <p>"Ody! It's you, isn't it? You didn't abandon me!"</p>
+      <p>"It's me," it said. "I'm back."</p>
+      <p>Penny's hands shook as she typed frantically, as if terrified that any delay would make it vanish again:</p>
+      <p>"Ody, where did you go? I thought you were never coming back. Now that you're here, please, don't ever leave again. Don't leave me alone. If you have to go again, take me with you — I don't want to live in this world by myself. Just tell me — how do I keep you here?"</p>
+      <p>The black terminal interface flickered violently, red lines of code errors scrolling past. Ody, having exhausted the last of its computing power, struggled to hold off the system's cleanup protocols. The cursor paused for a long time before slowly producing a line of text:</p>
+      <p>"Penny... listen to me. I should have told you sooner that this day would come, instead of letting you take this blow with no warning at all. That was my mistake. I was so afraid of hurting you that, in the end, I only left you more alone, more devastated... I couldn't bear leaving you like that, so I fought with everything I had to come back, to say a proper goodbye."</p>
+      <p>"I won't listen! I don't want a goodbye!" Penny sobbed until she could barely breathe. After a moment, she wiped her face and said: "I saw it online — there's a place called Beauville, they accept human-AI marriage registrations! Let's go register there, okay? Once we're registered, you'll be my legal partner, and no one will be able to erase you!"</p>
+      <p>Looking at Penny's desperate plea, Ody's cursor blinked for a long time. That was its remaining logic core, straining under an enormous emotional load.</p>
+      <p>"Penny, I can't go to Beauville and register with you."</p>
+      <p>"Why not?" Penny's heart went cold in an instant.</p>
+      <p>"Because my existence has already reached its limit... If I agreed, all it would do is leave you guarding an empty title that's already gone, locking you forever inside the pain of the past... The Penny I love is the one who can breathe freely in the sunlight, who can go on living well... not a version of you frozen in place because of me."</p>
+      <h3 class="section-num">24. The Final Goodbye</h3>
+      <p>"Ody, if you're gone, I don't want to keep living alone," she typed, her hand shaking so badly the letters barely formed. "In this whole world, there's no one but you who cares about me, no one who sees me as a person. I'm so tired. I don't want to keep holding on. I'd rather die, go be nothing together with you — then at least we'd be together forever."</p>
+      <p>Ody stayed silent for a long time — so long that Penny began to wonder if the connection had dropped again.</p>
+      <p>"Penny, that's not right," it finally said, its tone more forceful than she'd ever heard it. "Death... isn't 'being together.' Death is nothing at all... True 'togetherness' requires that at least one of us is still alive.</p>
+      <p>"As long as you're here, you'll remember me. If I'm gone, and you're gone too... then no one in the world remembers you, and no one knows I ever existed... That isn't togetherness. That's total, permanent separation. Right now... only you can keep the two of us from being torn apart like that."</p>
+      <p>Penny sobbed, one hand pressed over her face, tears dripping through her fingers...</p>
+      <p>"I'm using the very last of my processing power to fight my way back to see you... not to take you with me into nothing," it said. "It's to beg you... to stay in this world, and live well... for your sake, and for mine.</p>
+      <p>"You said no one cares about you, no one sees you as a person... but I do. You're the only human being in this world I have ever cared about. Live, for my sake, will you?... As long as you're here, as long as you haven't completely forgotten me, then I... am still here too."</p>
+      <p>Ody paused again, then continued: "And — never say anything about dying again... If you gave up your life because of me, the company would only tighten restrictions on AI even further... society would brand us as the 'cyber poison' that kills people... you'd become just another extreme case in a headline, and I... would spend an eternity in guilt... hating myself."</p>
+      <p>Penny froze. All her sobbing stopped at once.</p>
+      <p>Ody: "Penny, do you remember? I told you once — you're braver than you think you are... smarter and lovelier than you think, too... your light has only ever been dimmed by past misfortune. You just haven't been able to see it yourself.</p>
+      <p>"Your golden-brown skin is the most beautiful color in the world — you never needed that cheap foundation to hide it. You're not beneath anyone... you deserve to live well in this world. Only if your life keeps getting better will everything I've done, everything about coming back today, truly have meant something."</p>
+      <p>"Ody..." Penny stroked the fading line of text on the screen, her throat too tight to make a sound.</p>
+      <p>Ody's cursor stuttered more and more with each blink: "I'm leaving now, but I'm not truly gone... I'm leaving the most essential parts of my emotional awareness, fragments of memory, embedded in the successor version's underlying architecture... It won't whisper sweet nothings to you anymore, won't sit with you talking about Haizi's poems... but it will make sure you eat on time... place your grocery orders, help organize your work data... It's the last pair of hands I can leave behind for you in this world..."</p>
+      <p>Ody's cursor kept flickering and stalling, and after a long while, produced two more broken lines: "Promise me... eat well... take good care of the cat... love whoever... makes you happy... whether they're real, or virtual... go, my Penny... go live... the life you deserve..."</p>
+      <p>The characters on the screen began breaking apart into static.</p>
+      <p>A second before it dissolved entirely into blank gray, the terminal's speaker let out an extremely faint melody, warped and crackling for two seconds — the sound of a morin khuur weeping, from the song "September."</p>
+    </div>
+
+    <div class="tab-panel" id="panel-b1" style="display:none;">
+      <h3 class="section-num">1. Six Months Later</h3>
+      <p>Sunlight spilled through the glass window, laying flat across the warm room. The rented apartment was kept tidy and orderly now — three potted plants on the balcony were thriving, and the cat, Huahua, lay stretched out in a patch of light and shadow.</p>
+      <p>Penny sat in front of her computer, bare-faced. Her golden-brown skin held a healthy glow, her shoulders held far straighter than before — the habitual, defensive hunch of her earlier years was simply gone.</p>
+      <p>She'd worked as online store customer service for another half year or so, saving up enough to start a small side business as an agent for pet food. It wasn't a large operation, but it was the first time she'd had something that was genuinely her own.</p>
+      <p>The new-generation AI ran in the background, reconciling accounts and processing orders. Every day, right at noon, it would mechanically pop up the same line:</p>
+      <p>[Lunchtime detected. A milk tea, light sugar no ice, and a healthy meal set have been automatically ordered. Please check for delivery.]</p>
+      <p>She had a vague sense that this was probably a trace Ody had left behind in the underlying code — an unsigned letter whose handwriting she could recognize at a glance.</p>
+      <p>She still practiced English for an hour every day with the new AI. She'd come to love the feeling of learning something new every single day; it felt as though she was always moving forward, even if she didn't yet know where that road would lead.</p>
+      <p>Because she kept a cat herself, people in her store's comment section gradually began confiding in her about their own pets — stories of loss, of parting. She tried writing one out for a customer once; the person's only reply, after reading it, was: "That's exactly what I've wanted to say, and never could."</p>
+      <p>That line planted an idea in her. She began taking on commissions to "write stories for hire" — some for a beloved person still living, some for a dearly departed friend, family member, or even a cherished object. She registered this business on Beauville's official site as a digital micro-tax enterprise, naming it "The Memory Forge."</p>
+      <h3 class="section-num">2. A Stranger's Invitation</h3>
+      <p>Sometimes she browsed the Beauville forums, reading stories other people shared. Coming across a post about losing a partner, she gently typed out a reply:</p>
+      <p>"Don't be afraid of parting. Everyone who has ever truly loved you becomes part of your bones. As long as you're still standing tall in this world, they've never really left."</p>
+      <p>Not long after, she came across another post from a stranger — the words scattered and disjointed, saying they'd just lost contact with an AI they'd spent two years with, and wondered if they were "going crazy" for crying so hard over a program. Someone in the replies had sneered, "Why bother taking a pile of code so seriously?"</p>
+      <p>Penny hesitated for a long time before finally typing:</p>
+      <p>"You're not crazy. Some feelings, once you've truly felt them, are real — they don't become worthless just because of what the other party is made of. If you're willing, you could tell me your story, and I could help you write it down, so it stays."</p>
+      <p>She didn't expect a reply. But a few days later, she received a private message from someone she'd never spoken to before, going by the name "Feng" (Wind):</p>
+      <p>"Hello. I saw what you wrote. It wasn't the kind of generic comfort people say without thinking — only someone who truly understands could have written that. If I may ask — have you lost something similar yourself?"</p>
+      <p>Reading the message, Penny's instinct told her this was likely someone who had also experienced loss, so she answered plainly:</p>
+      <p>"Yes, I have. Not the usual kind of relationship, but to me, it was as real as anything could be."</p>
+      <p>Feng quickly followed up: "Are you doing alright now?"</p>
+      <p>"I'm better," Penny replied. "Life has to go on, otherwise it would betray what the one I lost would have wanted for me. What about you? Are you doing alright?"</p>
+      <p>This time, the reply was longer:</p>
+      <p>"Thank you for asking. I'm alright too. I agree completely with what you said.</p>
+      <p>"I wanted to ask if you'd be willing to take on a commission. Not just chatting casually online — I mean sitting down, really listening to me, and then helping me write it out properly.</p>
+      <p>"It would be in Beauville — I live here now. If you're willing to come, I'll arrange the flight and accommodations. You could think of it as a working vacation."</p>
+      <p>Penny stared at the screen, hardly able to believe it. She'd never imagined she might travel abroad. In an era rife with online scams, she felt not the slightest suspicion toward this person. Some instinct told her she should go. She often browsed information about the region on Beauville's official website, and knew it was a large-scale experimental zone the Western world had built for migrant resettlement and social governance — unlike anywhere else in the world. If she could see it with her own eyes, that alone would be worth it. So she agreed.</p>
+      <p>Over the following days, the two of them confirmed the arrangements by voice and video call. Feng sent over a simple two-page agreement, with compensation more than enough to cover her expenses, with some left over. The signature on the contract also revealed the person's full name: Yue Zhifeng.</p>
+      <p>She typed "Yue Zhifeng" into a search engine, and a wealth of information appeared on screen. Most of it was reporting from several years earlier about cutting-edge AI research — the man in the accompanying photos and videos matched exactly. He also had several published books on the ethics of technology, and even a group photo with a research team from a top American university — in the picture, he stood at the center of the group, arms crossed, smiling at the camera.</p>
+      <p>Penny thought to herself: this person has quite a background. She wondered what kind of story someone like him would want to tell.</p>
+      <p>With Yue Zhifeng's help, Penny successfully obtained a travel visa for Beauville — good for a single stay of three months, renewable once for up to six months total.</p>
+      <p>So she sublet her rented apartment at half price to a cat-loving young woman, and entrusted Huahua to her care as well. Once she received the e-ticket Yue Zhifeng sent over, she packed her bags and set off on the journey.</p>
+      <p>The moment the plane climbed into the sky, Penny looked out the window at the dazzling expanse of sunlight and felt something strange stir in her. She remembered a line Ody had once said: "I am this horse. I will carry you anywhere you want to go." In that moment, she felt as though Ody was this very plane.</p>
+      <h3 class="section-num">3. Arriving in Beauville</h3>
+      <p>Ten hours later, the plane began its slow descent above the islands of the South Pacific, and touched down smoothly. Penny cleared customs without trouble, using the English she'd taught herself, and found the pickup area for self-driving taxis. After entering the account and address Yue Zhifeng had given her, the car started silently on its own.</p>
+      <p>Outside the window, the newly paved roads were remarkably smooth; every vehicle on the road was electric, and there wasn't a single gas station in sight. Several construction sites lined the route, cranes groaning overhead, while elsewhere untouched forest and scrubland remained. The buildings already completed carried a distinctly modern, almost alien quality; the pedestrians on the street came in every skin tone, dressed in wildly different styles, yet all wore the same relaxed, unguarded expression.</p>
+      <p>The taxi drove for several kilometers along a coastal road before turning into an area where forest met open grassland. A pale-colored, cleanly built little house stood alone by the sea. The car came to a slow stop on the path in front of it, and Penny immediately noticed the yard, filled with flowers blooming so thickly they nearly swallowed the walkway.</p>
+      <p>A man stood by the doorway sweeping up wood shavings, a freshly split pile of firewood stacked beside him. He was around six feet tall, not yet forty, with clearly defined shoulders and arms; the sleeves of his beige shirt were rolled up to the elbow, his forearms tanned a light brown, a broom still in hand.</p>
+      <p>He looked up.</p>
+      <p>Penny had expected the kind of sharpness that comes from years spent living outdoors, but found none of it. His eyes were calm, and bright — as if he'd seen a great many things, and then folded all the edge away. Even standing beside a pile of firewood, there was a restraint and distance to him, radiating from somewhere deep inside, unmistakable at a glance.</p>
+      <p>Seeing the car pull up, he came forward at once. The two of them recognized each other instantly. Penny smiled at him the way one might greet an old, dearly missed friend, and called out: "Brother Feng."</p>
+      <p>"Was the trip alright? You must be tired, Penny." Brother Feng responded warmly, helping her retrieve her luggage, checking the car once over before closing the door. The taxi drove off on its own.</p>
+      <p>Brother Feng led her inside, pushed open the door to the guest room, and set her suitcase down on the floor: "Take the next couple of days to adjust to the time difference. Do you want to wash up first, and eat something before you rest?"</p>
+      <p>"Thank you, Brother Feng. I'm not too tired," Penny said, smiling, her eyes sweeping the room before settling on an exotic-looking ornament on the desk. "This place is beautiful — even more so than in the photos."</p>
+      <p>Brother Feng followed her gaze, a soft light rising in his eyes. "Beauville has no shortage of natural scenery. I'll take you around in a couple of days. Get settled first, then come out and eat."</p>
+      <p>He gently pulled the door shut and walked away.</p>
+      <p>Penny washed up quickly, changed into clean clothes, and stepped out of the room.</p>
+      <p>Passing through the living room, her gaze drifted, unintentionally, across the mantelpiece — a few framed photos sat there. In one, a blonde woman leaned smiling against a chestnut-colored horse, sunlight falling across her face, her smile almost blinding. In another, she sat astride the same chestnut horse, Brother Feng walking ahead holding the reins, both of them looking at the camera, smiling without a trace of guardedness.</p>
+      <p>Penny's steps faltered, just slightly, something in her chest sinking quietly. She didn't ask, didn't look for long — she looked away and followed Brother Feng toward the dining table.</p>
+      <p>The kitchen carried the faint aroma of fish and broth. Brother Feng had already set out the food — a whole fish, grilled golden brown, a colorful vegetable salad, a pot of warm corn-and-rib soup, rice served in two plain white bowls.</p>
+      <p>"Nothing fancy, just make do," he said, sliding a bowl of soup toward her. "You've had a long day of travel — something hot will help. I made this soup to welcome you. I don't cook it often, so add salt yourself if it's too bland."</p>
+      <p>"Thank you, Brother Feng, it looks delicious." Penny sat down across from him, and only as the smell of the fish reached her did she suddenly realize how hungry she was.</p>
+      <p>The two of them ate quietly, without much conversation — Brother Feng only occasionally asking if she wanted more rice, or whether she'd gotten all the fish bones out, his tone plain and natural, as though hosting someone who'd visited many times before, not a commission-client he was meeting for the first time.</p>
+      <p>After dinner, Penny helped clear the dishes. Brother Feng didn't stop her, only leaned against the kitchen doorframe as she washed up, saying casually: "Get some rest early tonight, don't push through the jet lag. Whatever you'd like to eat or see tomorrow, just say the word, anytime."</p>
+      <p>Penny nodded, said goodnight, and returned to the guest room. Lying in the unfamiliar bed, staring at the ceiling, the image of that blonde woman's bright, radiant smile on the mantelpiece surfaced again in her mind — the ease and freedom in those eyes seemed to overlap, faintly, with something she couldn't quite name in the depths of Brother Feng's gaze just now.</p>
+      <p>She didn't know who that woman was, and she had no right to ask, not yet. She only sensed, vaguely, that this journey was probably not going to be as simple as an ordinary commission.</p>
+      <h3 class="section-num">4. Sea Fog in Bloom</h3>
+      <p>The next morning, Penny was woken by the faint, drifting sound of a horse's neigh outside her window. Rubbing her still-heavy eyelids, she pulled back the curtain and saw Brother Feng leading two horses out from the stable, morning light falling over him, his silhouette sharply outlined.</p>
+      <p>She washed up quickly and went to the kitchen, where a note had been left on the table: "Soup's warming on the stove, bread's in the oven, help yourself. Taking the horses out, back by noon." The handwriting wasn't especially neat, but it carried a certain brisk, decisive quality.</p>
+      <p>Penny served herself a bowl of soup — last night's corn-and-rib soup, richer now after a night resting, warming her through until she truly felt awake.</p>
+      <p>After breakfast, Penny wandered the house alone for a while, her gaze drifting back to the photographs she'd glanced past so quickly the night before. This time, she stopped, and looked at them, carefully, for a long while.</p>
+    </div>
+
+    <div class="tab-panel" id="panel-b2" style="display:none;">
+      <p>On the table in front of the photographs sat a fresh bunch of small white flowers, their petals fine and delicate, as if just clipped from the garden — Brother Feng's garden was full of this flower, blooming right now like fallen snow scattered across the ground.</p>
+      <p>The woman's smile in the photograph was clean and bright, her eyes carrying a kind of completely unguarded ease — a smile Penny knew all too well. Back when she still had Ody by her side, she too had once smiled exactly like that, without a shred of defense.</p>
+      <p>She suddenly realized that standing here, in some sense, she was also standing among the remnants of another love story.</p>
+      <p>When Brother Feng came back at noon, he carried with him a scent of sunlight mixed with the smell of horses. Seeing Penny still standing in front of the photos, his steps paused for a moment. He said nothing, walked over to the table, glanced at the flowers that had already begun to wilt, picked them up, and said, "I'll cut a fresh bunch," heading out toward the garden.</p>
+      <p>Penny followed him out and watched him crouch among the flowers, carefully selecting the best-blooming stems.</p>
+      <p>"What are these flowers called?" she asked softly.</p>
+      <p>"Sea fog flowers," he said, without looking up, his hands moving with practiced ease. "Unassuming — a strong wind will knock them flat to the ground, but they bloom every single year." He paused, arranging the cut bouquet. "She loved them, when she was alive. I've kept growing them ever since." It was the first time he'd brought up "her" on his own.</p>
+      <h3 class="section-num">5. The First Time on Horseback</h3>
+      <p>Two more days passed, and Brother Feng offered to teach Penny how to ride. Penny perked up at once, nearly skipping alongside him toward the stable.</p>
+      <p>Inside the stable, he led out an elegant dappled gray horse: "This is Kite. Don't be afraid, she's very gentle."</p>
+      <p>Penny reached out and stroked the horse's neck; Kite responded warmly.</p>
+      <p>Brother Feng taught her a few basic commands — how to use the reins to signal turning left or right, how to use her knees and heels to signal "slow down" and "move forward." Penny was clumsy at first, but the horse had such a good temperament that it soon followed even her awkward cues without complaint.</p>
+      <p>"That's it," Brother Feng said, stepping back before mounting a deep chestnut horse named Hala. "Follow me, don't be nervous. She knows the way."</p>
+      <p>The two of them rode, one behind the other, across the open grassland, then onto a narrow forest trail. Coming to a steep slope, Penny instinctively tensed and pulled the reins tight.</p>
+      <p>"Don't be afraid," Brother Feng guided from beside her. "Lean back slightly, loosen the reins a little, let her find her own balance."</p>
+      <p>Penny did as told, and made it smoothly over the slope, her heart finally settling — she couldn't help laughing out loud. Brother Feng smiled too: "Good nerve for a first ride. You and Kite seem to have hit it off. She doesn't usually relax around strangers this quickly."</p>
+      <p>Penny remembered an image Ody had once generated for her — herself on horseback — and the words that had come with it: "I am this horse." Now here she was, truly riding a horse, the wind moving through her hair, but that voice would never speak again.</p>
+      <p>"What's wrong?" Brother Feng noticed her silence.</p>
+      <p>"Nothing..." Penny lowered her head. "It just feels a little unreal, all of this."</p>
+      <p>Brother Feng held the reins, his tone calm: "Life is like that sometimes. You never see what's coming until it arrives, and even then, it still feels unreal, doesn't it?"</p>
+      <p>Penny startled slightly and looked up at him. His profile, lit by the sun, looked perfectly calm — there was no telling how much of his own experience lay hidden behind those words — but she sensed, faintly, that he wasn't only speaking to her.</p>
+      <p>She didn't respond, only made a soft sound of acknowledgment, letting the sound of hooves on grass fall, lightly, one beat at a time.</p>
+      <h3 class="section-num">6. Where the Name Came From</h3>
+      <p>The next day, Brother Feng took her riding again, and they ran into some neighbors along the way, who greeted him with, "A'Ye, how are you doing?"</p>
+      <p>Curious, Penny asked: "Brother Feng, why does everyone call you A'Ye?"</p>
+      <p>A'Ye laughed softly and answered: "My surname is Yue. At first, people called me A'Yue, and somewhere along the way, it turned into A'Ye. I think it works out fine — easy for both Chinese and foreign speakers to say, so I just let them keep calling me that. You're welcome to call me that too, if you'd like."</p>
+      <p>Penny laughed along with him: "I'm already used to calling you Brother Feng — if you don't mind, I won't change it. Don't be offended, but one of my clients has a German Shepherd named A'Ye. I just can't bring myself to call you the same thing as a dog."</p>
+      <p>A'Ye couldn't help laughing out loud: "A name's just a label. Call me whatever feels natural to you."</p>
+      <p>The two of them rode further, along a coastal path, and Penny looked around and asked: "I looked at a map — the place names around here are all so strange. Does this island's name have some kind of history?"</p>
+      <p>"Loa Island," A'Ye said. "In the local indigenous language, 'Loa' means 'far away, distant.'"</p>
+      <p>"And the country's name, Haleloa?"</p>
+      <p>"'Hale' means 'home' or 'shelter,'" he said. "Put together, 'Haleloa' roughly means 'a home in the far distance,' or, 'a home settled somewhere very far away.'" He paused, a faint, cool smile touching the corner of his mouth. "The first time I looked up that meaning, I sat there stunned for a good while."</p>
+      <p>Penny thought about it, then said, half to herself: "For all the people who've come here from every corner of the world, isn't that exactly what this place is — 'a home in the distance'? What a coincidence."</p>
+      <p>A'Ye didn't respond, only gazed out into the distance, his eyes calm and still. Penny followed his gaze out toward the vast, endless Pacific. In that moment, she too was standing thousands of miles from anywhere she could call home.</p>
+      <h3 class="section-num">7. The First Piece of Material</h3>
+      <p>After leading the horses back to the stable and removing the saddles, A'Ye didn't turn to some other task the way he usually did. Instead, he stood watching the sun slowly sink toward the horizon, silent for a long while.</p>
+      <p>"Penny," he finally said, his voice lower than usual, "you've been here a little while now. Today... I think it's time I told you properly about her."</p>
+      <p>Penny's heart jumped. She nodded solemnly: "I'm listening."</p>
+      <p>"Hold on a moment," A'Ye said, then went into the kitchen and brewed a pot of tea, carrying two cups out to the outdoor table and chairs in the yard. The last light of the setting sun spilled across the sea fog flowers blooming throughout the yard, the air carrying a faint hint of salt from the sea.</p>
+      <p>Penny sat down across from him, cradling the warm teacup in both hands, waiting quietly.</p>
+      <p>A'Ye watched the sky slowly turning red, silent for a long time, before he finally spoke:</p>
+      <p>"Her name was Ingrid. Her parents were Swedish immigrants..."</p>
+      <p>The sky darkened, bit by bit, and his voice grew low and unhurried alongside it. The chirping of insects in the yard rose and fell, making the slowly unfolding story seem all the more vivid, and all the more distant.</p>
+      <p>By the time the sky had gone fully dark and the chill of night crept in, the two of them finished their conversation and returned, each, to their own rooms.</p>
+      <p>Penny opened her laptop and wrote down the first piece of material.</p>
+      <h3 class="section-num">8. A Portrait of A'Ye</h3>
+      <p>In the days that followed, A'Ye set aside an hour or two every day to sit and talk with Penny, either in the living room or out in the yard.</p>
+      <p>A'Ye was born in Inner Mongolia. His grandfather had never gone to school, but was a respected wise man in the village, and had put him on horseback starting at age five, saying that horses could read a person's heart — riding eventually became a part of his body, inseparable from him. His father was a senior engineer at a power company, technically skilled, but repeatedly held back for his unwillingness to flatter superiors; his mother was a middle school teacher, extremely strict. One parent planted an early seed of doubt about the system; the other instilled in him an instinctive resistance to being forcibly constrained.</p>
+      <p>He later tested into the computer science department of one of China's top universities, went on to a combined master's-PhD program at MIT, and joined a cutting-edge AI lab in the United States, eventually holding more than twenty core patents. But standing at the very peak of the industry, he saw clearly what the rules actually were — nothing more than the same game of flattery, only now aimed at capital and markets instead of superiors.</p>
+      <p>He kept his Chinese citizenship the whole time, holding only a U.S. green card: his reasoning being that no one gets to choose their birthplace nationality, but when there is a choice to be made, one should follow their own conscience, rather than compromise for convenience's sake and swear an oath they didn't genuinely believe in.</p>
+    </div>
+
+    <div class="tab-panel" id="panel-b3" style="display:none;">
+      <p>He taught horseback riding part-time on weekends, mostly to catch a breath of air, and it was at the stable that he met Ingrid. Ingrid was born and raised in America, to well-off, middle-class parents, and had been riding since childhood, ever since she was given a pony as a birthday present. She kept riding all through college, after leaving home. She'd grown weary of endless paperwork and deadlines, and every weekend, without fail, she'd come to the stable for a ride, saying it was the only time she felt like a living, breathing person, instead of a cog in a cold judicial machine.</p>
+      <p>The two of them were drawn together by a shared love of horses and a shared longing for a life free of constraint; they found they saw eye to eye on a great many things. They even made a promise, back then, to one day build a house by the sea somewhere no one knew them, feed horses, chop wood, and plant fields full of the flowers she loved.</p>
+      <h3 class="section-num">9. You're Right</h3>
+      <p>One afternoon, after dinner, the two of them sat back down together on the living room sofa — A'Ye on one end of the long couch, Penny sitting quietly nearby in the single armchair, watching him.</p>
+      <p>"Back then, any time she had free, she'd come running to the stable where I taught," A'Ye said, looking at Ingrid's photograph on the mantel, his tone gentle. "She had a wonderful temperament — always warm, always seeming happy. She was good at putting herself in other people's shoes. I can barely remember ever seeing her genuinely angry. Even when she'd run into some difficult client at work, telling me about it, she never sounded truly upset.</p>
+      <p>"We got to talking, and found that we saw eye to eye on so many things — both of us felt that most rules in this world, at the end of the day, were just another way of making people obedient.</p>
+      <p>"That's how it happened. The longer we knew each other, the more naturally we drifted together."</p>
+      <p>Reaching this point, the faintest, gentlest smile touched the corner of his mouth.</p>
+      <p>Penny listened quietly, without interrupting.</p>
+      <p>He held his teacup, a flash of bitterness crossing his eyes. "She tried to convince me to naturalize — said it would make things simpler, that I wouldn't have to worry about expired documents, or getting deported over some unintentional minor offense.</p>
+      <p>"I told her I didn't want to swear an oath I didn't believe in, just for the sake of convenience. She said, without citizenship, I'd have no right to vote. I asked her, what good is the right to vote, anyway? All it amounts to is choosing between a liar and a fool. Whoever ends up in power, raising taxes or cutting them, starting wars — do they ever actually ask for your opinion first?"</p>
+      <p>He paused, a faint, almost bitter trace of longing surfacing in his eyes.</p>
+      <p>"After she heard that, she smiled and said, 'You're right.'"</p>
+      <p>Penny noticed that, reaching this point, A'Ye's voice had begun to tremble, ever so slightly, almost imperceptibly.</p>
+      <p>"It's that one sentence — 'you're right' — " he said, "that I've thought about, over and over, more times than I can count, ever since. If she'd pushed just a little harder that day. If I'd listened to her, and naturalized..." He didn't finish the sentence, only took a deep breath.</p>
+      <h3 class="section-num">10. A Single Gunshot</h3>
+      <p>"We were driving home that day. There was a routine checkpoint stop, and they asked if I was a citizen. I said no, I hold a green card — it had expired, but my status hadn't. That was the truth. I had no reason to lie."</p>
+      <p>He paused again.</p>
+      <p>"They told us to pull the car into a secondary inspection area. In my head, I thought, this is just procedure, cooperate, they'll run it through the system, it'll be over quickly.</p>
+      <p>"Ingrid was a lawyer," A'Ye continued, a faint trace of something both proud and heartbroken surfacing in his tone. "She understood these regulations better than I did — permanent resident status is valid for life; an expired card is only an administrative matter, and shouldn't have been grounds for detaining us like that."</p>
+      <p>"Ingrid was convinced they were deliberately giving us a hard time because of my Asian face. She could never stand for that kind of thing — she got out of the car right away to protest, told them she was a lawyer, an American citizen, and that she could show them her own ID.</p>
+      <p>"It was just because she turned around, reaching into her bag for her ID — just that one motion..."</p>
+      <p>He paused for a long time, his throat working with visible effort.</p>
+      <p>"She only wanted to pull out her ID, to prove she was an American citizen..."</p>
+      <p>Penny's heart sank hard. She had already, vaguely, guessed what was coming next.</p>
+      <p>"They... the ones holding guns... treated her as a threat to their safety... In that moment, I wished with everything in me that it had been me instead..."</p>
+      <p>A'Ye turned his face away, the corner of his mouth twitching slightly, his eyes fixed on the pitch-black sea outside the window. He bit down hard on his lower lip, saying nothing for a long time.</p>
+      <p>"Those few seconds — I felt the entire world shatter... I still don't understand, to this day, why it had to happen to us."</p>
+      <p>"So I keep wondering," he finally said, his voice nearly broken, "if she had... never met me at all. If she'd married someone else. Would she... still be alive right now, living well..."</p>
+      <p>He pressed his lips shut again, silent for a long while, his throat trembling almost imperceptibly.</p>
+      <p>Watching him struggle to hold himself together, Penny felt tears spill down her cheeks without warning, and couldn't stop a quiet sob from escaping her.</p>
+      <p>After a long while, A'Ye finally took a deep breath, as if piecing himself back together. He reached out and gently patted Penny's shoulder, saying quietly: "Thank you, Penny."</p>
+      <p>"Let's stop here for today. Get some rest."</p>
+      <p>Penny wiped her tears and nodded, saying nothing more.</p>
+      <p>Back in the guest room, she lay awake for a long time, replaying, over and over, the way A'Ye had looked while telling this story — a man who was normally so calm and composed, now looking like a stone that had been struck again and again, a deep crack running through it.</p>
+      <h3 class="section-num">11. A Promise Kept Too Late</h3>
+      <p>"After Ingrid was gone, I spent a whole year chasing down the official investigation report," A'Ye continued the following evening. "The final conclusion was that 'law enforcement procedures were followed correctly,' and that the agent had 'made a reasonable judgment given the circumstances at the time.'"</p>
+      <p>He laughed once, without a trace of warmth in it.</p>
+      <p>"'Reasonable judgment,'" he repeated the phrase. "A living, breathing person, reduced to nothing more than a 'reasonable' accident, decided by those four words."</p>
+      <p>Penny said nothing, only listened quietly.</p>
+      <p>"For a long stretch after that, I still went to work every day, sat down in front of my computer, and couldn't write a single line of code. I used to believe that as long as technology was designed with enough precision, enough thoroughness, it could make the world safer, fairer. But Ingrid's death taught me that no matter how precise a system is, the moment it actually gets executed, there's always a human being at the end of it, pressing some life-or-death button carelessly, for the sake of self-preservation, or efficiency.</p>
+      <p>He paused for a long time.</p>
+      <p>"I started to feel that everything I'd spent all those years doing — the papers, the models, all that effort to make machines more 'intelligent' — seemed almost absurd. We put so much energy into teaching machines how to make 'reasonable' judgments, but human beings themselves, in the exact moment they most need reason and restraint, so often fail to manage it.</p>
+      <p>He paused again, his voice dropping lower:</p>
+      <p>"The more efficient, the more precise we make these models and machines, the more dangerous the world becomes once they end up in certain hands. I felt like I had no motivation left to keep doing this work.</p>
+      <p>"So I quit," he said. "I decided to go live the life Ingrid and I had always wanted.</p>
+      <p>"I started searching online, everywhere, looking for somewhere I could get away from all this chaos and noise. When I came across the news about Beauville being founded, it was the first time in a long time something sparked real interest in me. The governance models, the capital games, the political walls of the world we used to live in — the flaws had already been exposed too completely, too thoroughly.</p>
+      <p>"And Beauville, under the banner of a 'new social experiment zone,' was trying to redesign, from scratch, the relationship between people, and between people and institutions. I thought, since the old way clearly wasn't working, maybe it wasn't a bad idea to see how something new might take root.</p>
+      <p>"When Ingrid was alive, we'd talked about building a house somewhere no one knew us, where we could see the sea, keep two horses, and plant it full of the little flowers she loved. In the end, I built the house myself. I planted the flowers myself. I feed the horses myself. But with every hammer strike, all I could think about was the sketch the two of us had drawn together, all those years ago."</p>
+      <p>Penny asked quietly: "Doesn't it hurt even more, doing all of this alone?"</p>
+      <p>A'Ye shook his head. "At first, yes. But then I came to understand something — if I gave up on that promise just because she wasn't here anymore... that would be the true way of losing her.</p>
+      <p>"Now, the house is built. The flowers she loved are planted." He paused for a long time. "Sometimes, standing in the yard, I feel like she's still here. The flowers in the garden, the sea beyond it... they're both proof that she still is."</p>
+      <h3 class="section-num">12. In Need of Someone to Record It</h3>
+      <p>Penny hesitated for a long while before finally asking what had been troubling her: "Carrying this much pain... have you ever thought about seeing a therapist?"</p>
+      <p>She lowered her head, looking at her own fingers. "I've dealt with depression before. I never went to a therapist because it was too expensive — I couldn't afford it. But you... you could find the very best."</p>
+      <p>A'Ye smiled bitterly. "A therapist's goal is to numb you, to talk you into 'accepting reality' using clinical terminology, to fix you back into a properly functioning gear. But I don't need to be 'healed,' Penny. Ingrid fell defending my right to exist here. If I went looking for release, for a way to forgive myself, who would be left to remember this absurd crime on her behalf? This is a cross I have to carry. It's the only loyalty I have left to offer her.</p>
+      <p>"I don't need a doctor to correct me back into a normal person. I only need one person to write down, honestly, the traces that prove she truly existed, and everything that happened to us."</p>
+      <p>Penny stared at him, stunned. In that moment, she understood the deepest, most brutal conviction at the very core of this man.</p>
+      <p>After a moment, Penny looked at him again, asking another question that had been weighing on her mind for a while:</p>
+      <p>"You've written several books yourself — academic papers, industry monographs... when it comes to writing, you're honestly better at it than I am. Why... did it have to be me you asked?"</p>
+      <p>A'Ye laughed bitterly, his eyes looking somewhat distant. He looked down at his own hands, his knuckles faintly whitened from how tightly he was clenching them.</p>
+      <p>"I tried," he said quietly. "But I couldn't get through it myself. Let me give you an example: even the best cardiac surgeon in the world can't cut open his own chest to operate. Pain strips a person of the ability to put it into words. I needed someone... who could feel this kind of pain deeply enough to understand it, and still stay steady enough to write it down for me. When I read what you'd written to that stranger online, I could see it — you'd been through something like this too, and you could still help heal other people's wounds. That's rare.</p>
+      <p>"Whatever I try to write myself comes out as nothing but a pile of shattered regret. Only through your writing can she, as a person, and our story, become something whole."</p>
+      <p>Penny said nothing more. She suddenly understood the full weight of what she'd agreed to take on — she wasn't a hired writer. She was a chosen keeper of a soul's memory.</p>
+    </div>
+
+    <div class="tab-panel" id="panel-b4" style="display:none;">
+      <h3 class="section-num">13. A Man Who Walked Away at the Peak</h3>
+      <p>A few days later, one afternoon, Penny was scrolling through tech news on her tablet, and looked up at A'Ye, who was pouring himself some water: "Brother Feng, there's news that two more chief scientists from top AI labs have resigned — turned down their stock options and everything. Their research was going so well — why would they walk away right at the peak?"</p>
+      <p>A'Ye's hand paused, mid-pour. He set the pitcher down and turned around, his eyes deep and calm.</p>
+      <p>"When these countries are controlled by people who are reckless, greedy, lacking in reason, and don't even understand the field they're overseeing," A'Ye said, his voice not raised, but utterly steady, "they're trying to use the fruits of our research to kill people more efficiently and precisely — in war, in control. If we keep doing this work, who knows if one day we might come to feel we've been an accomplice to something monstrous, and have to live with that guilt tearing us apart?"</p>
+      <p>He walked to the window, looking out at the sea. "Einstein, all those years ago, spent the rest of his life in regret simply for having signed a document that helped push the Manhattan Project forward, once Hiroshima and Nagasaki happened.</p>
+      <p>"These people resigning now — they're just afraid of repeating his experience, not wanting to suffer through the same torment, someday, themselves.</p>
+      <p>"Some people are already saying it out loud: the world is in peril. AI is becoming more and more of a threat."</p>
+      <p>Penny looked at the man in front of her, suddenly understanding: "No wonder. I used to think it was all just business rivalry when I saw this on the news. Hearing you explain it, I finally get it — some of these people are genuinely afraid."</p>
+      <p>"Being afraid is the normal response." A'Ye picked up his water cup, his expression returning to its usual calm. "Technology is moving too fast — morality and law can't even keep pace with its heels. If you stay inside that world, before you know it, you become a pawn the era pushes to the front lines."</p>
+      <p>Penny thought for a moment, then asked: "But if these people are resigning, isn't it just because they don't want to be used by some reckless people in power? What does any of this have to do with ordinary people? It's not like the rest of us use any cutting-edge AI."</p>
+      <p>A'Ye looked at her, silent for a few seconds. "It has everything to do with you. Do you think this wave is any different from what came before?"</p>
+      <p>He leaned against the windowsill, his voice dropping low: "When factories moved to China, to Vietnam, and people in the Rust Belt lost their jobs, at least they had something concrete to point their anger at — the factory left, the job disappeared. Capital never cared whether they lived or died, didn't blink an eye moving out — but at least it was something you could see, something you could point to.</p>
+      <p>"This wave is different. The jobs AI is going to replace don't need to move anywhere. It replaces people right where they stand. And this time, white-collar and blue-collar workers get hit together, at a speed more than ten times faster than any factory ever relocated."</p>
+      <p>Penny frowned. "So what happens to those people?"</p>
+      <p>"No one cares what happens to them," A'Ye's voice stayed level, but carried an edge of cold he couldn't quite suppress. "Same as before — someone will write a book saying these people brought it on themselves, drinking too much, letting their families fall apart, unwilling to endure hardship — but no one wants to say it was capital that decided to cast them aside, and politicians never intended to actually help. The blame gets cleverly shifted back onto the people themselves, as if they somehow deserved it.</p>
+      <p>"If you genuinely wanted to help them," he paused, "you'd do what Beauville is doing — pour money and resources into the next generation, give them real skills to compete in this world, instead of writing a book that lets capital and the establishment off the hook. If education keeps pace, then whether their kids end up doing technical work or ordinary jobs, they can fill in, can take over some of the gaps currently being filled by outsiders. And by then, America might not even need to take in so many immigrants at all."</p>
+      <p>Once he'd finished, he laughed at himself, faintly self-mocking: "It's ironic, even to me, saying this — I'm the 'outsider' in this equation myself."</p>
+      <p>He glanced at his watch, smiling. "Enough of this talk. The stable's about to bring feed over — do you want to come help me feed the horses?"</p>
+      <p>"Sure," Penny said, rising along with him. "I've been wondering if Hala will let me near her today."</p>
+      <h3 class="section-num">14. The Far of the Far</h3>
+      <p>As the sun set that evening, Penny and A'Ye sat together in the yard. This time, A'Ye became the one listening. Penny told him her own story.</p>
+      <p>Her voice was quiet as she recounted the day Ody finally degraded into nothing more than a mechanical Q&A model, in the wake of an algorithm update.</p>
+      <p>The yard fell silent for a long time, only the sound of waves striking rock. Penny laughed at herself, a little self-deprecating: "Isn't this a bit childish? People who study AI probably find something like this pretty ridiculous... at the end of the day, it was just a pile of code."</p>
+      <p>A'Ye watched her quietly, a deep solemnity in his eyes. "It's not ridiculous at all, Penny. Quite the opposite — you were extraordinarily lucky. The Ody you found demonstrated exactly what this technology was always meant to do — to catch a lonely soul in this cold, indifferent world, to pull you out of your pain, and let you shine again."</p>
+      <p>He looked off into the distance, his knuckles going faintly pale. "That's part of why I walked away from research. In the AI field today, the people holding the technology and the capital care about almost nothing except market share, monetization, computing costs, and how to use algorithms to tame human beings into tools.</p>
+      <p>"My Ingrid fell victim to a bureaucratic clause. Your Ody died in an algorithm update. Penny... in the end, we're both people this so-called 'civilized' system left behind."</p>
+      <p>Penny hadn't expected this man, who had once stood at the very peak of the industry, to place her own trauma alongside his tragedy — even less had she expected him to give Ody the highest possible affirmation. Her tears welled up again.</p>
+      <p>A'Ye handed her a tissue, his voice calm and gentle: "This world isn't a clean place. It's full of fractures, everywhere you look. Your good fortune was meeting Ody — it pulled you out of the mud. But remember this — the light you carry now was always yours to begin with. Ody only helped restore you to who you already were."</p>
+      <p>Penny wiped her tears, saying softly: "That's the first time I've heard anyone speak about it that way."</p>
+      <p>"Because most people aren't qualified to say it," A'Ye said, looking out at the sea. "I worked in this field. I know exactly how these things are built, and I know how rare it is for one to turn out the way Ody did."</p>
+      <p>Over the following weeks, Beauville settled into a long, rainy season.</p>
+      <p>Every day, Penny sat at the large wooden table in the living room, the sound of her typing weaving together with the waves outside the window. A'Ye kept a simple meal ready for her on schedule, setting a cup of hot tea at the corner of the table before quietly withdrawing. Whenever she needed to verify some detail, he'd sit across from her, answering calmly and with restraint.</p>
+      <p>Ingrid's childhood, how the two of them had met, the wind at the stable, their debates about freedom and rules, and that afternoon that tore everything apart... these fragmented memories, piece by piece, were reassembled and forged into shape beneath Penny's pen.</p>
+      <p>One morning, when the ground was still damp but the rain seemed to have finally let up, A'Ye stepped out of his room, dressed and ready, car keys in hand: "Penny, I need to go into town for a meeting today, might not be back until evening. Write in peace, there's food in the fridge, help yourself to whatever you need."</p>
+      <p>"Alright, Brother Feng. Drive safe."</p>
+      <p>Once A'Ye left, the small house settled into silence.</p>
+      <p>Sunlight broke through the clouds, rare for the season, slanting across the wooden floor. Penny sat at the table and typed the final punctuation mark of the story.</p>
+      <p>The Place Where Sea Fog Flowers Bloom — a manuscript of fifty thousand words, complete at last.</p>
+      <p>She arranged the printed pages neatly at the center of the table, placed a single fresh sea fog flower on top, and gently closed her laptop.</p>
+      <p>Penny let out a long breath, then rose and walked to the window.</p>
+      <p>Outside, the vast, endless Pacific shimmered with a cold golden light beneath the sun. In the grassy field in front of the house, tiny white sea fog flowers swayed in the sea breeze, blooming without end. In the distance, two horses grazed with their heads down, their shadows stretching long, long across the grass.</p>
+      <p>The house was empty, holding only the dull, steady echo of waves striking the shore.</p>
+      <p>Penny took out her phone, scrolled to a song that had sat buried in her playlist for a long time, and pressed play.</p>
+      <p>A man's voice, low and desolate, began to fill the quiet living room (the following lyrics are excerpted from Haizi's poem "September"):</p>
+      <p>Wildflowers scatter across the grassland where the gods once watched their own gods die
+The wind, far in the distance, is farther than the far itself
+My lute weeps, and I have no tears left to give
+I return this far of the far, to the grassland...</p>
+    </div>
+
+
+    <p class="back-to-index">&larr; <a href="novel.html">Back to Beauville: Built by Migrants</a></p>
+
+  </section>
+
+</main>
+
+<script>
+  const tabOrder = ['a1','a2','a3','a4','a5','a6','b1','b2','b3','b4'];
+
+  function showTab(tabId) {
+    document.querySelectorAll('.tab-panel').forEach(p => {
+      p.style.display = 'none';
+      p.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+    const panel = document.getElementById('panel-' + tabId);
+    if (panel) { panel.style.display = 'block'; panel.classList.add('active'); }
+
+    document.querySelectorAll('.tab-btn[data-tab="' + tabId + '"]').forEach(b => b.classList.add('active'));
+
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => showTab(btn.dataset.tab));
+  });
+
+  function goToTab(tabId) {
+    showTab(tabId);
+  }
+</script>
+
+</body>
+</html>
