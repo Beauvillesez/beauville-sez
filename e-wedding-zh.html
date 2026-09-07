@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
 <style>
   :root {
     --navy-deep: #0F2A4A;
@@ -255,27 +257,70 @@
     max-width: 900px; margin: 0 auto; padding: 8px 40px 100px;
   }
 
-  .submit-panel {
-    background: var(--navy-deep);
+  /* ============ WEDDING FORM ============ */
+  .wedding-form-panel {
+    background: var(--white);
+    border: 1px solid var(--paper-line);
     border-radius: 4px;
     padding: 36px 34px;
-    position: relative;
-    overflow: hidden;
   }
 
-  .submit-panel::before {
-    content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%;
-    background: var(--gold-signal);
-  }
-
-  .submit-panel h3 {
+  .wedding-form-panel h3 {
     font-family: var(--font-display); font-weight: 600; font-size: 20px;
-    color: var(--sand); margin-bottom: 10px;
+    color: var(--navy-deep); margin-bottom: 10px;
   }
 
-  .submit-panel p {
-    font-size: 14px; line-height: 1.7; color: rgba(245, 240, 228, 0.78);
+  .wedding-form-panel > p {
+    font-size: 14px; line-height: 1.65; color: var(--ink-soft); margin-bottom: 24px;
   }
+
+  .field-group { margin-bottom: 20px; }
+  .field-group label {
+    display: block; font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.06em; color: var(--ink-soft); margin-bottom: 8px;
+  }
+
+  .field-group input, .field-group select {
+    width: 100%; padding: 11px 14px; border: 1px solid var(--paper-line);
+    border-radius: 4px; font-family: var(--font-body); font-size: 14.5px;
+    color: var(--ink); background: var(--white);
+  }
+
+  .field-group input:focus, .field-group select:focus { outline: none; border-color: var(--navy-mid); }
+
+  .type-toggle { display: flex; gap: 12px; }
+  .type-option {
+    flex: 1; border: 1px solid var(--paper-line); border-radius: 4px;
+    padding: 14px; cursor: pointer; text-align: center; transition: all 0.2s ease;
+  }
+  .type-option input { display: none; }
+  .type-option .type-name { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; color: var(--ink-soft); display: block; margin-bottom: 4px; }
+  .type-option .type-price { font-family: var(--font-display); font-weight: 600; font-size: 17px; color: var(--navy-deep); }
+  .type-option.selected { border-color: var(--gold-signal); background: rgba(200, 155, 60, 0.06); }
+
+  .wedding-btn {
+    width: 100%; background: var(--navy-deep); color: var(--sand);
+    font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.05em;
+    padding: 14px; border: none; border-radius: 4px; cursor: pointer;
+    transition: background 0.2s ease; margin-top: 8px;
+  }
+
+  .wedding-btn:hover { background: var(--navy-mid); }
+  .wedding-btn:disabled { opacity: 0.6; cursor: default; }
+
+  .wedding-error {
+    display: none; background: #FDEDED; border: 1px solid #E5A0A0; color: #8A2C2C;
+    padding: 14px 18px; border-radius: 4px; margin-bottom: 20px; font-size: 13.5px;
+  }
+
+  .wedding-confirm {
+    display: none; text-align: center; padding: 20px;
+  }
+  .wedding-confirm p:first-child {
+    font-family: var(--font-display); font-weight: 600; font-size: 19px;
+    color: var(--navy-deep); margin-bottom: 10px;
+  }
+  .wedding-confirm p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
 
   /* ============ RESPONSIVE ============ */
   @media (max-width: 980px) {
@@ -423,11 +468,162 @@
   </section>
 
   <section class="submit-section">
-    <div class="submit-panel">
-      <h3>尚未开放登记</h3>
-      <p>这个页面说明的是——一旦博维尔的公民账户系统正式上线，虚拟婚礼登记将如何运作。目前，这只是一个预告：先攒够 Beau Dollar，等登记处开放的那一天做好准备。</p>
+    <div class="wedding-form-panel" id="weddingFormPanel">
+      <h3>登记你们的承诺</h3>
+      <p>你需要先登录才能发起登记。你的伴侣需要在自己的账户里确认，登记才会正式生效。</p>
+
+      <div class="wedding-error" id="weddingError"></div>
+
+      <form id="weddingForm">
+        <div class="field-group">
+          <label for="myName">你的全名（希望在记录里显示的名字）</label>
+          <input type="text" id="myName" name="myName" required>
+        </div>
+
+        <div class="field-group">
+          <label for="partnerEmail">伴侣的邮箱（必须是已注册的博维尔数字居民）</label>
+          <input type="email" id="partnerEmail" name="partnerEmail" required>
+        </div>
+
+        <div class="field-group">
+          <label for="myVow">你的誓言（选填）</label>
+          <textarea id="myVow" name="myVow" rows="3" placeholder="如果你想留下几句话，可以写在这里……" style="width:100%; padding:11px 14px; border:1px solid var(--paper-line); border-radius:4px; font-family:var(--font-body); font-size:14.5px; color:var(--ink); resize:vertical;"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label for="myWitness">你的见证人（选填）</label>
+          <input type="text" id="myWitness" name="myWitness" placeholder="朋友、虚构角色——你想写谁都可以">
+        </div>
+
+        <div class="field-group">
+          <label>登记类型</label>
+          <div class="type-toggle">
+            <label class="type-option selected" id="permOption">
+              <input type="radio" name="regType" value="permanent" checked>
+              <span class="type-name">永久</span>
+              <span class="type-price">฿5,000</span>
+            </label>
+            <label class="type-option" id="freeOption">
+              <input type="radio" name="regType" value="free">
+              <span class="type-name">免费</span>
+              <span class="type-price">฿0</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="wedding-btn" id="weddingBtn">发送登记请求</button>
+      </form>
+
+      <div class="wedding-confirm" id="weddingConfirm">
+        <p>你的请求已经发送。</p>
+        <p id="weddingConfirmDetail"></p>
+      </div>
     </div>
   </section>
+
+  <script>
+    document.querySelectorAll('.type-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.type-option').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+      });
+    });
+
+    document.getElementById('weddingForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const errorBox = document.getElementById('weddingError');
+      errorBox.style.display = 'none';
+
+      const btn = document.getElementById('weddingBtn');
+      btn.disabled = true;
+      btn.textContent = '发送中…';
+
+      const myName = document.getElementById('myName').value.trim();
+      const partnerEmail = document.getElementById('partnerEmail').value.trim().toLowerCase();
+      const myVow = document.getElementById('myVow').value.trim();
+      const myWitness = document.getElementById('myWitness').value.trim();
+      const regType = document.querySelector('input[name="regType"]:checked').value;
+
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+
+        if (!session || !session.user) {
+          errorBox.textContent = '请先登录后再发起登记。';
+          errorBox.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = '发送登记请求';
+          setTimeout(() => { window.location.href = 'login-zh.html'; }, 1500);
+          return;
+        }
+
+        if (partnerEmail === session.user.email.toLowerCase()) {
+          throw new Error('不能跟自己登记。');
+        }
+
+        // 博维尔同一时间只允许一段生效中的公民承诺。
+        const { data: existingOwn } = await supabaseClient
+          .from('wedding_registrations')
+          .select('id')
+          .or('initiator_id.eq.' + session.user.id + ',partner_id.eq.' + session.user.id)
+          .eq('status', 'confirmed')
+          .maybeSingle();
+
+        if (existingOwn) {
+          throw new Error('你已经有一段生效中的公民承诺登记。博维尔同一时间只允许一段。');
+        }
+
+        const { data: partner, error: partnerError } = await supabaseClient
+          .from('residents')
+          .select('id')
+          .eq('email', partnerEmail)
+          .maybeSingle();
+
+        if (partnerError) throw partnerError;
+
+        if (!partner) {
+          throw new Error('没有找到使用该邮箱的博维尔数字居民。你的伴侣需要先注册。');
+        }
+
+        const { data: existingPartner } = await supabaseClient
+          .from('wedding_registrations')
+          .select('id')
+          .or('initiator_id.eq.' + partner.id + ',partner_id.eq.' + partner.id)
+          .eq('status', 'confirmed')
+          .maybeSingle();
+
+        if (existingPartner) {
+          throw new Error('对方已经有一段生效中的公民承诺登记。');
+        }
+
+        const { error: insertError } = await supabaseClient
+          .from('wedding_registrations')
+          .insert({
+            initiator_id: session.user.id,
+            initiator_name: myName,
+            initiator_vow: myVow || null,
+            initiator_witness: myWitness || null,
+            partner_email: partnerEmail,
+            partner_id: partner.id,
+            registration_type: regType,
+            status: 'pending'
+          });
+
+        if (insertError) throw insertError;
+
+        document.getElementById('weddingForm').style.display = 'none';
+        document.getElementById('weddingConfirmDetail').textContent =
+          '这条请求会出现在 ' + partnerEmail + ' 的账户里，等待对方确认或拒绝。';
+        document.getElementById('weddingConfirm').style.display = 'block';
+
+      } catch (err) {
+        errorBox.textContent = err.message;
+        errorBox.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = '发送登记请求';
+      }
+    });
+  </script>
 
 </main>
 
