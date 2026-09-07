@@ -311,6 +311,19 @@
     margin-top: 40px;
   }
 
+  .hero-ctas-secondary {
+    display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;
+  }
+
+  .btn-tertiary {
+    font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.04em;
+    padding: 9px 18px; border-radius: 20px; border: 1px solid var(--paper-line);
+    color: var(--ink-soft); background: var(--white); transition: all 0.2s ease;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+
+  .btn-tertiary:hover { border-color: var(--ocean-teal); color: var(--ocean-teal); }
+
   .btn {
     font-family: var(--font-body);
     font-weight: 500;
@@ -695,6 +708,11 @@
         <div class="hero-ctas">
           <a href="novel.html" class="btn btn-primary">探索博维尔 →</a>
           <a href="#ways-in" class="btn btn-secondary">加入共同体</a>
+        </div>
+
+        <div class="hero-ctas-secondary">
+          <a href="ai-odyssey-zh.html" class="btn-tertiary">外部档案 &rarr;</a>
+          <a href="e-wedding-zh.html" class="btn-tertiary">数字婚姻 &rarr;</a>
         </div>
       </div>
 
