@@ -497,10 +497,12 @@
 
   <div class="cert-overlay" id="certOverlay">
     <div class="cert-modal">
-      <div class="cert-style-picker">
-        <button class="cert-style-btn active" data-style="crown">Crown</button>
-        <button class="cert-style-btn" data-style="classic">Classic</button>
-        <button class="cert-style-btn" data-style="tropical">Tropical</button>
+      <div class="cert-style-picker" id="certStylePicker">
+        <button class="cert-style-btn active" data-style="crown" data-tier="paid">Crown</button>
+        <button class="cert-style-btn" data-style="classic" data-tier="paid">Classic</button>
+        <button class="cert-style-btn" data-style="tropical" data-tier="paid">Tropical</button>
+        <button class="cert-style-btn" data-style="free1" data-tier="free">Style A</button>
+        <button class="cert-style-btn" data-style="free2" data-tier="free">Style B</button>
       </div>
 
       <div class="certificate-visual" id="certificateVisual">
@@ -567,6 +569,36 @@
         official:  { top: '83.2%', left: '22%', width: '15%' },
         witness1:  { top: '83.2%', left: '41.6%', width: '15%' },
         witness2:  { top: '83.2%', left: '61.4%', width: '15%' }
+      }
+    },
+    free1: {
+      file: 'style-free1.jpg',
+      aspect: '1248 / 832',
+      tier: 'free',
+      fields: {
+        name1: { top: '47%', left: '28%', width: '32%' },
+        name2: { top: '47%', left: '80%', width: '30%' },
+        day:   { top: '62%', left: '27%', width: '10%' },
+        month: { top: '62%', left: '52%', width: '10%' },
+        year:  { top: '62%', left: '77%', width: '10%' },
+        official:  { top: '84.5%', left: '22%', width: '16%' },
+        witness1:  { top: '84.5%', left: '50%', width: '14%' },
+        witness2:  { top: '84.5%', left: '76%', width: '14%' }
+      }
+    },
+    free2: {
+      file: 'style-free2.jpg',
+      aspect: '1248 / 832',
+      tier: 'free',
+      fields: {
+        name1: { top: '42.5%', left: '50%', width: '55%' },
+        name2: { top: '48.5%', left: '50%', width: '55%' },
+        day:   { top: '58.5%', left: '35%', width: '10%' },
+        month: { top: '58.5%', left: '52%', width: '12%' },
+        year:  { top: '58.5%', left: '70%', width: '10%' },
+        official:  { top: '83.5%', left: '22%', width: '16%' },
+        witness1:  { top: '83.5%', left: '50%', width: '14%' },
+        witness2:  { top: '83.5%', left: '76%', width: '14%' }
       }
     }
   };
@@ -858,7 +890,16 @@
       vowsContainer.appendChild(p);
     }
 
-    applyCertStyle(currentCertStyle);
+    // Free registrations get two plain style choices; permanent registrations
+    // get the three ornate ones. No mixing between tiers.
+    const isFree = record.registration_type === 'free';
+    const visibleTier = isFree ? 'free' : 'paid';
+    document.querySelectorAll('#certStylePicker .cert-style-btn').forEach(btn => {
+      btn.style.display = (btn.dataset.tier === visibleTier) ? '' : 'none';
+    });
+    const defaultStyle = isFree ? 'free1' : 'crown';
+
+    applyCertStyle(defaultStyle);
     document.getElementById('certOverlay').classList.add('open');
   }
 
