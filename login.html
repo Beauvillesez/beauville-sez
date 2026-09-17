@@ -333,8 +333,8 @@
   }
 
   .cert-field {
-    position: absolute; transform: translate(-50%, 0);
-    padding-top: 0.1em; line-height: 1;
+    position: absolute; transform: translate(-50%, -100%);
+    padding-bottom: 0.15em; line-height: 1;
     font-family: 'Fraunces', serif; color: #2a1f14; text-align: center;
     white-space: nowrap; font-size: clamp(9px, 2.1vw, 17px);
   }
@@ -578,9 +578,9 @@
       fields: {
         name1: { top: '49.5%', left: '28%', width: '32%' },
         name2: { top: '49.5%', left: '62%', width: '30%' },
-        day:   { top: '62.5%', left: '35%', width: '10%' },
-        month: { top: '62.5%', left: '52%', width: '12%' },
-        year:  { top: '62.5%', left: '69%', width: '10%' },
+        day:   { top: '58%', left: '27%', width: '10%' },
+        month: { top: '58%', left: '52%', width: '10%' },
+        year:  { top: '58%', left: '77%', width: '10%' },
         official:  { top: '84.5%', left: '22%', width: '16%' },
         witness1:  { top: '84.5%', left: '50%', width: '14%' },
         witness2:  { top: '84.5%', left: '76%', width: '14%' }
@@ -593,9 +593,9 @@
       fields: {
         name1: { top: '42.5%', left: '50%', width: '55%' },
         name2: { top: '56%', left: '50%', width: '55%' },
-        day:   { top: '62.5%', left: '35%', width: '10%' },
-        month: { top: '62.5%', left: '52%', width: '12%' },
-        year:  { top: '62.5%', left: '69%', width: '10%' },
+        day:   { top: '68.5%', left: '35%', width: '10%' },
+        month: { top: '68.5%', left: '52%', width: '12%' },
+        year:  { top: '68.5%', left: '70%', width: '10%' },
         official:  { top: '83.5%', left: '22%', width: '16%' },
         witness1:  { top: '83.5%', left: '50%', width: '14%' },
         witness2:  { top: '83.5%', left: '76%', width: '14%' }
@@ -635,4 +635,341 @@
     if (witness1El) {
       const w1 = witness1El.dataset.raw || '';
       const w2 = (visual.querySelector('.cert-witness2') || {}).dataset ? visual.querySelector('.cert-witness2').dataset.raw : '';
-      if (style
+      if (style.combineWitnesses) {
+        witness1El.textContent = [w1, w2].filter(Boolean).join(' & ');
+      } else {
+        witness1El.textContent = w1;
+      }
+    }
+
+    document.querySelectorAll('.cert-style-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.style === styleKey);
+    });
+  }
+
+  document.querySelectorAll('.cert-style-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyCertStyle(btn.dataset.style));
+  });
+
+  const loginView = document.getElementById('loginView');
+  const dashboardView = document.getElementById('dashboardView');
+
+  async function loadPendingInvites(user) {
+    const container = document.getElementById('inviteContainer');
+    container.innerHTML = '';
+
+    const { data: invites } = await supabaseClient
+      .from('wedding_registrations')
+      .select('*, initiator:initiator_id(display_name, email)')
+      .eq('partner_id', user.id)
+      .eq('status', 'pending');
+
+    if (!invites || invites.length === 0) return;
+
+    invites.forEach(invite => {
+      const typeLabel = invite.registration_type === 'permanent' ? 'Permanent (฿5,000)' : 'Free (renews every 3 months)';
+      const vowLine = invite.initiator_vow
+        ? '<p style="font-style:italic; opacity:0.85;">"' + invite.initiator_vow + '"</p>'
+        : '';
+      const card = document.createElement('div');
+      card.className = 'invite-card';
+      card.innerHTML =
+        '<span class="invite-label">E-WEDDING REQUEST</span>' +
+        '<p><strong>' + (invite.initiator_name || invite.initiator.display_name || invite.initiator.email) + '</strong> has requested to register a civic commitment with you — ' + typeLabel + '.</p>' +
+        vowLine +
+        '<div class="field-group">' +
+          '<label>Your Full Name (as you\'d like it on record)</label>' +
+          '<input type="text" class="invite-name-input" placeholder="Required to accept">' +
+        '</div>' +
+        '<div class="field-group">' +
+          '<label>Your Vow (optional)</label>' +
+          '<textarea class="invite-vow-input" rows="2" placeholder="A few words, if you\'d like to leave them on record..." style="width:100%; padding:11px 14px; border:1px solid var(--paper-line); border-radius:4px; font-family:var(--font-body); font-size:14.5px; color:var(--ink); resize:vertical;"></textarea>' +
+        '</div>' +
+        '<div class="field-group">' +
+          '<label>Your Witness (optional)</label>' +
+          '<input type="text" class="invite-witness-input" placeholder="A friend, a fictional character — whoever you\'d like to name">' +
+        '</div>' +
+        '<div class="invite-actions">' +
+          '<button class="btn-accept" data-id="' + invite.id + '" data-action="confirm">Accept</button>' +
+          '<button class="btn-decline" data-id="' + invite.id + '" data-action="decline">Decline</button>' +
+        '</div>';
+      container.appendChild(card);
+    });
+
+    container.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => handleInviteAction(btn, user));
+    });
+  }
+
+  async function handleInviteAction(btn, user) {
+    const inviteId = btn.dataset.id;
+    const action = btn.dataset.action;
+    const card = btn.closest('.invite-card');
+
+    let partnerName = '';
+    let partnerVow = '';
+    let partnerWitness = '';
+
+    if (action === 'confirm') {
+      partnerName = card.querySelector('.invite-name-input').value.trim();
+      partnerVow = card.querySelector('.invite-vow-input').value.trim();
+      partnerWitness = card.querySelector('.invite-witness-input').value.trim();
+
+      if (!partnerName) {
+        alert('Please enter your name to accept this registration.');
+        return;
+      }
+    }
+
+    btn.parentElement.querySelectorAll('button').forEach(b => b.disabled = true);
+    btn.textContent = action === 'confirm' ? 'Confirming…' : 'Declining…';
+
+    try {
+      const { data: invite } = await supabaseClient
+        .from('wedding_registrations')
+        .select('*')
+        .eq('id', inviteId)
+        .single();
+
+      if (action === 'decline') {
+        await supabaseClient
+          .from('wedding_registrations')
+          .update({ status: 'declined' })
+          .eq('id', inviteId);
+
+      } else {
+        // Beauville allows one active civic commitment at a time —
+        // check both parties don't already have one confirmed elsewhere.
+        const { data: eitherExisting } = await supabaseClient
+          .from('wedding_registrations')
+          .select('id')
+          .or('initiator_id.eq.' + invite.initiator_id + ',partner_id.eq.' + invite.initiator_id + ',initiator_id.eq.' + invite.partner_id + ',partner_id.eq.' + invite.partner_id)
+          .eq('status', 'confirmed')
+          .maybeSingle();
+
+        if (eitherExisting) {
+          alert('One of you already has an active civic commitment on record. This request cannot be confirmed.');
+          await supabaseClient
+            .from('wedding_registrations')
+            .update({ status: 'declined' })
+            .eq('id', inviteId);
+          await loadPendingInvites(user);
+          return;
+        }
+
+        if (invite.registration_type === 'permanent') {
+          const { data: initiator } = await supabaseClient
+            .from('residents')
+            .select('beau_dollar_balance')
+            .eq('id', invite.initiator_id)
+            .single();
+
+          const { data: partnerResident } = await supabaseClient
+            .from('residents')
+            .select('beau_dollar_balance')
+            .eq('id', invite.partner_id)
+            .single();
+
+          if (!initiator || !partnerResident) {
+            alert('Could not verify balances. Please try again.');
+            await loadPendingInvites(user);
+            return;
+          }
+
+          const combined = initiator.beau_dollar_balance + partnerResident.beau_dollar_balance;
+
+          if (combined < 5000) {
+            alert("Your combined Beau Dollar balance isn't enough yet for a permanent registration (฿5,000 total).");
+            await loadPendingInvites(user);
+            return;
+          }
+
+          // Whoever has more contributes first; the other covers the remainder.
+          const initiatorPays = Math.min(initiator.beau_dollar_balance, 5000);
+          const partnerPays = 5000 - initiatorPays;
+
+          await supabaseClient
+            .from('residents')
+            .update({ beau_dollar_balance: initiator.beau_dollar_balance - initiatorPays })
+            .eq('id', invite.initiator_id);
+
+          if (partnerPays > 0) {
+            await supabaseClient
+              .from('residents')
+              .update({ beau_dollar_balance: partnerResident.beau_dollar_balance - partnerPays })
+              .eq('id', invite.partner_id);
+          }
+        }
+
+        const updateData = {
+          status: 'confirmed',
+          confirmed_at: new Date().toISOString(),
+          partner_name: partnerName,
+          partner_vow: partnerVow || null,
+          partner_witness: partnerWitness || null
+        };
+        if (invite.registration_type === 'free') {
+          const expiry = new Date();
+          expiry.setMonth(expiry.getMonth() + 3);
+          updateData.expires_at = expiry.toISOString();
+        }
+
+        await supabaseClient
+          .from('wedding_registrations')
+          .update(updateData)
+          .eq('id', inviteId);
+      }
+
+      await loadPendingInvites(user);
+
+    } catch (err) {
+      alert('Something went wrong: ' + err.message);
+      btn.parentElement.querySelectorAll('button').forEach(b => b.disabled = false);
+    }
+  }
+
+  async function loadMarriageStatus(user) {
+    const container = document.getElementById('marriageContainer');
+    container.innerHTML = '';
+
+    const { data: record } = await supabaseClient
+      .from('wedding_registrations')
+      .select('*')
+      .or('initiator_id.eq.' + user.id + ',partner_id.eq.' + user.id)
+      .eq('status', 'confirmed')
+      .maybeSingle();
+
+    if (!record) return;
+
+    const isInitiator = record.initiator_id === user.id;
+    const myName = isInitiator ? record.initiator_name : record.partner_name;
+    const otherName = isInitiator ? record.partner_name : record.initiator_name;
+    const typeLabel = record.registration_type === 'permanent' ? 'Permanent' : 'Free (renews every 3 months)';
+
+    const card = document.createElement('div');
+    card.className = 'marriage-card';
+    card.innerHTML =
+      '<div>' +
+        '<span class="marriage-label">CIVIC COMMITMENT ON RECORD</span>' +
+        '<p>' + myName + ' &amp; ' + otherName + ' — ' + typeLabel + '</p>' +
+      '</div>' +
+      '<button class="btn-view-cert">View Certificate</button>';
+
+    card.querySelector('.btn-view-cert').addEventListener('click', () => showCertificate(record, myName, otherName));
+    container.appendChild(card);
+  }
+
+  function showCertificate(record, myName, otherName) {
+    currentCertRecord = record;
+
+    document.getElementById('certName1').textContent = record.initiator_name;
+    document.getElementById('certName2').textContent = record.partner_name;
+
+    const confirmedDate = new Date(record.confirmed_at);
+    document.getElementById('certDay').textContent = confirmedDate.getDate();
+    document.getElementById('certMonth').textContent = confirmedDate.toLocaleDateString('en-US', { month: 'long' });
+    document.getElementById('certYear').textContent = confirmedDate.getFullYear();
+
+    document.getElementById('certWitness1').textContent = record.initiator_witness || '';
+    document.getElementById('certWitness1').dataset.raw = record.initiator_witness || '';
+    document.getElementById('certWitness2').textContent = record.partner_witness || '';
+    document.getElementById('certWitness2').dataset.raw = record.partner_witness || '';
+
+    const vowsContainer = document.getElementById('certVowsBelow');
+    vowsContainer.innerHTML = '';
+    if (record.initiator_vow) {
+      const p = document.createElement('p');
+      p.className = 'cert-vow-line';
+      p.textContent = '"' + record.initiator_vow + '" — ' + record.initiator_name;
+      vowsContainer.appendChild(p);
+    }
+    if (record.partner_vow) {
+      const p = document.createElement('p');
+      p.className = 'cert-vow-line';
+      p.textContent = '"' + record.partner_vow + '" — ' + record.partner_name;
+      vowsContainer.appendChild(p);
+    }
+
+    // Free registrations get two plain style choices; permanent registrations
+    // get the three ornate ones. No mixing between tiers.
+    const isFree = record.registration_type === 'free';
+    const visibleTier = isFree ? 'free' : 'paid';
+    document.querySelectorAll('#certStylePicker .cert-style-btn').forEach(btn => {
+      btn.style.display = (btn.dataset.tier === visibleTier) ? '' : 'none';
+    });
+    const defaultStyle = isFree ? 'free1' : 'crown';
+
+    applyCertStyle(defaultStyle);
+    document.getElementById('certOverlay').classList.add('open');
+  }
+
+  async function showDashboard(user) {
+    const { data: resident, error } = await supabaseClient
+      .from('residents')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (error || !resident) {
+      document.getElementById('loginError').textContent = 'Could not load your civic record. Please try again.';
+      document.getElementById('loginError').style.display = 'block';
+      return;
+    }
+
+    document.getElementById('dashGreeting').textContent = 'Welcome back, ' + (resident.display_name || 'Resident');
+    document.getElementById('dashEmail').textContent = resident.email;
+    document.getElementById('dashBalance').textContent = '฿ ' + resident.beau_dollar_balance.toLocaleString();
+    document.getElementById('dashRegType').textContent = resident.registration_type === 'pioneer' ? 'Pioneer' : 'Standard';
+    document.getElementById('dashSince').textContent = new Date(resident.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    await loadPendingInvites(user);
+    await loadMarriageStatus(user);
+
+    loginView.style.display = 'none';
+    dashboardView.style.display = 'block';
+  }
+
+  (async function checkSession() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session && session.user) {
+      showDashboard(session.user);
+    }
+  })();
+
+  document.getElementById('loginForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const errorBox = document.getElementById('loginError');
+    errorBox.style.display = 'none';
+
+    const loginBtn = document.getElementById('loginBtn');
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Logging in…';
+
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+
+      await showDashboard(data.user);
+
+    } catch (err) {
+      errorBox.textContent = 'Could not log in: ' + err.message;
+      errorBox.style.display = 'block';
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Log In';
+    }
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', async function () {
+    await supabaseClient.auth.signOut();
+    dashboardView.style.display = 'none';
+    loginView.style.display = 'block';
+    document.getElementById('loginForm').reset();
+  });
+</script>
+
+</body>
+</html>
