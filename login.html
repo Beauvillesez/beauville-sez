@@ -576,14 +576,14 @@
       aspect: '1248 / 832',
       tier: 'free',
       fields: {
-        name1: { top: '39.5%', left: '50%', width: '45%' },
-        name2: { top: '53.5%', left: '50%', width: '45%' },
-        day:   { top: '63.0%', left: '38.0%', width: '10%' },
-        month: { top: '63.0%', left: '52.0%', width: '15%' },
-        year:  { top: '63.0%', left: '68.0%', width: '12%' },
-        official:  { top: '83.5%', left: '23.5%', width: '16%' },
-        witness1:  { top: '83.5%', left: '50.0%', width: '14%' },
-        witness2:  { top: '83.5%', left: '76.0%', width: '14%' }
+        name1: { top: '49.9%', left: '31.4%', width: '30.3%', fontSize: 'clamp(11px, 2.6vw, 21px)' },
+        name2: { top: '49.9%', left: '68.7%', width: '30%', fontSize: 'clamp(11px, 2.6vw, 21px)' },
+        day:   { top: '63%', left: '35.6%', width: '5.7%' },
+        month: { top: '63%', left: '57.1%', width: '4.2%' },
+        year:  { top: '63%', left: '74.5%', width: '5.6%' },
+        official:  { top: '82.4%', left: '22.5%', width: '15.1%' },
+        witness1:  { top: '82.4%', left: '41.2%', width: '14.3%' },
+        witness2:  { top: '82.4%', left: '60.2%', width: '14.3%' }
       }
     },
     free2: {
@@ -591,14 +591,14 @@
       aspect: '1248 / 832',
       tier: 'free',
       fields: {
-        name1: { top: '33.5%', left: '50%', width: '55%' },
-        name2: { top: '44.5%', left: '50%', width: '55%' },
-        day:   { top: '68.5%', left: '35.0%', width: '10%' },
-        month: { top: '68.5%', left: '52.0%', width: '12%' },
-        year:  { top: '68.5%', left: '70.0%', width: '10%' },
-        official:  { top: '83.5%', left: '23.5%', width: '16%' },
-        witness1:  { top: '83.5%', left: '50.0%', width: '14%' },
-        witness2:  { top: '83.5%', left: '76.0%', width: '14%' }
+        name1: { top: '44.2%', left: '50%', width: '44.3%', fontSize: 'clamp(13px, 2.8vw, 22px)' },
+        name2: { top: '56.2%', left: '50%', width: '44.3%', fontSize: 'clamp(13px, 2.8vw, 22px)' },
+        day:   { top: '65.4%', left: '35.9%', width: '11.5%' },
+        month: { top: '65.4%', left: '50.2%', width: '11.5%' },
+        year:  { top: '65.4%', left: '64.2%', width: '11.5%' },
+        official:  { top: '84.3%', left: '24.9%', width: '20.8%' },
+        witness1:  { top: '84.6%', left: '48%', width: '16.7%' },
+        witness2:  { top: '84.6%', left: '68%', width: '15.1%' }
       }
     }
   };
@@ -628,6 +628,7 @@
       el.style.top = pos.top;
       el.style.left = pos.left;
       el.style.width = pos.width;
+      el.style.fontSize = pos.fontSize || '';
     });
 
     // Crown's design has a single witness line — combine both names there.
