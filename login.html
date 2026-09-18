@@ -497,13 +497,7 @@
 
   <div class="cert-overlay" id="certOverlay">
     <div class="cert-modal">
-      <div class="cert-style-picker" id="certStylePicker">
-        <button class="cert-style-btn active" data-style="crown" data-tier="paid">Crown</button>
-        <button class="cert-style-btn" data-style="classic" data-tier="paid">Classic</button>
-        <button class="cert-style-btn" data-style="tropical" data-tier="paid">Tropical</button>
-        <button class="cert-style-btn" data-style="free1" data-tier="free">Style A</button>
-        <button class="cert-style-btn" data-style="free2" data-tier="free">Style B</button>
-      </div>
+      <div class="cert-style-picker" id="certStylePicker"></div>
 
       <div class="certificate-visual" id="certificateVisual">
         <div class="cert-field cert-name1" id="certName1"></div>
@@ -532,6 +526,8 @@
     crown: {
       file: 'style-crown.jpg',
       aspect: '1168 / 784',
+      tier: 'paid',
+      label: 'Crown',
       combineWitnesses: true,
       fields: {
         name1: { top: '46.6%', left: '50%', width: '42%' },
@@ -546,6 +542,8 @@
     classic: {
       file: 'style-classic.jpg',
       aspect: '1168 / 784',
+      tier: 'paid',
+      label: 'Classic',
       fields: {
         name1: { top: '47.5%', left: '57.6%', width: '34%' },
         name2: { top: '53.2%', left: '53.6%', width: '38%' },
@@ -560,6 +558,8 @@
     tropical: {
       file: 'style-tropical.jpg',
       aspect: '1248 / 832',
+      tier: 'paid',
+      label: 'Tropical',
       fields: {
         name1: { top: '48.7%', left: '64.3%', width: '25%' },
         name2: { top: '54.6%', left: '65.1%', width: '24%' },
@@ -575,6 +575,7 @@
       file: 'style-free1.jpg',
       aspect: '1248 / 832',
       tier: 'free',
+      label: 'Style A',
       fields: {
         name1: { top: '49.9%', left: '31.4%', width: '30.3%', fontSize: 'clamp(11px, 2.6vw, 21px)' },
         name2: { top: '49.9%', left: '68.7%', width: '30%', fontSize: 'clamp(11px, 2.6vw, 21px)' },
@@ -590,6 +591,7 @@
       file: 'style-free2.jpg',
       aspect: '1248 / 832',
       tier: 'free',
+      label: 'Style B',
       fields: {
         name1: { top: '44.2%', left: '50%', width: '44.3%', fontSize: 'clamp(13px, 2.8vw, 22px)' },
         name2: { top: '56.2%', left: '50%', width: '44.3%', fontSize: 'clamp(13px, 2.8vw, 22px)' },
@@ -648,9 +650,25 @@
     });
   }
 
-  document.querySelectorAll('.cert-style-btn').forEach(btn => {
-    btn.addEventListener('click', () => applyCertStyle(btn.dataset.style));
-  });
+  // Builds the picker from scratch for the given tier — only buttons for
+  // that tier ever exist in the DOM. Nothing is hidden with CSS; a free
+  // user's page simply never receives the paid buttons (or vice versa).
+  function renderCertStylePicker(tier, activeStyle) {
+    const picker = document.getElementById('certStylePicker');
+    picker.innerHTML = '';
+
+    Object.keys(CERT_STYLES).forEach(styleKey => {
+      const style = CERT_STYLES[styleKey];
+      if (style.tier !== tier) return;
+
+      const btn = document.createElement('button');
+      btn.className = 'cert-style-btn' + (styleKey === activeStyle ? ' active' : '');
+      btn.dataset.style = styleKey;
+      btn.textContent = style.label || styleKey;
+      btn.addEventListener('click', () => applyCertStyle(styleKey));
+      picker.appendChild(btn);
+    });
+  }
 
   const loginView = document.getElementById('loginView');
   const dashboardView = document.getElementById('dashboardView');
@@ -892,14 +910,14 @@
     }
 
     // Free registrations get two plain style choices; permanent registrations
-    // get the three ornate ones. No mixing between tiers.
+    // get the three ornate ones. No mixing between tiers — the picker is
+    // rebuilt from scratch below, so a button for the other tier is never
+    // present in the DOM for this user to find, inspect, or unhide.
     const isFree = record.registration_type === 'free';
     const visibleTier = isFree ? 'free' : 'paid';
-    document.querySelectorAll('#certStylePicker .cert-style-btn').forEach(btn => {
-      btn.style.display = (btn.dataset.tier === visibleTier) ? '' : 'none';
-    });
     const defaultStyle = isFree ? 'free1' : 'crown';
 
+    renderCertStylePicker(visibleTier, defaultStyle);
     applyCertStyle(defaultStyle);
     document.getElementById('certOverlay').classList.add('open');
   }
