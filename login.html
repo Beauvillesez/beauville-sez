@@ -777,46 +777,25 @@
         }
 
         if (invite.registration_type === 'permanent') {
-          const { data: initiator } = await supabaseClient
-            .from('residents')
-            .select('beau_dollar_balance')
-            .eq('id', invite.initiator_id)
-            .single();
+          // Balance check + dual-account deduction now happens atomically inside
+          // process_wedding_payment (SECURITY DEFINER RPC), which bypasses the
+          // "users can only update their own balance" RLS rule safely on the
+          // database side. This avoids the silent-failure bug where the
+          // initiator's row update was blocked by RLS when the accepting party
+          // (not the initiator) was the one logged in.
+          const { error: paymentError } = await supabaseClient.rpc('process_wedding_payment', {
+            p_initiator_id: invite.initiator_id,
+            p_partner_id: invite.partner_id
+          });
 
-          const { data: partnerResident } = await supabaseClient
-            .from('residents')
-            .select('beau_dollar_balance')
-            .eq('id', invite.partner_id)
-            .single();
-
-          if (!initiator || !partnerResident) {
-            alert('Could not verify balances. Please try again.');
+          if (paymentError) {
+            if (paymentError.message && paymentError.message.includes('Combined balance insufficient')) {
+              alert("Your combined Beau Dollar balance isn't enough yet for a permanent registration (฿5,000 total).");
+            } else {
+              alert('Could not process payment: ' + paymentError.message);
+            }
             await loadPendingInvites(user);
             return;
-          }
-
-          const combined = initiator.beau_dollar_balance + partnerResident.beau_dollar_balance;
-
-          if (combined < 5000) {
-            alert("Your combined Beau Dollar balance isn't enough yet for a permanent registration (฿5,000 total).");
-            await loadPendingInvites(user);
-            return;
-          }
-
-          // Whoever has more contributes first; the other covers the remainder.
-          const initiatorPays = Math.min(initiator.beau_dollar_balance, 5000);
-          const partnerPays = 5000 - initiatorPays;
-
-          await supabaseClient
-            .from('residents')
-            .update({ beau_dollar_balance: initiator.beau_dollar_balance - initiatorPays })
-            .eq('id', invite.initiator_id);
-
-          if (partnerPays > 0) {
-            await supabaseClient
-              .from('residents')
-              .update({ beau_dollar_balance: partnerResident.beau_dollar_balance - partnerPays })
-              .eq('id', invite.partner_id);
           }
         }
 
