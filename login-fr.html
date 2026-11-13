@@ -254,6 +254,137 @@
 
   .btn-logout:hover { border-color: var(--navy-mid); color: var(--navy-mid); }
 
+  /* ============ WEDDING INVITATION ============ */
+  .invite-card {
+    background: rgba(200, 155, 60, 0.06);
+    border: 1px solid rgba(200, 155, 60, 0.3);
+    border-radius: 4px;
+    padding: 22px 24px;
+    margin-bottom: 24px;
+  }
+
+  .invite-card .invite-label {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em;
+    color: var(--gold-signal); display: block; margin-bottom: 10px;
+  }
+
+  .invite-card p {
+    font-size: 14px; color: var(--ink); line-height: 1.6; margin-bottom: 16px;
+  }
+
+  .invite-actions { display: flex; gap: 10px; }
+
+  .btn-accept, .btn-decline {
+    flex: 1; padding: 10px; border-radius: 4px; font-family: var(--font-mono);
+    font-size: 12px; letter-spacing: 0.04em; cursor: pointer; border: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-accept { background: var(--navy-deep); color: var(--sand); }
+  .btn-decline { background: transparent; color: var(--ink-soft); border: 1px solid var(--paper-line); }
+  .btn-accept:hover, .btn-decline:hover { opacity: 0.8; }
+  .btn-accept:disabled, .btn-decline:disabled { opacity: 0.5; cursor: default; }
+
+  /* ============ MARRIAGE STATUS + CERTIFICATE ============ */
+  .marriage-card {
+    background: rgba(44, 110, 107, 0.06);
+    border: 1px solid rgba(44, 110, 107, 0.3);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+
+  .marriage-card .marriage-label {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em;
+    color: var(--ocean-teal); display: block; margin-bottom: 6px;
+  }
+
+  .marriage-card p { font-size: 14px; color: var(--ink); }
+
+  .btn-view-cert {
+    background: var(--ocean-teal); color: var(--sand);
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.04em;
+    padding: 10px 18px; border: none; border-radius: 4px; cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .cert-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(15, 42, 74, 0.75);
+    z-index: 200; align-items: center; justify-content: center; padding: 24px;
+  }
+
+  .cert-overlay.open { display: flex; }
+
+  .cert-modal {
+    background: var(--sand); max-width: 640px; width: 100%;
+    padding: 0; position: relative; max-height: 92vh; overflow-y: auto;
+    border-radius: 4px;
+  }
+
+  .cert-style-picker {
+    display: flex; gap: 10px; padding: 16px 16px 0;
+  }
+
+  .cert-style-btn {
+    flex: 1; padding: 8px; border: 1px solid var(--paper-line); border-radius: 4px;
+    background: var(--white); cursor: pointer; font-family: var(--font-mono);
+    font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-soft);
+    transition: all 0.2s ease;
+  }
+
+  .cert-style-btn.active { border-color: var(--gold-signal); background: rgba(200, 155, 60, 0.08); color: var(--navy-deep); }
+
+  .certificate-visual {
+    position: relative; width: 100%; aspect-ratio: 1168 / 784;
+    background-size: cover; background-position: center;
+    margin-top: 14px;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+
+  .cert-field {
+    position: absolute; transform: translate(-50%, -100%);
+    padding-bottom: 0.15em; line-height: 1;
+    font-family: 'Fraunces', serif; color: #2a1f14; text-align: center;
+    white-space: nowrap; font-size: clamp(9px, 2.1vw, 17px);
+  }
+
+  /* Certificate number — deliberately tiny, e.g. B26-0001 */
+  .cert-field.cert-no {
+    font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.06em;
+    font-size: clamp(7px, 1.05vw, 9px); color: #5a4630; opacity: 0.9;
+  }
+
+  .cert-disclaimer {
+    font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.03em;
+    color: var(--ink-soft); text-align: center; padding: 8px 16px 0; line-height: 1.5;
+  }
+
+  .cert-vows-below { padding: 18px 24px 4px; }
+  .cert-vow-line {
+    font-family: var(--font-display); font-style: italic; font-size: 13.5px;
+    color: var(--ink-soft); line-height: 1.6; margin-bottom: 8px; text-align: center;
+  }
+
+  .cert-modal-actions {
+    display: flex; gap: 10px; padding: 16px 24px 24px;
+  }
+
+  .cert-action-btn {
+    flex: 1; background: var(--navy-deep); color: var(--sand);
+    font-family: var(--font-mono); font-size: 12px; padding: 10px 20px;
+    border: none; border-radius: 4px; cursor: pointer;
+  }
+
+  .cert-action-close { background: transparent; color: var(--ink-soft); border: 1px solid var(--paper-line); }
+
+  @media print {
+    body * { visibility: hidden; }
+    #certPrintArea, #certPrintArea * { visibility: visible; }
+    #certPrintArea { position: fixed; top: 0; left: 0; width: 100%; }
+    .certificate-visual { margin-top: 0; }
+  }
+
   @media (max-width: 980px) {
     .header-top { flex-wrap: wrap; padding: 20px 24px; }
     .tagline { display: none; }
@@ -362,6 +493,9 @@
         <p class="dash-greeting" id="dashGreeting">Bon retour</p>
         <p class="dash-email" id="dashEmail"></p>
 
+        <div id="inviteContainer"></div>
+        <div id="marriageContainer"></div>
+
         <div class="balance-box">
           <span class="balance-label">SOLDE DE BEAU DOLLAR</span>
           <span class="balance-value" id="dashBalance">฿ —</span>
@@ -383,10 +517,415 @@
     </section>
   </div>
 
+  <div class="cert-overlay" id="certOverlay">
+    <div class="cert-modal">
+      <div class="cert-style-picker" id="certStylePicker"></div>
+
+      <div id="certPrintArea">
+      <div class="certificate-visual" id="certificateVisual">
+        <div class="cert-field cert-name1" id="certName1"></div>
+        <div class="cert-field cert-name2" id="certName2"></div>
+        <div class="cert-field cert-day" id="certDay"></div>
+        <div class="cert-field cert-month" id="certMonth"></div>
+        <div class="cert-field cert-year" id="certYear"></div>
+        <div class="cert-field cert-official" id="certOfficial">Marcus Lim</div>
+        <div class="cert-field cert-witness1" id="certWitness1"></div>
+        <div class="cert-field cert-witness2" id="certWitness2"></div>
+        <div class="cert-field cert-no" id="certNo"></div>
+      </div>
+      <p class="cert-disclaimer">Certificat commémoratif d’un monde fictif. Il ne constitue un mariage légal nulle part dans le monde réel.<br>Commemorative certificate of a fictional world. Not a legal marriage anywhere in the real world.</p>
+      </div>
+
+      <div class="cert-vows-below" id="certVowsBelow"></div>
+
+      <div class="cert-modal-actions">
+        <button class="cert-action-btn" onclick="window.print()">Imprimer le certificat</button>
+        <button class="cert-action-btn cert-action-close" onclick="document.getElementById('certOverlay').classList.remove('open')">Fermer</button>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <script>
+  const CERT_STYLES = {
+    crown: {
+      file: 'style-crown.jpg',
+      aspect: '1168 / 784',
+      tier: 'paid',
+      label: 'Crown',
+      combineWitnesses: true,
+      fields: {
+        name1: { top: '46.6%', left: '50%', width: '42%' },
+        name2: { top: '58.3%', left: '50%', width: '42%' },
+        day:   { top: '68.5%', left: '39.5%', width: '9%' },
+        month: { top: '68.5%', left: '48.5%', width: '9%' },
+        year:  { top: '68.5%', left: '64.2%', width: '15%' },
+        official:  { top: '83.2%', left: '35.7%', width: '17%' },
+        witness1:  { top: '83.2%', left: '62.7%', width: '16%' },
+        no:        { top: '37.2%', left: '78%', width: '14%' }
+      }
+    },
+    classic: {
+      file: 'style-classic.jpg',
+      aspect: '1168 / 784',
+      tier: 'paid',
+      label: 'Classic',
+      fields: {
+        name1: { top: '47.5%', left: '57.6%', width: '34%' },
+        name2: { top: '53.2%', left: '53.6%', width: '38%' },
+        day:   { top: '58.2%', left: '47.8%', width: '8%' },
+        month: { top: '58.2%', left: '61.1%', width: '11%' },
+        year:  { top: '58.2%', left: '78.8%', width: '10%' },
+        official:  { top: '79.9%', left: '25%', width: '18%' },
+        witness1:  { top: '79.9%', left: '49.2%', width: '17%' },
+        witness2:  { top: '79.9%', left: '68.5%', width: '12%' },
+        no:        { top: '42.5%', left: '77%', width: '14%' }
+      }
+    },
+    tropical: {
+      file: 'style-tropical.jpg',
+      aspect: '1248 / 832',
+      tier: 'paid',
+      label: 'Tropical',
+      fields: {
+        name1: { top: '48.7%', left: '64.3%', width: '25%' },
+        name2: { top: '54.6%', left: '65.1%', width: '24%' },
+        day:   { top: '59.9%', left: '57.3%', width: '8%' },
+        month: { top: '59.9%', left: '70.6%', width: '14%' },
+        year:  { top: '64.8%', left: '60.7%', width: '12%' },
+        official:  { top: '83.2%', left: '22%', width: '15%' },
+        witness1:  { top: '83.2%', left: '41.6%', width: '15%' },
+        witness2:  { top: '83.2%', left: '61.4%', width: '15%' },
+        no:        { top: '78.5%', left: '50%', width: '14%' }
+      }
+    },
+    free1: {
+      file: 'style-free1.jpg',
+      aspect: '1248 / 832',
+      tier: 'free',
+      label: 'Style A',
+      fields: {
+        name1: { top: '49.9%', left: '31.4%', width: '30.3%', fontSize: 'clamp(11px, 2.6vw, 21px)' },
+        name2: { top: '49.9%', left: '68.7%', width: '30%', fontSize: 'clamp(11px, 2.6vw, 21px)' },
+        day:   { top: '63%', left: '35.6%', width: '5.7%' },
+        month: { top: '63%', left: '57.1%', width: '4.2%' },
+        year:  { top: '63%', left: '74.5%', width: '5.6%' },
+        official:  { top: '82.4%', left: '22.5%', width: '15.1%', fontSize: 'clamp(8px, 1.7vw, 14px)' },
+        witness1:  { top: '82.4%', left: '41.2%', width: '14.3%' },
+        witness2:  { top: '82.4%', left: '60.2%', width: '14.3%' },
+        no:        { top: '42%', left: '78%', width: '14%' }
+      }
+    },
+    free2: {
+      file: 'style-free2.jpg',
+      aspect: '1248 / 832',
+      tier: 'free',
+      label: 'Style B',
+      fields: {
+        name1: { top: '44.2%', left: '50%', width: '44.3%', fontSize: 'clamp(13px, 2.8vw, 22px)' },
+        name2: { top: '56.2%', left: '50%', width: '44.3%', fontSize: 'clamp(13px, 2.8vw, 22px)' },
+        day:   { top: '65.4%', left: '35.9%', width: '11.5%', fontSize: 'clamp(8px, 1.7vw, 14px)' },
+        month: { top: '65.4%', left: '50.2%', width: '11.5%', fontSize: 'clamp(8px, 1.7vw, 14px)' },
+        year:  { top: '65.4%', left: '64.2%', width: '11.5%', fontSize: 'clamp(8px, 1.7vw, 14px)' },
+        official:  { top: '84.3%', left: '24.9%', width: '20.8%', fontSize: 'clamp(8px, 1.7vw, 14px)' },
+        witness1:  { top: '84.6%', left: '48%', width: '16.7%' },
+        witness2:  { top: '84.6%', left: '68%', width: '15.1%' },
+        no:        { top: '23.5%', left: '87%', width: '14%' }
+      }
+    }
+  };
+
+  let currentCertStyle = 'crown';
+  let currentCertRecord = null;
+
+  function applyCertStyle(styleKey) {
+    currentCertStyle = styleKey;
+    const style = CERT_STYLES[styleKey];
+    const visual = document.getElementById('certificateVisual');
+    visual.style.backgroundImage = "url('" + style.file + "')";
+    visual.style.aspectRatio = style.aspect || '1168 / 784';
+
+    const allFieldNames = ['name1', 'name2', 'day', 'month', 'year', 'official', 'witness1', 'witness2', 'no'];
+
+    allFieldNames.forEach(fieldName => {
+      const el = visual.querySelector('.cert-' + fieldName);
+      if (!el) return;
+
+      const pos = style.fields[fieldName];
+      if (!pos) {
+        el.style.display = 'none';
+        return;
+      }
+      el.style.display = '';
+      el.style.top = pos.top;
+      el.style.left = pos.left;
+      el.style.width = pos.width;
+      el.style.fontSize = pos.fontSize || '';
+    });
+
+    // Crown's design has a single witness line — combine both names there.
+    const witness1El = visual.querySelector('.cert-witness1');
+    if (witness1El) {
+      const w1 = witness1El.dataset.raw || '';
+      const w2 = (visual.querySelector('.cert-witness2') || {}).dataset ? visual.querySelector('.cert-witness2').dataset.raw : '';
+      if (style.combineWitnesses) {
+        witness1El.textContent = [w1, w2].filter(Boolean).join(' & ');
+      } else {
+        witness1El.textContent = w1;
+      }
+    }
+
+    document.querySelectorAll('.cert-style-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.style === styleKey);
+    });
+  }
+
+  // Builds the picker from scratch for the given tier — only buttons for
+  // that tier ever exist in the DOM. Nothing is hidden with CSS; a free
+  // user's page simply never receives the paid buttons (or vice versa).
+  function renderCertStylePicker(tier, activeStyle) {
+    const picker = document.getElementById('certStylePicker');
+    picker.innerHTML = '';
+
+    Object.keys(CERT_STYLES).forEach(styleKey => {
+      const style = CERT_STYLES[styleKey];
+      if (style.tier !== tier) return;
+
+      const btn = document.createElement('button');
+      btn.className = 'cert-style-btn' + (styleKey === activeStyle ? ' active' : '');
+      btn.dataset.style = styleKey;
+      btn.textContent = style.label || styleKey;
+      btn.addEventListener('click', () => applyCertStyle(styleKey));
+      picker.appendChild(btn);
+    });
+  }
+
   const loginView = document.getElementById('loginView');
+  async function loadPendingInvites(user) {
+    const container = document.getElementById('inviteContainer');
+    container.innerHTML = '';
+
+    const { data: invites } = await supabaseClient
+      .from('wedding_registrations')
+      .select('*, initiator:initiator_id(display_name, email)')
+      .eq('partner_id', user.id)
+      .eq('status', 'pending');
+
+    if (!invites || invites.length === 0) return;
+
+    invites.forEach(invite => {
+      const typeLabel = invite.registration_type === 'permanent' ? 'Permanent (฿5 000)' : 'Gratuit (renouvelable tous les 3 mois)';
+      const vowLine = invite.initiator_vow
+        ? '<p style="font-style:italic; opacity:0.85;">« ' + invite.initiator_vow + ' »</p>'
+        : '';
+      const card = document.createElement('div');
+      card.className = 'invite-card';
+      card.innerHTML =
+        '<span class="invite-label">DEMANDE D’E-WEDDING</span>' +
+        '<p><strong>' + (invite.initiator_name || invite.initiator.display_name || invite.initiator.email) + '</strong> vous demande d’enregistrer un engagement civique — ' + typeLabel + '.</p>' +
+        vowLine +
+        '<div class="field-group">' +
+          '<label>Votre nom complet (tel qu’il figurera au registre)</label>' +
+          '<input type="text" class="invite-name-input" placeholder="Requis pour accepter">' +
+        '</div>' +
+        '<div class="field-group">' +
+          '<label>Votre vœu (facultatif)</label>' +
+          '<textarea class="invite-vow-input" rows="2" placeholder="Quelques mots, si vous le souhaitez…" style="width:100%; padding:11px 14px; border:1px solid var(--paper-line); border-radius:4px; font-family:var(--font-body); font-size:14.5px; color:var(--ink); resize:vertical;"></textarea>' +
+        '</div>' +
+        '<div class="field-group">' +
+          '<label>Votre témoin (facultatif)</label>' +
+          '<input type="text" class="invite-witness-input" placeholder="Un ami, un personnage fictif — qui vous voulez">' +
+        '</div>' +
+        '<div class="invite-actions">' +
+          '<button class="btn-accept" data-id="' + invite.id + '" data-action="confirm">Accepter</button>' +
+          '<button class="btn-decline" data-id="' + invite.id + '" data-action="decline">Refuser</button>' +
+        '</div>';
+      container.appendChild(card);
+    });
+
+    container.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => handleInviteAction(btn, user));
+    });
+  }
+
+  async function handleInviteAction(btn, user) {
+    const inviteId = btn.dataset.id;
+    const action = btn.dataset.action;
+    const card = btn.closest('.invite-card');
+
+    let partnerName = '';
+    let partnerVow = '';
+    let partnerWitness = '';
+
+    if (action === 'confirm') {
+      partnerName = card.querySelector('.invite-name-input').value.trim();
+      partnerVow = card.querySelector('.invite-vow-input').value.trim();
+      partnerWitness = card.querySelector('.invite-witness-input').value.trim();
+
+      if (!partnerName) {
+        alert('Veuillez saisir votre nom pour accepter cet enregistrement.');
+        return;
+      }
+    }
+
+    btn.parentElement.querySelectorAll('button').forEach(b => b.disabled = true);
+    btn.textContent = action === 'confirm' ? 'Confirmation…' : 'Refus…';
+
+    try {
+      const { data: invite } = await supabaseClient
+        .from('wedding_registrations')
+        .select('*')
+        .eq('id', inviteId)
+        .single();
+
+      if (action === 'decline') {
+        await supabaseClient
+          .from('wedding_registrations')
+          .update({ status: 'declined' })
+          .eq('id', inviteId);
+
+      } else {
+        // Beauville allows one active civic commitment at a time —
+        // check both parties don't already have one confirmed elsewhere.
+        const { data: eitherExisting } = await supabaseClient
+          .from('wedding_registrations')
+          .select('id')
+          .or('initiator_id.eq.' + invite.initiator_id + ',partner_id.eq.' + invite.initiator_id + ',initiator_id.eq.' + invite.partner_id + ',partner_id.eq.' + invite.partner_id)
+          .eq('status', 'confirmed')
+          .maybeSingle();
+
+        if (eitherExisting) {
+          alert('L’un de vous a déjà un engagement civique actif au registre. Cette demande ne peut pas être confirmée.');
+          await supabaseClient
+            .from('wedding_registrations')
+            .update({ status: 'declined' })
+            .eq('id', inviteId);
+          await loadPendingInvites(user);
+          return;
+        }
+
+        if (invite.registration_type === 'permanent') {
+          // Balance check + dual-account deduction happens atomically inside
+          // process_wedding_payment (SECURITY DEFINER RPC).
+          const { error: paymentError } = await supabaseClient.rpc('process_wedding_payment', {
+            p_initiator_id: invite.initiator_id,
+            p_partner_id: invite.partner_id
+          });
+
+          if (paymentError) {
+            if (paymentError.message && paymentError.message.includes('Combined balance insufficient')) {
+              alert('Votre solde combiné de Beau Dollars ne suffit pas encore pour un enregistrement permanent (฿5 000 au total).');
+            } else {
+              alert('Impossible de traiter le paiement : ' + paymentError.message);
+            }
+            await loadPendingInvites(user);
+            return;
+          }
+        }
+
+        const updateData = {
+          status: 'confirmed',
+          confirmed_at: new Date().toISOString(),
+          partner_name: partnerName,
+          partner_vow: partnerVow || null,
+          partner_witness: partnerWitness || null
+        };
+        if (invite.registration_type === 'free') {
+          const expiry = new Date();
+          expiry.setMonth(expiry.getMonth() + 3);
+          updateData.expires_at = expiry.toISOString();
+        }
+
+        await supabaseClient
+          .from('wedding_registrations')
+          .update(updateData)
+          .eq('id', inviteId);
+      }
+
+      await loadPendingInvites(user);
+      await loadMarriageStatus(user);
+
+    } catch (err) {
+      alert('Une erreur est survenue : ' + err.message);
+      btn.parentElement.querySelectorAll('button').forEach(b => b.disabled = false);
+    }
+  }
+
+  async function loadMarriageStatus(user) {
+    const container = document.getElementById('marriageContainer');
+    container.innerHTML = '';
+
+    const { data: record } = await supabaseClient
+      .from('wedding_registrations')
+      .select('*')
+      .or('initiator_id.eq.' + user.id + ',partner_id.eq.' + user.id)
+      .eq('status', 'confirmed')
+      .maybeSingle();
+
+    if (!record) return;
+
+    const isInitiator = record.initiator_id === user.id;
+    const myName = isInitiator ? record.initiator_name : record.partner_name;
+    const otherName = isInitiator ? record.partner_name : record.initiator_name;
+    const typeLabel = record.registration_type === 'permanent' ? 'Permanent' : 'Gratuit (renouvelable tous les 3 mois)';
+
+    const card = document.createElement('div');
+    card.className = 'marriage-card';
+    card.innerHTML =
+      '<div>' +
+        '<span class="marriage-label">ENGAGEMENT CIVIQUE ENREGISTRÉ</span>' +
+        '<p>' + myName + ' &amp; ' + otherName + ' — ' + typeLabel + '</p>' +
+      '</div>' +
+      '<button class="btn-view-cert">Voir le certificat</button>';
+
+    card.querySelector('.btn-view-cert').addEventListener('click', () => showCertificate(record, myName, otherName));
+    container.appendChild(card);
+  }
+
+  function showCertificate(record, myName, otherName) {
+    currentCertRecord = record;
+
+    document.getElementById('certName1').textContent = record.initiator_name;
+    document.getElementById('certName2').textContent = record.partner_name;
+
+    // The certificate artwork is in English, so the month stays in English.
+    const confirmedDate = new Date(record.confirmed_at);
+    document.getElementById('certDay').textContent = confirmedDate.getDate();
+    document.getElementById('certMonth').textContent = confirmedDate.toLocaleDateString('en-US', { month: 'long' });
+    document.getElementById('certYear').textContent = confirmedDate.getFullYear();
+    document.getElementById('certNo').textContent = record.cert_no || '';
+
+    document.getElementById('certWitness1').textContent = record.initiator_witness || '';
+    document.getElementById('certWitness1').dataset.raw = record.initiator_witness || '';
+    document.getElementById('certWitness2').textContent = record.partner_witness || '';
+    document.getElementById('certWitness2').dataset.raw = record.partner_witness || '';
+
+    const vowsContainer = document.getElementById('certVowsBelow');
+    vowsContainer.innerHTML = '';
+    if (record.initiator_vow) {
+      const p = document.createElement('p');
+      p.className = 'cert-vow-line';
+      p.textContent = '« ' + record.initiator_vow + ' » — ' + record.initiator_name;
+      vowsContainer.appendChild(p);
+    }
+    if (record.partner_vow) {
+      const p = document.createElement('p');
+      p.className = 'cert-vow-line';
+      p.textContent = '« ' + record.partner_vow + ' » — ' + record.partner_name;
+      vowsContainer.appendChild(p);
+    }
+
+    const isFree = record.registration_type === 'free';
+    const visibleTier = isFree ? 'free' : 'paid';
+    const defaultStyle = isFree ? 'free1' : 'crown';
+
+    renderCertStylePicker(visibleTier, defaultStyle);
+    applyCertStyle(defaultStyle);
+    document.getElementById('certOverlay').classList.add('open');
+  }
+
+
   const dashboardView = document.getElementById('dashboardView');
 
   async function showDashboard(user) {
@@ -407,6 +946,9 @@
     document.getElementById('dashBalance').textContent = '฿ ' + resident.beau_dollar_balance.toLocaleString();
     document.getElementById('dashRegType').textContent = resident.registration_type === 'pioneer' ? 'Pionnier' : 'Standard';
     document.getElementById('dashSince').textContent = new Date(resident.created_at).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    await loadPendingInvites(user);
+    await loadMarriageStatus(user);
 
     loginView.style.display = 'none';
     dashboardView.style.display = 'block';
