@@ -609,12 +609,12 @@
         name1: { top: '49.9%', left: '31.4%', width: '30.3%', fontSize: 'clamp(11px, 2.6vw, 21px)' },
         name2: { top: '49.9%', left: '68.7%', width: '30%', fontSize: 'clamp(11px, 2.6vw, 21px)' },
         day:   { top: '63%', left: '35.6%', width: '5.7%' },
-        month: { top: '63%', left: '57.1%', width: '4.2%' },
+        month: { top: '63%', left: '56.6%', width: '4.2%', fontSize: 'clamp(8px, 1.8vw, 14px)' },
         year:  { top: '63%', left: '74.5%', width: '5.6%' },
         official:  { top: '82.4%', left: '22.5%', width: '15.1%', fontSize: 'clamp(8px, 1.7vw, 14px)' },
         witness1:  { top: '82.4%', left: '41.2%', width: '14.3%' },
         witness2:  { top: '82.4%', left: '60.2%', width: '14.3%' },
-        no:        { top: '42%', left: '78%', width: '14%' }
+        no:        { top: '23.5%', left: '83.5%', width: '14%' }
       }
     },
     free2: {
@@ -892,9 +892,14 @@
 
     // The certificate artwork is in English, so the month stays in English.
     const confirmedDate = new Date(record.confirmed_at);
-    document.getElementById('certDay').textContent = confirmedDate.getDate();
-    document.getElementById('certMonth').textContent = confirmedDate.toLocaleDateString('en-US', { month: 'long' });
-    document.getElementById('certYear').textContent = confirmedDate.getFullYear();
+    // Fixed timezone (same one the certificate number's year uses), so the date
+    // doesn't change depending on where the viewer's device clock is set.
+    const dp = {};
+    new Intl.DateTimeFormat('en-US', { timeZone: 'America/Vancouver', day: 'numeric', month: 'long', year: 'numeric' })
+      .formatToParts(confirmedDate).forEach(x => { dp[x.type] = x.value; });
+    document.getElementById('certDay').textContent = dp.day;
+    document.getElementById('certMonth').textContent = dp.month;
+    document.getElementById('certYear').textContent = dp.year;
     document.getElementById('certNo').textContent = record.cert_no || '';
 
     document.getElementById('certWitness1').textContent = record.initiator_witness || '';
