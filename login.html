@@ -349,6 +349,17 @@
     white-space: nowrap; font-size: clamp(9px, 2.1vw, 17px);
   }
 
+  /* Certificate number — deliberately tiny, e.g. B26-0001 */
+  .cert-field.cert-no {
+    font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.06em;
+    font-size: clamp(7px, 1.05vw, 9px); color: #5a4630; opacity: 0.9;
+  }
+
+  .cert-disclaimer {
+    font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.03em;
+    color: var(--ink-soft); text-align: center; padding: 8px 16px 0; line-height: 1.5;
+  }
+
   .cert-vows-below { padding: 18px 24px 4px; }
   .cert-vow-line {
     font-family: var(--font-display); font-style: italic; font-size: 13.5px;
@@ -369,8 +380,9 @@
 
   @media print {
     body * { visibility: hidden; }
-    .certificate-visual, .certificate-visual * { visibility: visible; }
-    .certificate-visual { position: fixed; top: 0; left: 0; width: 100%; }
+    #certPrintArea, #certPrintArea * { visibility: visible; }
+    #certPrintArea { position: fixed; top: 0; left: 0; width: 100%; }
+    .certificate-visual { margin-top: 0; }
   }
 
   @media (max-width: 980px) {
@@ -509,6 +521,7 @@
     <div class="cert-modal">
       <div class="cert-style-picker" id="certStylePicker"></div>
 
+      <div id="certPrintArea">
       <div class="certificate-visual" id="certificateVisual">
         <div class="cert-field cert-name1" id="certName1"></div>
         <div class="cert-field cert-name2" id="certName2"></div>
@@ -518,6 +531,9 @@
         <div class="cert-field cert-official" id="certOfficial">Marcus Lim</div>
         <div class="cert-field cert-witness1" id="certWitness1"></div>
         <div class="cert-field cert-witness2" id="certWitness2"></div>
+        <div class="cert-field cert-no" id="certNo"></div>
+      </div>
+      <p class="cert-disclaimer">Commemorative certificate of a fictional world. Not a legal marriage anywhere in the real world.</p>
       </div>
 
       <div class="cert-vows-below" id="certVowsBelow"></div>
@@ -546,7 +562,8 @@
         month: { top: '68.5%', left: '48.5%', width: '9%' },
         year:  { top: '68.5%', left: '64.2%', width: '15%' },
         official:  { top: '83.2%', left: '35.7%', width: '17%' },
-        witness1:  { top: '83.2%', left: '62.7%', width: '16%' }
+        witness1:  { top: '83.2%', left: '62.7%', width: '16%' },
+        no:        { top: '37.2%', left: '78%', width: '14%' }
       }
     },
     classic: {
@@ -562,7 +579,8 @@
         year:  { top: '58.2%', left: '78.8%', width: '10%' },
         official:  { top: '79.9%', left: '25%', width: '18%' },
         witness1:  { top: '79.9%', left: '49.2%', width: '17%' },
-        witness2:  { top: '79.9%', left: '68.5%', width: '12%' }
+        witness2:  { top: '79.9%', left: '68.5%', width: '12%' },
+        no:        { top: '42.5%', left: '77%', width: '14%' }
       }
     },
     tropical: {
@@ -578,7 +596,8 @@
         year:  { top: '64.8%', left: '60.7%', width: '12%' },
         official:  { top: '83.2%', left: '22%', width: '15%' },
         witness1:  { top: '83.2%', left: '41.6%', width: '15%' },
-        witness2:  { top: '83.2%', left: '61.4%', width: '15%' }
+        witness2:  { top: '83.2%', left: '61.4%', width: '15%' },
+        no:        { top: '78.5%', left: '50%', width: '14%' }
       }
     },
     free1: {
@@ -594,7 +613,8 @@
         year:  { top: '63%', left: '74.5%', width: '5.6%' },
         official:  { top: '82.4%', left: '22.5%', width: '15.1%', fontSize: 'clamp(8px, 1.7vw, 14px)' },
         witness1:  { top: '82.4%', left: '41.2%', width: '14.3%' },
-        witness2:  { top: '82.4%', left: '60.2%', width: '14.3%' }
+        witness2:  { top: '82.4%', left: '60.2%', width: '14.3%' },
+        no:        { top: '42%', left: '78%', width: '14%' }
       }
     },
     free2: {
@@ -610,7 +630,8 @@
         year:  { top: '65.4%', left: '64.2%', width: '11.5%', fontSize: 'clamp(8px, 1.7vw, 14px)' },
         official:  { top: '84.3%', left: '24.9%', width: '20.8%', fontSize: 'clamp(8px, 1.7vw, 14px)' },
         witness1:  { top: '84.6%', left: '48%', width: '16.7%' },
-        witness2:  { top: '84.6%', left: '68%', width: '15.1%' }
+        witness2:  { top: '84.6%', left: '68%', width: '15.1%' },
+        no:        { top: '23.5%', left: '87%', width: '14%' }
       }
     }
   };
@@ -625,7 +646,7 @@
     visual.style.backgroundImage = "url('" + style.file + "')";
     visual.style.aspectRatio = style.aspect || '1168 / 784';
 
-    const allFieldNames = ['name1', 'name2', 'day', 'month', 'year', 'official', 'witness1', 'witness2'];
+    const allFieldNames = ['name1', 'name2', 'day', 'month', 'year', 'official', 'witness1', 'witness2', 'no'];
 
     allFieldNames.forEach(fieldName => {
       const el = visual.querySelector('.cert-' + fieldName);
@@ -877,6 +898,7 @@
     document.getElementById('certDay').textContent = confirmedDate.getDate();
     document.getElementById('certMonth').textContent = confirmedDate.toLocaleDateString('en-US', { month: 'long' });
     document.getElementById('certYear').textContent = confirmedDate.getFullYear();
+    document.getElementById('certNo').textContent = record.cert_no || '';
 
     document.getElementById('certWitness1').textContent = record.initiator_witness || '';
     document.getElementById('certWitness1').dataset.raw = record.initiator_witness || '';
