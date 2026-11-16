@@ -309,6 +309,15 @@
     white-space: nowrap;
   }
 
+  .marriage-card .marriage-note { font-size: 12.5px; color: var(--ink-soft); margin-top: 6px; line-height: 1.5; }
+  .marriage-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-renew {
+    background: transparent; color: var(--ocean-teal); border: 1px solid var(--ocean-teal);
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.04em;
+    padding: 10px 18px; border-radius: 4px; cursor: pointer; white-space: nowrap;
+  }
+  .btn-renew:disabled { opacity: 0.5; cursor: default; }
+
   .cert-overlay {
     display: none; position: fixed; inset: 0; background: rgba(15, 42, 74, 0.75);
     z-index: 200; align-items: center; justify-content: center; padding: 24px;
@@ -857,6 +866,11 @@
     }
   }
 
+  const MARRIAGE_LOCALE = "en-US";
+  function fmtVancouver(d) {
+    return new Date(d).toLocaleDateString(MARRIAGE_LOCALE, { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Vancouver' });
+  }
+
   async function loadMarriageStatus(user) {
     const container = document.getElementById('marriageContainer');
     container.innerHTML = '';
@@ -875,16 +889,54 @@
     const otherName = isInitiator ? record.partner_name : record.initiator_name;
     const typeLabel = record.registration_type === 'permanent' ? 'Permanent' : 'Free (renews every 3 months)';
 
+    // Free registrations: valid 3 months, renewable from 30 days before expiry
+    // until the end of a further 3-month grace period (enforced in the database).
+    let note = '';
+    let canRenew = false;
+    if (record.registration_type === 'free' && record.expires_at) {
+      const exp = new Date(record.expires_at);
+      const grace = new Date(exp);
+      grace.setMonth(grace.getMonth() + 3);
+      const now = new Date();
+      const renewFrom = new Date(exp.getTime() - 30 * 24 * 3600 * 1000);
+      const d = fmtVancouver(exp);
+      const g = fmtVancouver(grace);
+      if (now > exp) { note = "Expired on " + d + ". Grace period until " + g + " — renew to keep your registration."; canRenew = true; }
+      else if (now >= renewFrom) { note = "Expires on " + d + ". You can renew now, free of charge, for another 3 months."; canRenew = true; }
+      else { note = "Valid until " + d; }
+    }
+
     const card = document.createElement('div');
     card.className = 'marriage-card';
     card.innerHTML =
       '<div>' +
         '<span class="marriage-label">CIVIC COMMITMENT ON RECORD</span>' +
         '<p>' + myName + ' &amp; ' + otherName + ' — ' + typeLabel + '</p>' +
+        (note ? '<p class="marriage-note">' + note + '</p>' : '') +
       '</div>' +
-      '<button class="btn-view-cert">View Certificate</button>';
+      '<div class="marriage-actions">' +
+        (canRenew ? '<button class="btn-renew">Renew (free)</button>' : '') +
+        '<button class="btn-view-cert">View Certificate</button>' +
+      '</div>';
 
     card.querySelector('.btn-view-cert').addEventListener('click', () => showCertificate(record, myName, otherName));
+
+    const renewBtn = card.querySelector('.btn-renew');
+    if (renewBtn) {
+      renewBtn.addEventListener('click', async () => {
+        renewBtn.disabled = true;
+        renewBtn.textContent = 'Renewing…';
+        const { error } = await supabaseClient.rpc('renew_free_wedding', { p_id: record.id });
+        if (error) {
+          alert('Could not renew: ' + error.message);
+          renewBtn.disabled = false;
+          renewBtn.textContent = 'Renew (free)';
+          return;
+        }
+        alert('Renewed. Your registration is extended by 3 months.');
+        await loadMarriageStatus(user);
+      });
+    }
     container.appendChild(card);
   }
 
@@ -956,6 +1008,9 @@
     document.getElementById('dashBalance').textContent = '฿ ' + resident.beau_dollar_balance.toLocaleString();
     document.getElementById('dashRegType').textContent = resident.registration_type === 'pioneer' ? 'Pioneer' : 'Standard';
     document.getElementById('dashSince').textContent = new Date(resident.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    // Close out free registrations whose grace period has ended before looking anything up.
+    try { await supabaseClient.rpc('void_expired_weddings'); } catch (e) {}
 
     await loadPendingInvites(user);
     await loadMarriageStatus(user);

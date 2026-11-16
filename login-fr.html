@@ -309,6 +309,15 @@
     white-space: nowrap;
   }
 
+  .marriage-card .marriage-note { font-size: 12.5px; color: var(--ink-soft); margin-top: 6px; line-height: 1.5; }
+  .marriage-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-renew {
+    background: transparent; color: var(--ocean-teal); border: 1px solid var(--ocean-teal);
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.04em;
+    padding: 10px 18px; border-radius: 4px; cursor: pointer; white-space: nowrap;
+  }
+  .btn-renew:disabled { opacity: 0.5; cursor: default; }
+
   .cert-overlay {
     display: none; position: fixed; inset: 0; background: rgba(15, 42, 74, 0.75);
     z-index: 200; align-items: center; justify-content: center; padding: 24px;
@@ -609,12 +618,12 @@
         name1: { top: '49.9%', left: '31.4%', width: '30.3%', fontSize: 'clamp(11px, 2.6vw, 21px)' },
         name2: { top: '49.9%', left: '68.7%', width: '30%', fontSize: 'clamp(11px, 2.6vw, 21px)' },
         day:   { top: '63%', left: '35.6%', width: '5.7%' },
-        month: { top: '63%', left: '57.1%', width: '4.2%' },
+        month: { top: '63%', left: '56.6%', width: '4.2%', fontSize: 'clamp(8px, 1.8vw, 14px)' },
         year:  { top: '63%', left: '74.5%', width: '5.6%' },
         official:  { top: '82.4%', left: '22.5%', width: '15.1%', fontSize: 'clamp(8px, 1.7vw, 14px)' },
         witness1:  { top: '82.4%', left: '41.2%', width: '14.3%' },
         witness2:  { top: '82.4%', left: '60.2%', width: '14.3%' },
-        no:        { top: '42%', left: '78%', width: '14%' }
+        no:        { top: '23.5%', left: '83.5%', width: '14%' }
       }
     },
     free2: {
@@ -852,6 +861,11 @@
     }
   }
 
+  const MARRIAGE_LOCALE = "fr-FR";
+  function fmtVancouver(d) {
+    return new Date(d).toLocaleDateString(MARRIAGE_LOCALE, { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Vancouver' });
+  }
+
   async function loadMarriageStatus(user) {
     const container = document.getElementById('marriageContainer');
     container.innerHTML = '';
@@ -870,16 +884,54 @@
     const otherName = isInitiator ? record.partner_name : record.initiator_name;
     const typeLabel = record.registration_type === 'permanent' ? 'Permanent' : 'Gratuit (renouvelable tous les 3 mois)';
 
+    // Free registrations: valid 3 months, renewable from 30 days before expiry
+    // until the end of a further 3-month grace period (enforced in the database).
+    let note = '';
+    let canRenew = false;
+    if (record.registration_type === 'free' && record.expires_at) {
+      const exp = new Date(record.expires_at);
+      const grace = new Date(exp);
+      grace.setMonth(grace.getMonth() + 3);
+      const now = new Date();
+      const renewFrom = new Date(exp.getTime() - 30 * 24 * 3600 * 1000);
+      const d = fmtVancouver(exp);
+      const g = fmtVancouver(grace);
+      if (now > exp) { note = "Expiré le " + d + ". Période de grâce jusqu’au " + g + " — renouvelez pour conserver votre enregistrement."; canRenew = true; }
+      else if (now >= renewFrom) { note = "Expire le " + d + ". Vous pouvez le renouveler gratuitement pour 3 mois supplémentaires."; canRenew = true; }
+      else { note = "Valable jusqu’au " + d; }
+    }
+
     const card = document.createElement('div');
     card.className = 'marriage-card';
     card.innerHTML =
       '<div>' +
         '<span class="marriage-label">ENGAGEMENT CIVIQUE ENREGISTRÉ</span>' +
         '<p>' + myName + ' &amp; ' + otherName + ' — ' + typeLabel + '</p>' +
+        (note ? '<p class="marriage-note">' + note + '</p>' : '') +
       '</div>' +
-      '<button class="btn-view-cert">Voir le certificat</button>';
+      '<div class="marriage-actions">' +
+        (canRenew ? '<button class="btn-renew">Renouveler (gratuit)</button>' : '') +
+        '<button class="btn-view-cert">Voir le certificat</button>' +
+      '</div>';
 
     card.querySelector('.btn-view-cert').addEventListener('click', () => showCertificate(record, myName, otherName));
+
+    const renewBtn = card.querySelector('.btn-renew');
+    if (renewBtn) {
+      renewBtn.addEventListener('click', async () => {
+        renewBtn.disabled = true;
+        renewBtn.textContent = 'Renouvellement…';
+        const { error } = await supabaseClient.rpc('renew_free_wedding', { p_id: record.id });
+        if (error) {
+          alert('Impossible de renouveler : ' + error.message);
+          renewBtn.disabled = false;
+          renewBtn.textContent = 'Renouveler (gratuit)';
+          return;
+        }
+        alert('Renouvelé. Votre enregistrement est prolongé de 3 mois.');
+        await loadMarriageStatus(user);
+      });
+    }
     container.appendChild(card);
   }
 
@@ -891,9 +943,14 @@
 
     // The certificate artwork is in English, so the month stays in English.
     const confirmedDate = new Date(record.confirmed_at);
-    document.getElementById('certDay').textContent = confirmedDate.getDate();
-    document.getElementById('certMonth').textContent = confirmedDate.toLocaleDateString('en-US', { month: 'long' });
-    document.getElementById('certYear').textContent = confirmedDate.getFullYear();
+    // Fixed timezone (same one the certificate number's year uses), so the date
+    // doesn't change depending on where the viewer's device clock is set.
+    const dp = {};
+    new Intl.DateTimeFormat('en-US', { timeZone: 'America/Vancouver', day: 'numeric', month: 'long', year: 'numeric' })
+      .formatToParts(confirmedDate).forEach(x => { dp[x.type] = x.value; });
+    document.getElementById('certDay').textContent = dp.day;
+    document.getElementById('certMonth').textContent = dp.month;
+    document.getElementById('certYear').textContent = dp.year;
     document.getElementById('certNo').textContent = record.cert_no || '';
 
     document.getElementById('certWitness1').textContent = record.initiator_witness || '';
@@ -946,6 +1003,9 @@
     document.getElementById('dashBalance').textContent = '฿ ' + resident.beau_dollar_balance.toLocaleString();
     document.getElementById('dashRegType').textContent = resident.registration_type === 'pioneer' ? 'Pionnier' : 'Standard';
     document.getElementById('dashSince').textContent = new Date(resident.created_at).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    // Close out free registrations whose grace period has ended before looking anything up.
+    try { await supabaseClient.rpc('void_expired_weddings'); } catch (e) {}
 
     await loadPendingInvites(user);
     await loadMarriageStatus(user);
