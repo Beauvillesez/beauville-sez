@@ -287,6 +287,71 @@
     font-size: 14px; line-height: 1.7; color: rgba(245, 240, 228, 0.78);
   }
 
+  /* ============ WEDDING FORM ============ */
+  .wedding-form-panel {
+    background: var(--white);
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    padding: 36px 34px;
+  }
+
+  .wedding-form-panel h3 {
+    font-family: var(--font-display); font-weight: 600; font-size: 20px;
+    color: var(--navy-deep); margin-bottom: 10px;
+  }
+
+  .wedding-form-panel > p {
+    font-size: 14px; line-height: 1.65; color: var(--ink-soft); margin-bottom: 24px;
+  }
+
+  .field-group { margin-bottom: 20px; }
+  .field-group label {
+    display: block; font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.06em; color: var(--ink-soft); margin-bottom: 8px;
+  }
+
+  .field-group input, .field-group select {
+    width: 100%; padding: 11px 14px; border: 1px solid var(--paper-line);
+    border-radius: 4px; font-family: var(--font-body); font-size: 14.5px;
+    color: var(--ink); background: var(--white);
+  }
+
+  .field-group input:focus, .field-group select:focus { outline: none; border-color: var(--navy-mid); }
+
+  .type-toggle { display: flex; gap: 12px; }
+  .type-option {
+    flex: 1; border: 1px solid var(--paper-line); border-radius: 4px;
+    padding: 14px; cursor: pointer; text-align: center; transition: all 0.2s ease;
+  }
+  .type-option input { display: none; }
+  .type-option .type-name { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; color: var(--ink-soft); display: block; margin-bottom: 4px; }
+  .type-option .type-price { font-family: var(--font-display); font-weight: 600; font-size: 17px; color: var(--navy-deep); }
+  .type-option.selected { border-color: var(--gold-signal); background: rgba(200, 155, 60, 0.06); }
+
+  .wedding-btn {
+    width: 100%; background: var(--navy-deep); color: var(--sand);
+    font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.05em;
+    padding: 14px; border: none; border-radius: 4px; cursor: pointer;
+    transition: background 0.2s ease; margin-top: 8px;
+  }
+
+  .wedding-btn:hover { background: var(--navy-mid); }
+  .wedding-btn:disabled { opacity: 0.6; cursor: default; }
+
+  .wedding-error {
+    display: none; background: #FDEDED; border: 1px solid #E5A0A0; color: #8A2C2C;
+    padding: 14px 18px; border-radius: 4px; margin-bottom: 20px; font-size: 13.5px;
+  }
+
+  .wedding-confirm {
+    display: none; text-align: center; padding: 20px;
+  }
+  .wedding-confirm p:first-child {
+    font-family: var(--font-display); font-weight: 600; font-size: 19px;
+    color: var(--navy-deep); margin-bottom: 10px;
+  }
+  .wedding-confirm p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
+
   /* ============ RESPONSIVE ============ */
   @media (max-width: 980px) {
     .header-top { flex-wrap: wrap; padding: 20px 24px; }
@@ -433,13 +498,165 @@
   </section>
 
   <section class="submit-section">
-    <div class="submit-panel">
-      <h3>Inscriptions pas encore ouvertes</h3>
-      <p>Cette page décrit comment fonctionnera l'inscription au E-Mariage une fois les comptes civiques de Beauville actifs. Pour l'instant, il s'agit d'un aperçu — gagnez des Beau Dollars, et soyez prêt lorsque le registre ouvrira.</p>
+    <div class="wedding-form-panel" id="weddingFormPanel">
+      <h3>Enregistrer votre engagement</h3>
+      <p>Vous devez être connecté pour lancer une inscription. Votre partenaire devra la confirmer depuis son propre compte avant qu'elle ne devienne officielle.</p>
+
+      <div class="wedding-error" id="weddingError"></div>
+
+      <form id="weddingForm">
+        <div class="field-group">
+          <label for="myName">Votre nom complet (tel que vous souhaitez qu'il figure au registre)</label>
+          <input type="text" id="myName" name="myName" required>
+        </div>
+
+        <div class="field-group">
+          <label for="partnerEmail">Courriel de votre partenaire (doit être un e-résident inscrit de Beauville)</label>
+          <input type="email" id="partnerEmail" name="partnerEmail" required>
+        </div>
+
+        <div class="field-group">
+          <label for="myVow">Votre vœu (facultatif)</label>
+          <textarea id="myVow" name="myVow" rows="3" placeholder="Quelques mots, si vous souhaitez les laisser au registre..." style="width:100%; padding:11px 14px; border:1px solid var(--paper-line); border-radius:4px; font-family:var(--font-body); font-size:14.5px; color:var(--ink); resize:vertical;"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label for="myWitness">Votre témoin (facultatif)</label>
+          <input type="text" id="myWitness" name="myWitness" placeholder="Un ami, un personnage de fiction — qui vous voudrez">
+        </div>
+
+        <div class="field-group">
+          <label>Type d'inscription</label>
+          <div class="type-toggle">
+            <label class="type-option selected" id="permOption">
+              <input type="radio" name="regType" value="permanent" checked>
+              <span class="type-name">PERMANENTE</span>
+              <span class="type-price">฿5 000</span>
+            </label>
+            <label class="type-option" id="freeOption">
+              <input type="radio" name="regType" value="free">
+              <span class="type-name">GRATUITE</span>
+              <span class="type-price">฿0</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="wedding-btn" id="weddingBtn">Envoyer la demande d'inscription</button>
+      </form>
+
+      <div class="wedding-confirm" id="weddingConfirm">
+        <p>Votre demande a été envoyée.</p>
+        <p id="weddingConfirmDetail"></p>
+      </div>
     </div>
   </section>
 
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script>
+    document.querySelectorAll('.type-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.type-option').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+      });
+    });
+
+    document.getElementById('weddingForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const errorBox = document.getElementById('weddingError');
+      errorBox.style.display = 'none';
+
+      const btn = document.getElementById('weddingBtn');
+      btn.disabled = true;
+      btn.textContent = 'Envoi…';
+
+      const myName = document.getElementById('myName').value.trim();
+      const partnerEmail = document.getElementById('partnerEmail').value.trim().toLowerCase();
+      const myVow = document.getElementById('myVow').value.trim();
+      const myWitness = document.getElementById('myWitness').value.trim();
+      const regType = document.querySelector('input[name="regType"]:checked').value;
+
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+
+        if (!session || !session.user) {
+          errorBox.textContent = "Veuillez d'abord vous connecter pour lancer une inscription.";
+          errorBox.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = "Envoyer la demande d'inscription";
+          setTimeout(() => { window.location.href = 'login-fr.html'; }, 1500);
+          return;
+        }
+
+        if (partnerEmail === session.user.email.toLowerCase()) {
+          throw new Error("Vous ne pouvez pas vous inscrire avec vous-même.");
+        }
+
+        // Beauville allows one active civic commitment at a time.
+        const { data: existingOwn } = await supabaseClient
+          .from('wedding_registrations')
+          .select('id')
+          .or('initiator_id.eq.' + session.user.id + ',partner_id.eq.' + session.user.id)
+          .eq('status', 'confirmed')
+          .maybeSingle();
+
+        if (existingOwn) {
+          throw new Error("Vous avez déjà un engagement civique actif au registre. Beauville n'en autorise qu'un à la fois.");
+        }
+
+        const { data: partner, error: partnerError } = await supabaseClient
+          .from('residents')
+          .select('id')
+          .eq('email', partnerEmail)
+          .maybeSingle();
+
+        if (partnerError) throw partnerError;
+
+        if (!partner) {
+          throw new Error("Aucun e-résident de Beauville trouvé avec ce courriel. Votre partenaire doit d'abord s'inscrire.");
+        }
+
+        const { data: existingPartner } = await supabaseClient
+          .from('wedding_registrations')
+          .select('id')
+          .or('initiator_id.eq.' + partner.id + ',partner_id.eq.' + partner.id)
+          .eq('status', 'confirmed')
+          .maybeSingle();
+
+        if (existingPartner) {
+          throw new Error("Ce résident a déjà un engagement civique actif au registre.");
+        }
+
+        const { error: insertError } = await supabaseClient
+          .from('wedding_registrations')
+          .insert({
+            initiator_id: session.user.id,
+            initiator_name: myName,
+            initiator_vow: myVow || null,
+            initiator_witness: myWitness || null,
+            partner_email: partnerEmail,
+            partner_id: partner.id,
+            registration_type: regType,
+            status: 'pending'
+          });
+
+        if (insertError) throw insertError;
+
+        document.getElementById('weddingForm').style.display = 'none';
+        document.getElementById('weddingConfirmDetail').textContent =
+          "Elle apparaîtra dans le compte de " + partnerEmail + ", qui pourra la confirmer ou la refuser.";
+        document.getElementById('weddingConfirm').style.display = 'block';
+
+      } catch (err) {
+        errorBox.textContent = err.message;
+        errorBox.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = "Envoyer la demande d'inscription";
+      }
+    });
+  </script>
 </body>
 </html>
