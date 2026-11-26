@@ -567,11 +567,11 @@
       fields: {
         name1: { top: '46.6%', left: '50%', width: '42%' },
         name2: { top: '58.3%', left: '50%', width: '42%' },
-        day:   { top: '68.5%', left: '39.5%', width: '9%' },
-        month: { top: '68.5%', left: '48.5%', width: '9%' },
-        year:  { top: '68.5%', left: '64.2%', width: '15%' },
-        official:  { top: '83.2%', left: '35.7%', width: '17%' },
-        witness1:  { top: '83.2%', left: '62.7%', width: '16%' },
+        day:   { top: '68.5%', left: '39.5%', width: '9%', fontSize: 'clamp(8px, 1.75vw, 14px)' },
+        month: { top: '68.5%', left: '48.5%', width: '9%', fontSize: 'clamp(8px, 1.75vw, 14px)' },
+        year:  { top: '68.5%', left: '64.2%', width: '15%', fontSize: 'clamp(8px, 1.75vw, 14px)' },
+        official:  { top: '83.2%', left: '35.7%', width: '17%', fontSize: 'clamp(8px, 1.75vw, 14px)' },
+        witness1:  { top: '83.2%', left: '62.7%', width: '19%' },
         no:        { top: '37.2%', left: '78%', width: '14%' }
       }
     },
@@ -583,9 +583,9 @@
       fields: {
         name1: { top: '47.5%', left: '57.6%', width: '34%' },
         name2: { top: '53.2%', left: '53.6%', width: '38%' },
-        day:   { top: '58.2%', left: '47.8%', width: '8%' },
-        month: { top: '58.2%', left: '61.1%', width: '11%' },
-        year:  { top: '58.2%', left: '78.8%', width: '10%' },
+        day:   { top: '58.2%', left: '44.9%', width: '8%' },
+        month: { top: '58.2%', left: '58.2%', width: '11%' },
+        year:  { top: '58.2%', left: '75.9%', width: '10%' },
         official:  { top: '79.9%', left: '25%', width: '18%' },
         witness1:  { top: '79.9%', left: '49.2%', width: '17%' },
         witness2:  { top: '79.9%', left: '68.5%', width: '12%' },
@@ -602,7 +602,7 @@
         name2: { top: '54.6%', left: '65.1%', width: '24%' },
         day:   { top: '59.9%', left: '57.3%', width: '8%' },
         month: { top: '59.9%', left: '70.6%', width: '14%' },
-        year:  { top: '64.8%', left: '60.7%', width: '12%' },
+        year:  { top: '64.8%', left: '55.1%', width: '12%' },
         official:  { top: '83.2%', left: '22%', width: '15%' },
         witness1:  { top: '83.2%', left: '41.6%', width: '15%' },
         witness2:  { top: '83.2%', left: '61.4%', width: '15%' },
@@ -646,6 +646,27 @@
   };
 
   let currentCertStyle = 'crown';
+  // Shrink any name that is wider than its line on the certificate, so long
+  // names never run into the printed words or the seal.
+  function fitCertFields() {
+    const visual = document.getElementById('certificateVisual');
+    if (!visual) return;
+    visual.querySelectorAll('.cert-field').forEach(el => {
+      if (el.classList.contains('cert-no') || el.style.display === 'none') return;
+      el.style.removeProperty('--fit');
+      const style = CERT_STYLES[currentCertStyle];
+      const key = [...el.classList].find(c => c.startsWith('cert-') && c !== 'cert-field').slice(5);
+      el.style.fontSize = (style.fields[key] && style.fields[key].fontSize) || '';
+      if (!el.clientWidth) return;
+      let size = parseFloat(getComputedStyle(el).fontSize);
+      while (el.scrollWidth > el.clientWidth + 1 && size > 7) {
+        size -= 0.5;
+        el.style.fontSize = size + 'px';
+      }
+    });
+  }
+  window.addEventListener('resize', fitCertFields);
+
   let currentCertRecord = null;
 
   function applyCertStyle(styleKey) {
@@ -688,6 +709,7 @@
     document.querySelectorAll('.cert-style-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.style === styleKey);
     });
+    requestAnimationFrame(fitCertFields);
   }
 
   // Builds the picker from scratch for the given tier — only buttons for
