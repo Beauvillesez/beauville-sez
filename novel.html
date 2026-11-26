@@ -153,8 +153,15 @@
   }
 
   .external-archive-btn:hover { background: var(--navy-mid); }
-  .external-archive-btn { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 2px; border-radius: 14px; }
-  .external-archive-btn small { font-size: 11px; opacity: 0.8; letter-spacing: 0.04em; }
+  .novella-card {
+    display: flex; flex-direction: column; gap: 6px; max-width: 440px;
+    font-family: var(--font-mono); background: var(--navy-deep); color: var(--sand);
+    padding: 16px 22px 18px; border-radius: 14px; text-decoration: none; transition: background 0.2s ease;
+  }
+  .novella-card:hover { background: var(--navy-mid); }
+  .novella-card .nc-kicker { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.75; }
+  .novella-card .nc-title { font-size: 15.5px; letter-spacing: 0.03em; line-height: 1.4; color: #FFFFFF; }
+  .novella-card .nc-desc { font-size: 12px; letter-spacing: 0.03em; line-height: 1.55; opacity: 0.85; }
 
   .hero-top-row {
     display: flex; justify-content: flex-end; margin-bottom: 20px;
@@ -339,7 +346,7 @@
 
   <section class="page-hero">
     <div class="hero-top-row">
-      <a href="ai-odyssey.html" class="external-archive-btn"><span>A Lone Rider: Across the Grassland &rarr;</span><small>Complete novella · read on its own</small></a>
+      <a href="ai-odyssey.html" class="novella-card"><span class="nc-kicker">External Archive · Complete novella, read on its own</span><span class="nc-title">A Lone Rider: Across the <span style="white-space: nowrap">Grassland &rarr;</span></span><span class="nc-desc">A story about the relationships between humans and AI, and between people and the systems around them.</span></a>
     </div>
     <span class="kicker">THE NOVEL</span>
     <h1 class="page-title">Beauville: Built by Migrants</h1>
