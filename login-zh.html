@@ -908,13 +908,13 @@
     const typeLabel = record.registration_type === 'permanent' ? '永久' : '免费（每 3 个月续期）';
 
     // Free registrations: valid 3 months, renewable from 30 days before expiry
-    // until the end of a further 3-month grace period (enforced in the database).
+    // until the end of a further 30-day grace period (enforced in the database).
     let note = '';
     let canRenew = false;
     if (record.registration_type === 'free' && record.expires_at) {
       const exp = new Date(record.expires_at);
       const grace = new Date(exp);
-      grace.setMonth(grace.getMonth() + 3);
+      grace.setDate(grace.getDate() + 30);
       const now = new Date();
       const renewFrom = new Date(exp.getTime() - 30 * 24 * 3600 * 1000);
       const d = fmtVancouver(exp);

@@ -1,4 +1,4 @@
--- 1) Void free registrations whose 3-month grace period has ended.
+-- 1) Void free registrations whose 30-day grace period has ended.
 --    Safe to call by anyone logged in; it only touches rows that are really past due.
 create or replace function void_expired_weddings() returns void
 language plpgsql security definer set search_path = public as $$
@@ -8,7 +8,7 @@ begin
    where status = 'confirmed'
      and registration_type = 'free'
      and expires_at is not null
-     and expires_at + interval '3 months' < now();
+     and expires_at + interval '30 days' < now();
 end $$;
 
 -- 2) Free renewal: either party, from 30 days before expiry until the grace period ends.
@@ -28,7 +28,7 @@ begin
   end if;
   if r.expires_at is null then raise exception 'No expiry date on record'; end if;
   if now() < r.expires_at - interval '30 days' then raise exception 'Too early to renew'; end if;
-  if now() > r.expires_at + interval '3 months' then raise exception 'Grace period has ended'; end if;
+  if now() > r.expires_at + interval '30 days' then raise exception 'Grace period has ended'; end if;
   base := greatest(r.expires_at, now());
   update wedding_registrations set expires_at = base + interval '3 months' where id = p_id;
 end $$;
