@@ -514,7 +514,7 @@
         </div>
 
         <div class="field-group">
-          <label for="partnerEmail">Courriel de votre partenaire (doit être un e-résident inscrit de Beauville)</label>
+          <label for="partnerEmail">Courriel de votre partenaire (doit être un E-résident inscrit de Beauville)</label>
           <input type="email" id="partnerEmail" name="partnerEmail" required>
         </div>
 
@@ -619,7 +619,7 @@
         if (partnerError) throw partnerError;
 
         if (!partner) {
-          throw new Error("Aucun e-résident de Beauville trouvé avec ce courriel. Votre partenaire doit d'abord s'inscrire.");
+          throw new Error("Aucun E-résident de Beauville trouvé avec ce courriel. Votre partenaire doit d'abord s'inscrire.");
         }
 
         const { data: existingPartner } = await supabaseClient
