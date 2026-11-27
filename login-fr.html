@@ -359,13 +359,6 @@
   }
 
   /* Certificate number — deliberately tiny, e.g. B26-0001 */
-  /* Crown's printed label under the witness line: "Witness" or "Witnesses" */
-  .cert-witness-label {
-    position: absolute; transform: translate(-50%, -100%); display: none;
-    font-family: 'Times New Roman', Times, serif; color: #3b2a1a;
-    line-height: 1; white-space: nowrap; pointer-events: none;
-  }
-
   .cert-field.cert-no {
     font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.06em;
     font-size: clamp(7px, 1.05vw, 9px); color: #5a4630; opacity: 0.9;
@@ -547,7 +540,6 @@
         <div class="cert-field cert-official" id="certOfficial">Marcus Lim</div>
         <div class="cert-field cert-witness1" id="certWitness1"></div>
         <div class="cert-field cert-witness2" id="certWitness2"></div>
-        <div class="cert-witness-label" id="certWitnessLabel"></div>
         <div class="cert-field cert-no" id="certNo"></div>
       </div>
       <p class="cert-disclaimer">Commemorative certificate of a fictional world.</p>
@@ -572,7 +564,7 @@
       tier: 'paid',
       label: 'Crown',
       combineWitnesses: true,
-      witnessLabel: { top: '86.9%', left: '62.3%' },
+      pluralFile: 'style-crown-plural.jpg',
       fields: {
         name1: { top: '46.6%', left: '50%', width: '42%' },
         name2: { top: '58.3%', left: '50%', width: '42%' },
@@ -660,8 +652,6 @@
   function fitCertFields() {
     const visual = document.getElementById('certificateVisual');
     if (!visual) return;
-    const witnessLabel = document.getElementById('certWitnessLabel');
-    if (witnessLabel) witnessLabel.style.fontSize = (visual.clientWidth * 0.0158) + 'px';
     visual.querySelectorAll('.cert-field').forEach(el => {
       if (el.classList.contains('cert-no') || el.style.display === 'none') return;
       el.style.removeProperty('--fit');
@@ -710,19 +700,14 @@
     if (witness1El) {
       const w1 = witness1El.dataset.raw || '';
       const w2 = (visual.querySelector('.cert-witness2') || {}).dataset ? visual.querySelector('.cert-witness2').dataset.raw : '';
-      const label = document.getElementById('certWitnessLabel');
       if (style.combineWitnesses) {
         const names = [w1, w2].filter(Boolean);
         witness1El.textContent = names.join(' & ');
-        // The label is not in the image: singular or plural to match the names.
-        if (label && style.witnessLabel) {
-          label.textContent = names.length > 1 ? 'Witnesses' : 'Witness';
-          label.style.top = style.witnessLabel.top;
-          label.style.left = style.witnessLabel.left;
-          label.style.display = 'block';
+        // Two names: use the version of the image printed with "Witnesses".
+        if (names.length > 1 && style.pluralFile) {
+          visual.style.backgroundImage = "url('" + style.pluralFile + "')";
         }
       } else {
-        if (label) label.style.display = 'none';
         witness1El.textContent = w1;
       }
     }
